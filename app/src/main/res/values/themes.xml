@@ -1,0 +1,25 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.UMS" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/light_primary</item>
+        <item name="colorPrimaryVariant">@color/light_primaryContainer</item>
+        <item name="colorOnPrimary">@color/light_onPrimary</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/light_secondary</item>
+        <item name="colorSecondaryVariant">@color/light_secondaryContainer</item>
+        <item name="colorOnSecondary">@color/light_onSecondary</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name = "colorOnSurface">@color/light_onSurface</item>
+        <!-- Customize your theme here. -->
+    </style>
+    
+    <style name="FloatingActionButtonStyle" parent="Widget.Design.FloatingActionButton">
+        <item name="shapeAppearanceOverlay">@style/FabShapeStyle1</item>
+    </style>
+    
+    <style name="FabShapeStyle1" parent="ShapeAppearanceOverlay.Material3.FloatingActionButton">
+        <item name = "cornerSize">16dp</item>
+    </style>
+</resources>

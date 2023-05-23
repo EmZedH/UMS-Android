@@ -1,0 +1,56 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_marginHorizontal="10dp"
+    android:layout_height="wrap_content"
+    android:background="@color/light_surface"
+    android:layout_marginTop="20dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/light_surface"
+        android:clickable="true"
+        android:focusable="true"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:contentDescription="@string/list_item_option_string"
+        android:src="@drawable/ic_vertical_menu_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+    <TextView
+        android:id="@+id/element_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/college_id_string"
+        android:textSize="20sp"
+        android:textColor="@color/light_onSurface"
+        android:layout_marginStart="5dp"
+        />
+
+    <TextView
+        android:id="@+id/element_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/element_id"
+        android:layout_marginTop="10dp"
+        android:textSize="30sp"
+        android:textColor="@color/light_onSurfaceVariant"
+        android:layout_marginStart="5dp"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--<TextView-->
+<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:id="@+id/list_item"-->
+<!--    android:layout_width="wrap_content"-->
+<!--    android:layout_height="wrap_content"/>-->
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent">-->
+
+<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

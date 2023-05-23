@@ -1,0 +1,45 @@
+<resources>
+    <string name="app_name">UMS</string>
+    <string name="action_settings">Settings</string>
+    <!-- Strings used for fragments for navigation -->
+
+    <string name="universityString">University</string>
+    <string name="managementString">Management</string>
+    <string name="systemString">System</string>
+    <string name="userIDString">User ID</string>
+    <string name="passwordString">Password</string>
+    <string name="loginString">Log In</string>
+    <string name="hello_string">Hello </string>
+    <string name="self_service_string">Self Service</string>
+    <string name="log_out_string">Log Out</string>
+    <string name="manage_user_string">Manage User</string>
+    <string name="manage_course_string">Manage Course</string>
+    <string name="manage_department_string">Manage Department</string>
+    <string name="manage_course_professor_string">Manage Course Professor</string>
+    <string name="manage_records_string">Manage Records</string>
+    <string name="manage_section_string">Manage Section</string>
+    <string name="manage_transactions_string">Manage Transactions</string>
+    <string name="manage_college_string">Manage College</string>
+    <string name="manage_tests_string">Manage Tests</string>
+    <string name="uid_string">UID : </string>
+    <string name="page_title">Page Title</string>
+    <string name="home_string">Home</string>
+    <string name="search">search</string>
+    <string name="content_description_top_bar_search">top app bar search</string>
+    <string name="fab_content_description">FAB to add items</string>
+    <string name="main_page_with_drawer_string">Main Page with Drawer</string>
+    <string name="navigation_drawer_open">Open Navigation Drawer</string>
+    <string name="navigation_drawer_close">Close Navigation Drawer</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="no_colleges_string">No Colleges</string>
+    <string name="college_id_string">CID : C/</string>
+    <string name="manage_profile_string">Manage Profile</string>
+    <string name="list_item_option_string">List Item Option</string>
+    <string name="cross_button_description">Close current window</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="add_college_string">Add College</string>
+    <string name="college_telephone_string">College Telephone</string>
+    <string name="college_address_string">College Address</string>
+    <string name="college_name_string">College Name</string>
+</resources>
