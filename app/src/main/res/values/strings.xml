@@ -42,4 +42,6 @@
     <string name="college_telephone_string">College Telephone</string>
     <string name="college_address_string">College Address</string>
     <string name="college_name_string">College Name</string>
+    <string name="edit_string">Edit</string>
+    <string name="delete_string">Delete</string>
 </resources>

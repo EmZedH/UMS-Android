@@ -52,6 +52,7 @@ class MainPageActivity: AppCompatActivity(){
 
         drawerLayout = findViewById(R.id.main_page_drawer_layout)
         navigationView = findViewById(R.id.navigation_view)
+
         toggle = ActionBarDrawerToggle(
             this,
             drawerLayout,
@@ -65,12 +66,24 @@ class MainPageActivity: AppCompatActivity(){
             replace(R.id.fragment_container_view, superAdminFragment)
             commit()
         }
-
-        bottomSheetDialog(collegeDAO, superAdminFragment)
-
         toggle.syncState()
 
+        val bottomSheet = AddCollege(collegeDAO, superAdminFragment)
 
+
+        val addFloatingButton = findViewById<FloatingActionButton>(R.id.add_floating_action_button)
+
+        addFloatingButton.setOnClickListener {
+            bottomSheet.show(supportFragmentManager, "bottomSheetDialog")
+        }
+
+//        bottomSheetDialog(collegeDAO, superAdminFragment)
+
+
+//        floatingActionButton()
+    }
+
+    private fun floatingActionButton() {
         val addFloatingButton = findViewById<FloatingActionButton>(R.id.add_floating_action_button)
 
         addFloatingButton.setOnClickListener {
@@ -119,37 +132,38 @@ class MainPageActivity: AppCompatActivity(){
             if (collegeAddress?.editText?.text.toString().isEmpty()) {
                 collegeAddress?.error = "Don't leave address field blank"
             }
-        }
-        if (collegeTelephone?.editText?.text.toString().isEmpty()) {
-            collegeTelephone?.error = "Don't leave telephone field blank"
-        }
-        if (collegeName?.editText?.text.toString()
-                .isNotEmpty() and collegeAddress?.editText?.text.toString()
-                .isNotEmpty() and collegeTelephone?.editText?.text.toString().isNotEmpty()
-        ) {
 
-            collegeDAO.insert(
-                College(
-                    collegeDAO.getNewID(),
-                    collegeName?.editText?.text.toString(),
-                    collegeAddress?.editText?.text.toString(),
-                    collegeTelephone?.editText?.text.toString()
+            if (collegeTelephone?.editText?.text.toString().isEmpty()) {
+                collegeTelephone?.error = "Don't leave telephone field blank"
+            }
+            if (collegeName?.editText?.text.toString()
+                    .isNotEmpty() and collegeAddress?.editText?.text.toString()
+                    .isNotEmpty() and collegeTelephone?.editText?.text.toString().isNotEmpty()
+            ) {
+
+                collegeDAO.insert(
+                    College(
+                        collegeDAO.getNewID(),
+                        collegeName?.editText?.text.toString(),
+                        collegeAddress?.editText?.text.toString(),
+                        collegeTelephone?.editText?.text.toString()
+                    )
                 )
-            )
 
-            bottomSheetDialog.findViewById<TextView>(R.id.college_id)!!.text =
-                "CID : C/${collegeDAO.getNewID()}"
+                bottomSheetDialog.findViewById<TextView>(R.id.college_id)!!.text =
+                    "CID : C/${collegeDAO.getNewID()}"
 
-            collegeName?.error = null
-            collegeAddress?.error = null
-            collegeTelephone?.error = null
+                collegeName?.error = null
+                collegeAddress?.error = null
+                collegeTelephone?.error = null
 
-            supportFragmentManager.beginTransaction().detach(superAdminFragment).commit()
-            supportFragmentManager.beginTransaction().attach(superAdminFragment).commit()
-            bottomSheetDialog.dismiss()
-            collegeName?.editText?.text?.clear()
-            collegeAddress?.editText?.text?.clear()
-            collegeTelephone?.editText?.text?.clear()
+                supportFragmentManager.beginTransaction().detach(superAdminFragment).commit()
+                supportFragmentManager.beginTransaction().attach(superAdminFragment).commit()
+                bottomSheetDialog.dismiss()
+                collegeName?.editText?.text?.clear()
+                collegeAddress?.editText?.text?.clear()
+                collegeTelephone?.editText?.text?.clear()
+            }
 
         }
 

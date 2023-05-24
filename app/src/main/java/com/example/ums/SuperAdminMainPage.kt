@@ -19,8 +19,7 @@ class SuperAdminMainPage : Fragment() {
     ): View? {
 
         val dbHelper = DatabaseHelper(this.requireActivity())
-//
-//
+
         val collegeList = CollegeDAO(dbHelper).getList()
 
         val view = inflater.inflate(R.layout.fragment_super_admin_main_page, container, false)

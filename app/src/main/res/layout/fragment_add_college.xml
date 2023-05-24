@@ -101,7 +101,6 @@
         android:layout_marginHorizontal="20dp"
         android:contextClickable="true"
         android:hint="@string/college_telephone_string"
-        android:textColorHint="@color/light_onSurface"
         >
 
         <com.google.android.material.textfield.TextInputEditText
