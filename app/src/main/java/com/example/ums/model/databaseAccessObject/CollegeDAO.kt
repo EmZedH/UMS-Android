@@ -40,9 +40,10 @@ class CollegeDAO(private val databaseHelper : DatabaseHelper) {
 
     fun delete(collegeID : Int){
         val db = databaseHelper.writableDatabase
+        println("COLLEGE ID = $collegeID")
         val deleteQuery = "DELETE FROM COLLEGE WHERE C_ID = $collegeID"
 
-        db.execSQL(deleteQuery, null)
+        db.execSQL(deleteQuery)
 
         db.close()
     }
@@ -52,7 +53,9 @@ class CollegeDAO(private val databaseHelper : DatabaseHelper) {
 
         val cursor = db.rawQuery("SELECT MIN(C_ID) + 1 AS smallest_number\n" +
                 "FROM COLLEGE\n" +
-                "WHERE (C_ID + 1) NOT IN (SELECT C_ID FROM COLLEGE)\n", null)
+                "WHERE (C_ID + 1) NOT IN (SELECT C_ID FROM COLLEGE)\n" +
+                "  AND C_ID > 0;", null)
+
 
         cursor.moveToFirst()
         val newID = cursor.getInt(0)

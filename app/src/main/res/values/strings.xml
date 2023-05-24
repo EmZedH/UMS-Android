@@ -44,4 +44,5 @@
     <string name="college_name_string">College Name</string>
     <string name="edit_string">Edit</string>
     <string name="delete_string">Delete</string>
+    <string name="tap_add_button_to_get_started_string">Tap Add Button to get started</string>
 </resources>

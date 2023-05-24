@@ -86,18 +86,22 @@ class AddCollege(private val collegeDAO: CollegeDAO, private val superAdminMainP
                 collegeDAO.insert(
                     College(
                         collegeDAO.getNewID(),
-                        collegeNameText.toString(),
-                        collegeAddressText.toString(),
-                        collegeTelephoneText.toString()
+                        collegeNameText,
+                        collegeAddressText,
+                        collegeTelephoneText
                     )
                 )
 
                 view.findViewById<TextView>(R.id.college_id)!!.text =
                     "CID : C/${collegeDAO.getNewID()}"
 
-                var collegeNameText = ""
-                var collegeAddressText = ""
-                var collegeTelephoneText = ""
+                collegeNameText = ""
+                collegeAddressText = ""
+                collegeTelephoneText = ""
+
+                collegeName.editText?.setText("")
+                collegeAddress.editText?.setText("")
+                collegeTelephone.editText?.setText("")
 
                 dismiss()
             }

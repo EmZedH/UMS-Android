@@ -70,17 +70,11 @@ class MainPageActivity: AppCompatActivity(){
 
         val bottomSheet = AddCollege(collegeDAO, superAdminFragment)
 
-
         val addFloatingButton = findViewById<FloatingActionButton>(R.id.add_floating_action_button)
 
         addFloatingButton.setOnClickListener {
             bottomSheet.show(supportFragmentManager, "bottomSheetDialog")
         }
-
-//        bottomSheetDialog(collegeDAO, superAdminFragment)
-
-
-//        floatingActionButton()
     }
 
     private fun floatingActionButton() {
@@ -91,83 +85,83 @@ class MainPageActivity: AppCompatActivity(){
         }
     }
 
-    private fun bottomSheetDialog(
-        collegeDAO: CollegeDAO,
-        superAdminFragment: SuperAdminMainPage
-    ) {
-        bottomSheetDialog = BottomSheetDialog(this)
-        bottomSheetDialog.setContentView(R.layout.add_item_bottom_sheet)
-        // Set the desired behavior for the BottomSheetDialog
-
-        bottomSheetDialog.behavior.isDraggable = true
-
-        val bottomSheetCloseButton =
-            bottomSheetDialog.findViewById<ImageButton>(R.id.add_item_close_button)
-        bottomSheetCloseButton!!.setOnClickListener {
-            bottomSheetDialog.dismiss()
-        }
-
-        val collegeName =
-            bottomSheetDialog.findViewById<TextInputLayout>(R.id.college_name_text_field)
-        val collegeAddress =
-            bottomSheetDialog.findViewById<TextInputLayout>(R.id.college_address_textfield)
-        val collegeTelephone =
-            bottomSheetDialog.findViewById<TextInputLayout>(R.id.college_telephone_textfield)
-
-        val addCollegeButton =
-            bottomSheetDialog.findViewById<MaterialButton>(R.id.add_college_button)
-
-        collegeName?.error = null
-        collegeAddress?.error = null
-        collegeTelephone?.error = null
-
-        bottomSheetDialog.findViewById<TextView>(R.id.college_id)!!.text =
-            "CID : C/${collegeDAO.getNewID()}"
-
-        addCollegeButton?.setOnClickListener {
-
-            if (collegeName?.editText?.text.toString().isEmpty()) {
-                collegeName?.error = "Don't leave name field blank"
-            }
-            if (collegeAddress?.editText?.text.toString().isEmpty()) {
-                collegeAddress?.error = "Don't leave address field blank"
-            }
-
-            if (collegeTelephone?.editText?.text.toString().isEmpty()) {
-                collegeTelephone?.error = "Don't leave telephone field blank"
-            }
-            if (collegeName?.editText?.text.toString()
-                    .isNotEmpty() and collegeAddress?.editText?.text.toString()
-                    .isNotEmpty() and collegeTelephone?.editText?.text.toString().isNotEmpty()
-            ) {
-
-                collegeDAO.insert(
-                    College(
-                        collegeDAO.getNewID(),
-                        collegeName?.editText?.text.toString(),
-                        collegeAddress?.editText?.text.toString(),
-                        collegeTelephone?.editText?.text.toString()
-                    )
-                )
-
-                bottomSheetDialog.findViewById<TextView>(R.id.college_id)!!.text =
-                    "CID : C/${collegeDAO.getNewID()}"
-
-                collegeName?.error = null
-                collegeAddress?.error = null
-                collegeTelephone?.error = null
-
-                supportFragmentManager.beginTransaction().detach(superAdminFragment).commit()
-                supportFragmentManager.beginTransaction().attach(superAdminFragment).commit()
-                bottomSheetDialog.dismiss()
-                collegeName?.editText?.text?.clear()
-                collegeAddress?.editText?.text?.clear()
-                collegeTelephone?.editText?.text?.clear()
-            }
-
-        }
-
-    }
+//    private fun bottomSheetDialog(
+//        collegeDAO: CollegeDAO,
+//        superAdminFragment: SuperAdminMainPage
+//    ) {
+//        bottomSheetDialog = BottomSheetDialog(this)
+//        bottomSheetDialog.setContentView(R.layout.add_item_bottom_sheet)
+//        // Set the desired behavior for the BottomSheetDialog
+//
+//        bottomSheetDialog.behavior.isDraggable = true
+//
+//        val bottomSheetCloseButton =
+//            bottomSheetDialog.findViewById<ImageButton>(R.id.add_item_close_button)
+//        bottomSheetCloseButton!!.setOnClickListener {
+//            bottomSheetDialog.dismiss()
+//        }
+//
+//        val collegeName =
+//            bottomSheetDialog.findViewById<TextInputLayout>(R.id.college_name_text_field)
+//        val collegeAddress =
+//            bottomSheetDialog.findViewById<TextInputLayout>(R.id.college_address_textfield)
+//        val collegeTelephone =
+//            bottomSheetDialog.findViewById<TextInputLayout>(R.id.college_telephone_textfield)
+//
+//        val addCollegeButton =
+//            bottomSheetDialog.findViewById<MaterialButton>(R.id.add_college_button)
+//
+//        collegeName?.error = null
+//        collegeAddress?.error = null
+//        collegeTelephone?.error = null
+//
+//        bottomSheetDialog.findViewById<TextView>(R.id.college_id)!!.text =
+//            "CID : C/${collegeDAO.getNewID()}"
+//
+//        addCollegeButton?.setOnClickListener {
+//
+//            if (collegeName?.editText?.text.toString().isEmpty()) {
+//                collegeName?.error = "Don't leave name field blank"
+//            }
+//            if (collegeAddress?.editText?.text.toString().isEmpty()) {
+//                collegeAddress?.error = "Don't leave address field blank"
+//            }
+//
+//            if (collegeTelephone?.editText?.text.toString().isEmpty()) {
+//                collegeTelephone?.error = "Don't leave telephone field blank"
+//            }
+//            if (collegeName?.editText?.text.toString()
+//                    .isNotEmpty() and collegeAddress?.editText?.text.toString()
+//                    .isNotEmpty() and collegeTelephone?.editText?.text.toString().isNotEmpty()
+//            ) {
+//
+//                collegeDAO.insert(
+//                    College(
+//                        collegeDAO.getNewID(),
+//                        collegeName?.editText?.text.toString(),
+//                        collegeAddress?.editText?.text.toString(),
+//                        collegeTelephone?.editText?.text.toString()
+//                    )
+//                )
+//
+//                bottomSheetDialog.findViewById<TextView>(R.id.college_id)!!.text =
+//                    "CID : C/${collegeDAO.getNewID()}"
+//
+//                collegeName?.error = null
+//                collegeAddress?.error = null
+//                collegeTelephone?.error = null
+//
+//                supportFragmentManager.beginTransaction().detach(superAdminFragment).commit()
+//                supportFragmentManager.beginTransaction().attach(superAdminFragment).commit()
+//                bottomSheetDialog.dismiss()
+//                collegeName?.editText?.text?.clear()
+//                collegeAddress?.editText?.text?.clear()
+//                collegeTelephone?.editText?.text?.clear()
+//            }
+//
+//        }
+//
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
