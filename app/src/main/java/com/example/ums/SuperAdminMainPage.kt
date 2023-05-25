@@ -27,20 +27,19 @@ class SuperAdminMainPage() : Fragment() {
         val firstTextView = view.findViewById<TextView>(R.id.no_colleges_text_view)
         val secondTextView = view.findViewById<TextView>(R.id.add_to_get_started_text_view)
 
+        println("Super Admin Main Page start point")
+
         if(collegeList.isNotEmpty()){
 
+            println("Filled college start point")
 
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
 
             val recyclerView: RecyclerView = view.findViewById(R.id.college_list_view)
-            val adapter = CollegeListItemViewAdapter(collegeList, collegeDAO)
+            val adapter = CollegeListItemViewAdapter(collegeList, collegeDAO, this)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(this.context)
-        }
-        else{
-//            firstTextView.visibility = View.VISIBLE
-//            secondTextView.visibility = View.VISIBLE
         }
         return view
     }

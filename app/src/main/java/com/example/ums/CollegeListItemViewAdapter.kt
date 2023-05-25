@@ -8,13 +8,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 
-class CollegeListItemViewAdapter(private val collegeList : MutableList<College>, private val collegeDAO: CollegeDAO) : RecyclerView.Adapter<ListItemViewHolder>(){
+class CollegeListItemViewAdapter(private val collegeList : MutableList<College>, private val collegeDAO: CollegeDAO, private val fragment: Fragment) : RecyclerView.Adapter<ListItemViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItemViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_layout, parent, false)
@@ -74,6 +76,14 @@ class CollegeListItemViewAdapter(private val collegeList : MutableList<College>,
             collegeList.removeAt(position)
             notifyItemRemoved(position)
             dialog.dismiss()
+
+            if(collegeList.isEmpty()){
+                val noCollegeTextView = fragment.requireView().findViewById<TextView>(R.id.no_colleges_text_view)
+                val tapAddButtonTextView = fragment.requireView().findViewById<TextView>(R.id.add_to_get_started_text_view)
+
+                noCollegeTextView.visibility = View.VISIBLE
+                tapAddButtonTextView.visibility = View.VISIBLE
+            }
         }
 
         // Set the negative button (cancel)
@@ -85,12 +95,5 @@ class CollegeListItemViewAdapter(private val collegeList : MutableList<College>,
         val dialog = builder.create()
         dialog.show()
     }
-
-//    public fun isCollegeEmpty() : Boolean {
-//        for (i in collegeList){
-//            println("College present = ${i.collegeName}")
-//        }
-//        return collegeList.isNotEmpty()
-//    }
 
 }

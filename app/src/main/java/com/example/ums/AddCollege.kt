@@ -110,6 +110,7 @@ class AddCollege(private val collegeDAO: CollegeDAO, private val superAdminMainP
     }
 
     override fun dismiss() {
+        super.dismiss()
         collegeName.error = null
         collegeAddress.error = null
         collegeTelephone.error = null
@@ -120,7 +121,6 @@ class AddCollege(private val collegeDAO: CollegeDAO, private val superAdminMainP
 
         requireActivity().supportFragmentManager.beginTransaction().detach(superAdminMainPage).commit()
         requireActivity().supportFragmentManager.beginTransaction().attach(superAdminMainPage).commit()
-        super.dismiss()
     }
 
 }
