@@ -1,12 +1,15 @@
 package com.example.ums
 
+import android.app.AlertDialog
 import android.content.ClipData
 import android.content.ClipData.Item
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.appcompat.widget.PopupMenu
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
@@ -46,9 +49,7 @@ class CollegeListItemViewAdapter(private val collegeList : MutableList<College>,
                 }
                 R.id.delete_college -> {
                     // Handle delete option
-                    collegeDAO.delete(college.collegeID)
-                    collegeList.removeAt(position)
-                    notifyItemRemoved(position)
+                    showConfirmationDialog(context, college, position)
                     true
                 }
                 // Add more menu item cases as needed
@@ -59,4 +60,37 @@ class CollegeListItemViewAdapter(private val collegeList : MutableList<College>,
             }}
         popupMenu.show()
     }
+    private fun showConfirmationDialog(context: Context, college: College, position: Int) {
+        val builder = AlertDialog.Builder(context)
+
+        // Set the dialog title and message
+        builder.setTitle("Confirmation")
+            .setMessage("Are you sure you want to delete this college?")
+
+        // Set the positive button (delete)
+        builder.setPositiveButton("Delete") { dialog, _ ->
+            // Perform the delete operation
+            collegeDAO.delete(college.collegeID)
+            collegeList.removeAt(position)
+            notifyItemRemoved(position)
+            dialog.dismiss()
+        }
+
+        // Set the negative button (cancel)
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        // Create and show the dialog
+        val dialog = builder.create()
+        dialog.show()
+    }
+
+//    public fun isCollegeEmpty() : Boolean {
+//        for (i in collegeList){
+//            println("College present = ${i.collegeName}")
+//        }
+//        return collegeList.isNotEmpty()
+//    }
+
 }

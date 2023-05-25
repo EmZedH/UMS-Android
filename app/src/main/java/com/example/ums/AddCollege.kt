@@ -57,7 +57,6 @@ class AddCollege(private val collegeDAO: CollegeDAO, private val superAdminMainP
         val addCollegeButton =
             view.findViewById<MaterialButton>(R.id.add_college_button)
 
-
         view.findViewById<TextView>(R.id.college_id)!!.text =
             "CID : C/${collegeDAO.getNewID()}"
 

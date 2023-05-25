@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 
-class SuperAdminMainPage : Fragment() {
+class SuperAdminMainPage() : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -19,7 +19,7 @@ class SuperAdminMainPage : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val dbHelper = DatabaseHelper(this.requireActivity())
+        val dbHelper = DatabaseHelper(requireActivity())
         val collegeDAO = CollegeDAO(dbHelper)
         val collegeList = collegeDAO.getList().toMutableList()
 
@@ -29,8 +29,9 @@ class SuperAdminMainPage : Fragment() {
 
         if(collegeList.isNotEmpty()){
 
-            firstTextView.text = ""
-            secondTextView.text = ""
+
+            firstTextView.visibility = View.INVISIBLE
+            secondTextView.visibility = View.INVISIBLE
 
             val recyclerView: RecyclerView = view.findViewById(R.id.college_list_view)
             val adapter = CollegeListItemViewAdapter(collegeList, collegeDAO)
@@ -38,8 +39,8 @@ class SuperAdminMainPage : Fragment() {
             recyclerView.layoutManager = LinearLayoutManager(this.context)
         }
         else{
-            firstTextView.text = getString(R.string.no_colleges_string)
-            secondTextView.text = getString(R.string.tap_add_button_to_get_started_string)
+//            firstTextView.visibility = View.VISIBLE
+//            secondTextView.visibility = View.VISIBLE
         }
         return view
     }

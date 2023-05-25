@@ -68,6 +68,7 @@ class MainPageActivity: AppCompatActivity(){
         }
         toggle.syncState()
 
+
         val bottomSheet = AddCollege(collegeDAO, superAdminFragment)
 
         val addFloatingButton = findViewById<FloatingActionButton>(R.id.add_floating_action_button)
