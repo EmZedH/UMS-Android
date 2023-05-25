@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.core.view.isNotEmpty
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -57,8 +56,7 @@ class AddCollege(private val collegeDAO: CollegeDAO, private val superAdminMainP
         val addCollegeButton =
             view.findViewById<MaterialButton>(R.id.add_college_button)
 
-        view.findViewById<TextView>(R.id.college_id)!!.text =
-            "CID : C/${collegeDAO.getNewID()}"
+        setCollegeIDTextView(view)
 
         addCollegeButton.setOnClickListener {
 
@@ -82,7 +80,7 @@ class AddCollege(private val collegeDAO: CollegeDAO, private val superAdminMainP
                 collegeTelephoneText.isNotEmpty()
             ) {
 
-                collegeDAO.insert(
+                collegeDAO.insertCollege(
                     College(
                         collegeDAO.getNewID(),
                         collegeNameText,
@@ -91,8 +89,7 @@ class AddCollege(private val collegeDAO: CollegeDAO, private val superAdminMainP
                     )
                 )
 
-                view.findViewById<TextView>(R.id.college_id)!!.text =
-                    "CID : C/${collegeDAO.getNewID()}"
+                setCollegeIDTextView(view)
 
                 collegeNameText = ""
                 collegeAddressText = ""
@@ -121,6 +118,22 @@ class AddCollege(private val collegeDAO: CollegeDAO, private val superAdminMainP
 
         requireActivity().supportFragmentManager.beginTransaction().detach(superAdminMainPage).commit()
         requireActivity().supportFragmentManager.beginTransaction().attach(superAdminMainPage).commit()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        collegeName.error = null
+        collegeAddress.error = null
+        collegeTelephone.error = null
+
+        collegeNameText = collegeName.editText?.text.toString()
+        collegeAddressText = collegeAddress.editText?.text.toString()
+        collegeTelephoneText = collegeTelephone.editText?.text.toString()
+    }
+
+    private fun setCollegeIDTextView(view : View){
+        view.findViewById<TextView>(R.id.college_id)!!.setText(R.string.college_id_string)
+        view.findViewById<TextView>(R.id.college_id)!!.append(collegeDAO.getNewID().toString())
     }
 
 }

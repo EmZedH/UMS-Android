@@ -1,22 +1,18 @@
 package com.example.ums
 
 import android.app.AlertDialog
-import android.content.ClipData
-import android.content.ClipData.Item
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 
-class CollegeListItemViewAdapter(private val collegeList : MutableList<College>, private val collegeDAO: CollegeDAO, private val fragment: Fragment) : RecyclerView.Adapter<ListItemViewHolder>(){
+class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val fragment: Fragment) : RecyclerView.Adapter<ListItemViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItemViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_layout, parent, false)
@@ -24,20 +20,21 @@ class CollegeListItemViewAdapter(private val collegeList : MutableList<College>,
     }
 
     override fun getItemCount(): Int {
-        return collegeList.size
+        return collegeDAO.getList().size
     }
 
     override fun onBindViewHolder(holder: ListItemViewHolder, position: Int) {
-        val college = collegeList[position]
-        holder.itemIDTextView.text = "ID : C/${college.collegeID}"
+        val college = collegeDAO.getList()[position]
+        holder.itemIDTextView.setText(R.string.college_id_string)
+        holder.itemIDTextView.append(college.collegeID.toString())
         holder.itemNameTextView.text = college.collegeName
 
         holder.optionsButton.setOnClickListener {
-            showOptionsPopupMenu(college, holder, position)
+            showOptionsPopupMenu(college, holder)
         }
     }
 
-    private fun showOptionsPopupMenu(college : College, holder: ListItemViewHolder, position: Int){
+    private fun showOptionsPopupMenu(college : College, holder: ListItemViewHolder){
         val context = holder.itemView.context
         val popupMenu = PopupMenu(context, holder.optionsButton)
 
@@ -51,10 +48,9 @@ class CollegeListItemViewAdapter(private val collegeList : MutableList<College>,
                 }
                 R.id.delete_college -> {
                     // Handle delete option
-                    showConfirmationDialog(context, college, position)
+                    showConfirmationDialog(context, college)
                     true
                 }
-                // Add more menu item cases as needed
 
                 else -> {
                     false
@@ -62,7 +58,7 @@ class CollegeListItemViewAdapter(private val collegeList : MutableList<College>,
             }}
         popupMenu.show()
     }
-    private fun showConfirmationDialog(context: Context, college: College, position: Int) {
+    private fun showConfirmationDialog(context: Context, college: College) {
         val builder = AlertDialog.Builder(context)
 
         // Set the dialog title and message
@@ -73,11 +69,13 @@ class CollegeListItemViewAdapter(private val collegeList : MutableList<College>,
         builder.setPositiveButton("Delete") { dialog, _ ->
             // Perform the delete operation
             collegeDAO.delete(college.collegeID)
-            collegeList.removeAt(position)
-            notifyItemRemoved(position)
+
+            val updatedPosition = collegeDAO.getList().indexOf(college)
+            notifyItemRemoved(updatedPosition)
+            notifyItemRangeChanged(updatedPosition, itemCount - updatedPosition)
             dialog.dismiss()
 
-            if(collegeList.isEmpty()){
+            if(collegeDAO.getList().isEmpty()){
                 val noCollegeTextView = fragment.requireView().findViewById<TextView>(R.id.no_colleges_text_view)
                 val tapAddButtonTextView = fragment.requireView().findViewById<TextView>(R.id.add_to_get_started_text_view)
 

@@ -6,25 +6,21 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.ums.model.College
 import com.example.ums.model.User
-import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.example.ums.model.databaseAccessObject.UserDAO
+import com.example.ums.model.databaseAccessObject.UserNewDAO
 
 class LoginActivity : AppCompatActivity() {
 
     private val userIDPasswordIncorrectString = "User email ID or Password incorrect"
     private val userIDPasswordProperString = "Enter fields properly"
 
-    //    private val user = User("23-SA-1","AAA","9090909090","2001-01-01","M","CHENNAI","EASY", "SUPER_ADMIN","aaa@email.com")
-    private val dbHelper = DatabaseHelper(this)
-    private val userDAO = UserDAO(dbHelper)
+    private val userDAO = UserDAO(DatabaseHelper(this))
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_page)
 
-//        addColleges()
         val textViewUserNamePasswordIncorrect = findViewById<TextView>(R.id.textViewUserIDPasswordNotCorrect)
         val loginButton = findViewById<Button>(R.id.login_button)
         val userIDEditText = findViewById<EditText>(R.id.userIDEditText)

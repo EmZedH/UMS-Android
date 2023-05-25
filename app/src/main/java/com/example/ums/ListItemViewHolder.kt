@@ -10,7 +10,6 @@ class ListItemViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
     val optionsButton : ImageButton = itemView.findViewById(R.id.options_button)
     init {
         itemView.setOnClickListener {
-
         }
     }
     val itemIDTextView : TextView = itemView.findViewById(R.id.element_id)
