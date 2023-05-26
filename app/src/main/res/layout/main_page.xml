@@ -35,7 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:name="com.example.ums.SuperAdminMainPage"
-            tools:layout="@layout/fragment_super_admin_main_page" />
+            tools:layout="@layout/fragment_main_page" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/add_floating_action_button"

@@ -26,8 +26,8 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
     override fun onBindViewHolder(holder: ListItemViewHolder, position: Int) {
         val college = collegeDAO.getList()[position]
         holder.itemIDTextView.setText(R.string.college_id_string)
-        holder.itemIDTextView.append(college.collegeID.toString())
-        holder.itemNameTextView.text = college.collegeName
+        holder.itemIDTextView.append(college.id.toString())
+        holder.itemNameTextView.text = college.name
 
         holder.optionsButton.setOnClickListener {
             showOptionsPopupMenu(college, holder)
@@ -68,7 +68,7 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
         // Set the positive button (delete)
         builder.setPositiveButton("Delete") { dialog, _ ->
             // Perform the delete operation
-            collegeDAO.delete(college.collegeID)
+            collegeDAO.delete(college.id)
 
             val updatedPosition = collegeDAO.getList().indexOf(college)
             notifyItemRemoved(updatedPosition)

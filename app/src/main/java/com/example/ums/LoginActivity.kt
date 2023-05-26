@@ -8,7 +8,6 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ums.model.User
 import com.example.ums.model.databaseAccessObject.UserDAO
-import com.example.ums.model.databaseAccessObject.UserNewDAO
 
 class LoginActivity : AppCompatActivity() {
 
@@ -55,9 +54,9 @@ class LoginActivity : AppCompatActivity() {
 
         val intent = Intent(this, MainPageActivity::class.java)
         val bundle = Bundle()
-        bundle.putString("userName", user.userName)
-        bundle.putString("userID", user.userID)
-        bundle.putString("userRole", user.userRole)
+        bundle.putString("userName", user.name)
+        bundle.putInt("userID", user.id)
+        bundle.putString("userRole", user.role)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         intent.putExtras(bundle)
         startActivity(intent)

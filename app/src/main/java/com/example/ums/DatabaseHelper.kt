@@ -46,14 +46,14 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
             ")"
 
     private val createTableProfessor = "CREATE TABLE IF NOT EXISTS \"PROFESSOR\" (\n" +
-            "\t\"PROF_ID\"\tTEXT,\n" +
+            "\t\"PROF_ID\"\tINTEGER,\n" +
             "\t\"DEPT_ID\"\tTEXT,\n" +
             "\t\"COLLEGE_ID\"\tTEXT,\n" +
             "\tPRIMARY KEY(\"PROF_ID\")\n" +
             ")"
 
     private val createTableRecords = "CREATE TABLE IF NOT EXISTS \"RECORDS\" (\n" +
-            "\t\"STUDENT_ID\"\tTEXT,\n" +
+            "\t\"STUDENT_ID\"\tINTEGER,\n" +
             "\t\"COURSE_ID\"\tTEXT,\n" +
             "\t\"DEPT_ID\"\tTEXT,\n" +
             "\t\"PROF_ID\"\tTEXT,\n" +
@@ -68,7 +68,7 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
             ")"
 
     private val createTableSection = "CREATE TABLE IF NOT EXISTS \"SECTION\" (\n" +
-            "\t\"SEC_ID\"\tTEXT,\n" +
+            "\t\"SEC_ID\"\tINTEGER,\n" +
             "\t\"SEC_NAME\"\tTEXT,\n" +
             "\t\"DEPT_ID\"\tTEXT,\n" +
             "\t\"COLLEGE_ID\"\tTEXT,\n" +
@@ -76,7 +76,7 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
             ")"
 
     private val createTableStudent = "CREATE TABLE IF NOT EXISTS \"STUDENT\" (\n" +
-            "\t\"STUDENT_ID\"\tTEXT,\n" +
+            "\t\"STUDENT_ID\"\tINTEGER,\n" +
             "\t\"S_SEM\"\tINTEGER,\n" +
             "\t\"S_DEGREE\"\tTEXT,\n" +
             "\t\"SEC_ID\"\tTEXT,\n" +
@@ -86,12 +86,12 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
             ")"
 
     private val createTableSuperAdmin = "CREATE TABLE IF NOT EXISTS \"SUPER_ADMIN\" (\n" +
-            "\t\"SA_ID\"\tTEXT,\n" +
+            "\t\"SA_ID\"\tINTEGER,\n" +
             "\tPRIMARY KEY(\"SA_ID\")\n" +
             ")"
 
     private val createTableTests = "CREATE TABLE IF NOT EXISTS \"TEST\" (\n" +
-            "\t\"TEST_ID\"\tTEXT,\n" +
+            "\t\"TEST_ID\"\tINTEGER,\n" +
             "\t\"STUDENT_ID\"\tTEXT,\n" +
             "\t\"COURSE_ID\"\tTEXT,\n" +
             "\t\"DEPT_ID\"\tTEXT,\n" +
@@ -101,8 +101,8 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
             ")"
 
     private val createTableTransactions = "CREATE TABLE IF NOT EXISTS \"TRANSACTIONS\" (\n" +
-            "\t\"T_ID\"\tTEXT,\n" +
-            "\t\"STUDENT_ID\"\tTEXT,\n" +
+            "\t\"T_ID\"\tINTEGER,\n" +
+            "\t\"STUDENT_ID\"\tINTEGER,\n" +
             "\t\"T_DATE\"\tDATE,\n" +
             "\t\"T_AMOUNT\"\tINT,\n" +
             "\tPRIMARY KEY(\"T_ID\")\n" +
@@ -110,7 +110,7 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
 
 
     private val createTableUser = "CREATE TABLE IF NOT EXISTS \"USER\" (\n" +
-            "\t\"U_ID\"\tTEXT,\n" +
+            "\t\"U_ID\"\tINTEGER,\n" +
             "\t\"U_NAME\"\tTEXT,\n" +
             "\t\"U_CONTACT\"\tTEXT,\n" +
             "\t\"U_DOB\"\tDATE,\n" +
@@ -122,7 +122,7 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
             "\tPRIMARY KEY(\"U_ID\")\n" +
             ")"
 
-    private val createStarterSuperAdmin = "INSERT OR IGNORE INTO USER VALUES (\"23-SA-1\",\"AAA\",\"9090909090\",\"2001-01-01\",\"M\",\"CHENNAI\",\"EASY\",\"SUPER_ADMIN\",\"aaa@email.com\")"
+    private val createStarterSuperAdmin = "INSERT OR IGNORE INTO USER VALUES (1,\"AAA\",\"9090909090\",\"2001-01-01\",\"M\",\"CHENNAI\",\"EASY\",\"SUPER_ADMIN\",\"aaa@email.com\")"
 
     override fun onCreate(database: SQLiteDatabase) {
 

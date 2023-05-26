@@ -8,12 +8,10 @@
             <item
                 android:id="@+id/manage_profile_tab"
                 android:title="@string/manage_profile_string"
-                android:checkable="true"
                 />
             <item
                 android:id="@+id/log_out_tab"
                 android:title="@string/log_out_string"
-                android:checkable="true"
                 />
         </menu>
     </item>

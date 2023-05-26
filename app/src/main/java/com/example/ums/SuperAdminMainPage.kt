@@ -18,9 +18,9 @@ class SuperAdminMainPage : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val collegeDAO = CollegeDAO(requireActivity())
+        val collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
 
-        val view = inflater.inflate(R.layout.fragment_super_admin_main_page, container, false)
+        val view = inflater.inflate(R.layout.fragment_main_page, container, false)
         val firstTextView = view.findViewById<TextView>(R.id.no_colleges_text_view)
         val secondTextView = view.findViewById<TextView>(R.id.add_to_get_started_text_view)
 

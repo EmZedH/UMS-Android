@@ -1,5 +1,6 @@
 package com.example.ums
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -10,6 +11,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.navigation.NavigationView
 
 class MainPageActivity: AppCompatActivity(){
 
@@ -27,10 +29,10 @@ class MainPageActivity: AppCompatActivity(){
         val bundle = intent.extras
 
 //        val userName = bundle!!.getString("userName")
-//        val userID = bundle.getString("userID")
-        userRole = bundle!!.getString("userRole")!!
+        val userID = bundle!!.getInt("userID")
+        userRole = bundle.getString("userRole")!!
 
-        val collegeDAO = CollegeDAO(this)
+        val collegeDAO = CollegeDAO(DatabaseHelper(this))
         drawerLayout = findViewById(R.id.main_page_drawer_layout)
         val toggle = ActionBarDrawerToggle(
             this,
@@ -41,12 +43,26 @@ class MainPageActivity: AppCompatActivity(){
         )
         toggle.syncState()
 
+        val navigationView = findViewById<NavigationView>(R.id.navigation_view)
+
+        navigationView.setNavigationItemSelectedListener { menuItem ->
+            when(menuItem.itemId){
+                R.id.manage_profile_tab -> {
+                    val intent = Intent(this, ManageProfile::class.java)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
+                }
+            }
+            drawerLayout.closeDrawer(GravityCompat.START)
+            true
+        }
+
         if(userRole == "SUPER_ADMIN"){
             superAdminProcesses(collegeDAO)
         }
     }
 
-    private fun superAdminProcesses(collegeNewDAO: CollegeDAO){
+    private fun superAdminProcesses(collegeDAO: CollegeDAO){
 
         val superAdminFragment = SuperAdminMainPage()
         supportFragmentManager.beginTransaction().apply {
@@ -54,7 +70,7 @@ class MainPageActivity: AppCompatActivity(){
             commit()
         }
 
-        val bottomSheet = AddCollege(collegeNewDAO, superAdminFragment)
+        val bottomSheet = AddCollegeBottomSheet(collegeDAO, superAdminFragment)
 
         val addFloatingButton = findViewById<FloatingActionButton>(R.id.add_floating_action_button)
 

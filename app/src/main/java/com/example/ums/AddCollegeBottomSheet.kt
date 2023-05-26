@@ -12,7 +12,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class AddCollege(private val collegeDAO: CollegeDAO, private val superAdminMainPage: SuperAdminMainPage) : BottomSheetDialogFragment() {
+class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val superAdminMainPage: SuperAdminMainPage) : BottomSheetDialogFragment() {
 
     private lateinit var collegeName : TextInputLayout
     private lateinit var collegeAddress : TextInputLayout
@@ -30,18 +30,18 @@ class AddCollege(private val collegeDAO: CollegeDAO, private val superAdminMainP
 
         val view = inflater.inflate(R.layout.fragment_add_college, container, false)
         val bottomSheetCloseButton =
-            view.findViewById<ImageButton>(R.id.add_item_close_button)
+            view.findViewById<ImageButton>(R.id.change_password_close_buutton)
 
         bottomSheetCloseButton!!.setOnClickListener {
             dismiss()
         }
 
         collegeName =
-            view.findViewById(R.id.college_name_text_field)
+            view.findViewById(R.id.current_password)
         collegeAddress =
-            view.findViewById(R.id.college_address_textfield)
+            view.findViewById(R.id.new_password)
         collegeTelephone =
-            view.findViewById(R.id.college_telephone_textfield)
+            view.findViewById(R.id.confirm_new_password)
 
         if(collegeNameText.isNotEmpty()){
             collegeName.editText?.setText(collegeNameText)
@@ -132,8 +132,8 @@ class AddCollege(private val collegeDAO: CollegeDAO, private val superAdminMainP
     }
 
     private fun setCollegeIDTextView(view : View){
-        view.findViewById<TextView>(R.id.college_id)!!.setText(R.string.college_id_string)
-        view.findViewById<TextView>(R.id.college_id)!!.append(collegeDAO.getNewID().toString())
+        view.findViewById<TextView>(R.id.user_email_textView)!!.setText(R.string.college_id_string)
+        view.findViewById<TextView>(R.id.user_email_textView)!!.append(collegeDAO.getNewID().toString())
     }
 
 }

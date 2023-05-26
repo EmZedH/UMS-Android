@@ -45,4 +45,14 @@
     <string name="edit_string">Edit</string>
     <string name="delete_string">Delete</string>
     <string name="tap_add_button_to_get_started_string">Tap Add Button to get started</string>
+    <string name="user_id_string">UID : </string>
+    <string name="user_name_string">User Name</string>
+    <string name="contact_number_string">Contact Number</string>
+    <string name="user_address_string">Address</string>
+    <string name="confirm_user_details">Confirm User Details</string>
+    <string name="update_string">Update</string>
+    <string name="current_password_string">Current Password</string>
+    <string name="new_password_string">New Password</string>
+    <string name="confirm_new_password_string">Confirm New Password</string>
+    <string name="change_password_string">Change Password</string>
 </resources>
