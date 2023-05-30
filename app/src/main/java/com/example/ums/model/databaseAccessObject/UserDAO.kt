@@ -6,7 +6,7 @@ import com.example.ums.model.User
 
 class UserDAO(private val databaseHelper : DatabaseHelper) {
 
-    fun getUser(userEmailID : String, password : String) : User? {
+    fun get(userEmailID : String, password : String) : User? {
 
         var user : User? = null
         val db = databaseHelper.readableDatabase
@@ -36,7 +36,7 @@ class UserDAO(private val databaseHelper : DatabaseHelper) {
         return user
     }
 
-    fun getUser(userID : Int) : User?{
+    fun get(userID : Int) : User?{
 
 
         var user : User? = null
@@ -56,8 +56,6 @@ class UserDAO(private val databaseHelper : DatabaseHelper) {
                 cursor.getString(7),
                 cursor.getString(8)
             )
-
-            print(cursor.getString(1))
         }
 
         cursor.close()

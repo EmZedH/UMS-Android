@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:id="@+id/drawer_main_item"
-        android:title="TODO"
-        >
-        <menu>
+<!--    <item android:id="@+id/drawer_main_item"-->
+<!--        android:title="@string/hello_string"-->
+<!--        >-->
+<!--        <menu>-->
             <item
                 android:id="@+id/manage_profile_tab"
                 android:title="@string/manage_profile_string"
@@ -13,6 +13,6 @@
                 android:id="@+id/log_out_tab"
                 android:title="@string/log_out_string"
                 />
-        </menu>
-    </item>
+<!--        </menu>-->
+<!--    </item>-->
 </menu>

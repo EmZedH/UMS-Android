@@ -6,7 +6,21 @@ import com.example.ums.model.College
 
 class CollegeDAO(private val databaseHelper: DatabaseHelper) {
 
+    fun get(userID : Int) : College?{
+        var college : College? = null
+        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM COLLEGE WHERE C_ID = $userID", null)
+        if(cursor.moveToFirst()){
+            college = College(
+                cursor.getInt(0),
+                cursor.getString(1),
+                cursor.getString(2),
+                cursor.getString(3)
+            )
 
+        }
+        cursor.close()
+        return college
+    }
     fun getList() : List<College>{
         val collegeList = mutableListOf<College>()
         val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM COLLEGE", null)
@@ -25,7 +39,7 @@ class CollegeDAO(private val databaseHelper: DatabaseHelper) {
         return collegeList
     }
 
-    fun insertCollege(college : College){
+    fun insert(college : College){
         val contentValues = ContentValues().apply {
             put("C_ID", college.id)
             put("C_NAME",college.name)
@@ -63,4 +77,15 @@ class CollegeDAO(private val databaseHelper: DatabaseHelper) {
         return newID
     }
 
+    fun update(collegeID : Int, college : College){
+        val db = databaseHelper.writableDatabase
+        val contentValues = ContentValues().apply{
+            put("C_NAME", college.name)
+            put("C_ADDRESS", college.address)
+            put("C_TELEPHONE", college.telephone)
+        }
+
+        db.update("COLLEGE",contentValues, "C_ID=?", arrayOf(collegeID.toString()))
+        db.close()
+    }
 }

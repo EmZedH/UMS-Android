@@ -9,8 +9,9 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-//        startLoginActivity()
-        startMainPageActivity("AAA",1,"SUPER_ADMIN")
+        startLoginActivity()
+//        startMainPageActivity("AAA",1,"SUPER_ADMIN")
+//        startManageProfileActivity(1)
     }
 
     private fun startLoginActivity(){
@@ -26,6 +27,16 @@ class MainActivity : AppCompatActivity() {
         bundle.putString("userName", userName)
         bundle.putInt("userID", userID)
         bundle.putString("userRole", userRole)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        intent.putExtras(bundle)
+        startActivity(intent)
+        finish()
+    }
+
+    private fun startManageProfileActivity(userID : Int){
+        val intent = Intent(this, ManageProfileActivity::class.java)
+        val bundle = Bundle()
+        bundle.putInt("userID", userID)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
         intent.putExtras(bundle)
         startActivity(intent)

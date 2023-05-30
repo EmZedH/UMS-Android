@@ -16,7 +16,7 @@
         android:minWidth="48dp"
         android:minHeight="48dp"
         android:contentDescription="@string/list_item_option_string"
-        android:src="@drawable/ic_vertical_menu_24"
+        android:src="@drawable/ic_more_vert_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
     <TextView
@@ -43,15 +43,3 @@
         android:layout_marginStart="5dp"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>
-
-<!--<TextView-->
-<!--    xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    android:id="@+id/list_item"-->
-<!--    android:layout_width="wrap_content"-->
-<!--    android:layout_height="wrap_content"/>-->
-<!--<?xml version="1.0" encoding="utf-8"?>-->
-<!--<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent">-->
-
-<!--</androidx.constraintlayout.widget.ConstraintLayout>-->

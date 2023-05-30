@@ -5,36 +5,38 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 
-class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val fragment: Fragment) : RecyclerView.Adapter<ListItemViewHolder>(){
+class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val fragment: Fragment) : RecyclerView.Adapter<CollegeListItemViewAdapter.CollegeListItemViewHolder>(){
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItemViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollegeListItemViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_layout, parent, false)
-        return ListItemViewHolder(itemView)
+        return CollegeListItemViewHolder(itemView)
     }
 
     override fun getItemCount(): Int {
         return collegeDAO.getList().size
     }
 
-    override fun onBindViewHolder(holder: ListItemViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CollegeListItemViewHolder, position: Int) {
         val college = collegeDAO.getList()[position]
         holder.itemIDTextView.setText(R.string.college_id_string)
         holder.itemIDTextView.append(college.id.toString())
         holder.itemNameTextView.text = college.name
 
         holder.optionsButton.setOnClickListener {
-            showOptionsPopupMenu(college, holder)
+            showOptionsPopupMenu(college, holder, position)
         }
     }
 
-    private fun showOptionsPopupMenu(college : College, holder: ListItemViewHolder){
+    private fun showOptionsPopupMenu(college : College, holder: CollegeListItemViewHolder, position: Int){
         val context = holder.itemView.context
         val popupMenu = PopupMenu(context, holder.optionsButton)
 
@@ -43,11 +45,12 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
         popupMenu.setOnMenuItemClickListener{menuItem ->
             when (menuItem.itemId) {
                 R.id.edit_college -> {
-                    // Handle edit option
+                    val editFragment = EditCollegeBottomSheet(collegeDAO, college.id, fragment)
+                    editFragment.show((context as AppCompatActivity).supportFragmentManager, "bottomSheetDialog")
+                    notifyItemChanged(position)
                     true
                 }
                 R.id.delete_college -> {
-                    // Handle delete option
                     showConfirmationDialog(context, college)
                     true
                 }
@@ -92,6 +95,16 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
         // Create and show the dialog
         val dialog = builder.create()
         dialog.show()
+    }
+    inner class CollegeListItemViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
+
+        val optionsButton : ImageButton = itemView.findViewById(R.id.options_button)
+        init {
+            itemView.setOnClickListener {
+            }
+        }
+        val itemIDTextView : TextView = itemView.findViewById(R.id.element_id)
+        val itemNameTextView : TextView = itemView.findViewById(R.id.element_name)
     }
 
 }

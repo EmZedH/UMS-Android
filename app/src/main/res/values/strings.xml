@@ -24,7 +24,7 @@
     <string name="uid_string">UID : </string>
     <string name="page_title">Page Title</string>
     <string name="home_string">Home</string>
-    <string name="search">search</string>
+    <string name="search">Search</string>
     <string name="content_description_top_bar_search">top app bar search</string>
     <string name="fab_content_description">FAB to add items</string>
     <string name="main_page_with_drawer_string">Main Page with Drawer</string>
@@ -55,4 +55,6 @@
     <string name="new_password_string">New Password</string>
     <string name="confirm_new_password_string">Confirm New Password</string>
     <string name="change_password_string">Change Password</string>
+    <string name="person_image_string">Person image</string>
+    <string name="hi_string">Hi</string>
 </resources>

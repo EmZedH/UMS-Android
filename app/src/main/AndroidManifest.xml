@@ -25,7 +25,7 @@
         </activity>
         <activity android:name=".LoginActivity"/>
         <activity android:name=".MainPageActivity"/>
-        <activity android:name=".ManageProfile"/>
+        <activity android:name=".ManageProfileActivity"/>
     </application>
 
 </manifest>

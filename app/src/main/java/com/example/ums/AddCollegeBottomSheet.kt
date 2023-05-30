@@ -6,13 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val superAdminMainPage: SuperAdminMainPage) : BottomSheetDialogFragment() {
+class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val fragment: Fragment) : BottomSheetDialogFragment() {
 
     private lateinit var collegeName : TextInputLayout
     private lateinit var collegeAddress : TextInputLayout
@@ -27,21 +28,21 @@ class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val supe
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
+        retainInstance = true
         val view = inflater.inflate(R.layout.fragment_add_college, container, false)
         val bottomSheetCloseButton =
-            view.findViewById<ImageButton>(R.id.change_password_close_buutton)
+            view.findViewById<ImageButton>(R.id.close_button)
 
         bottomSheetCloseButton!!.setOnClickListener {
             dismiss()
         }
 
         collegeName =
-            view.findViewById(R.id.current_password)
+            view.findViewById(R.id.college_name_layout)
         collegeAddress =
-            view.findViewById(R.id.new_password)
+            view.findViewById(R.id.college_address_layout)
         collegeTelephone =
-            view.findViewById(R.id.confirm_new_password)
+            view.findViewById(R.id.college_telephone_layout)
 
         if(collegeNameText.isNotEmpty()){
             collegeName.editText?.setText(collegeNameText)
@@ -54,33 +55,36 @@ class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val supe
         }
 
         val addCollegeButton =
-            view.findViewById<MaterialButton>(R.id.add_college_button)
+            view.findViewById<MaterialButton>(R.id.update_college_button)
 
         setCollegeIDTextView(view)
 
         addCollegeButton.setOnClickListener {
+            var flag = true
 
             collegeNameText = collegeName.editText?.text.toString()
             collegeAddressText = collegeAddress.editText?.text.toString()
             collegeTelephoneText = collegeTelephone.editText?.text.toString()
 
             if (collegeNameText.isEmpty()) {
+                flag = false
                 collegeName.error = "Don't leave name field blank"
             }
             if (collegeAddressText.isEmpty()) {
+                flag = false
                 collegeAddress.error = "Don't leave address field blank"
             }
-
             if (collegeTelephoneText.isEmpty()) {
+                flag = false
                 collegeTelephone.error = "Don't leave telephone field blank"
             }
+            else if(!Utility.isValidContactNumber(collegeTelephoneText)){
+                flag = false
+                collegeTelephone.error = "Enter 10 digit contact number"
+            }
+            if (flag) {
 
-            if (collegeNameText.isNotEmpty() and
-                collegeAddressText.isNotEmpty() and
-                collegeTelephoneText.isNotEmpty()
-            ) {
-
-                collegeDAO.insertCollege(
+                collegeDAO.insert(
                     College(
                         collegeDAO.getNewID(),
                         collegeNameText,
@@ -116,8 +120,8 @@ class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val supe
         collegeAddressText = collegeAddress.editText?.text.toString()
         collegeTelephoneText = collegeTelephone.editText?.text.toString()
 
-        requireActivity().supportFragmentManager.beginTransaction().detach(superAdminMainPage).commit()
-        requireActivity().supportFragmentManager.beginTransaction().attach(superAdminMainPage).commit()
+        requireActivity().supportFragmentManager.beginTransaction().detach(fragment).commit()
+        requireActivity().supportFragmentManager.beginTransaction().attach(fragment).commit()
     }
 
     override fun onStop() {
@@ -132,8 +136,8 @@ class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val supe
     }
 
     private fun setCollegeIDTextView(view : View){
-        view.findViewById<TextView>(R.id.user_email_textView)!!.setText(R.string.college_id_string)
-        view.findViewById<TextView>(R.id.user_email_textView)!!.append(collegeDAO.getNewID().toString())
+        view.findViewById<TextView>(R.id.college_id_text_view)!!.setText(R.string.college_id_string)
+        view.findViewById<TextView>(R.id.college_id_text_view)!!.append(collegeDAO.getNewID().toString())
     }
 
 }

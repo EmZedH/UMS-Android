@@ -1,5 +1,6 @@
 package com.example.ums
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
@@ -25,33 +26,43 @@ class LoginActivity : AppCompatActivity() {
         val userIDEditText = findViewById<EditText>(R.id.userIDEditText)
         val passwordEditText = findViewById<EditText>(R.id.passwordEditText)
 
-        loginButton.setOnClickListener {
+        val sharedPreferences = getSharedPreferences("UMSPreferences", Context.MODE_PRIVATE)
+        val userEmail = sharedPreferences.getString("email", null)
+        val userPassword=  sharedPreferences.getString("password", null)
+        val isLoggedOut = sharedPreferences.getBoolean("isLoggedOut", true)
 
-            textViewUserNamePasswordIncorrect.text = ""
+        if(userEmail != null && userPassword != null && !isLoggedOut){
+            val user = userDAO.get(userEmail, userPassword)!!
+            goToMainPage(user)
+        }
+        else{
+            loginButton.setOnClickListener {
 
-            val userEmailID = userIDEditText.text.toString().lowercase()
-            val password = passwordEditText.text.toString()
+                textViewUserNamePasswordIncorrect.text = ""
 
-            val user = userDAO.getUser(userEmailID, password)
+                val userEmailID = userIDEditText.text.toString().lowercase()
+                val password = passwordEditText.text.toString()
 
-            if(user == null){
+                val user = userDAO.get(userEmailID, password)
 
-                textViewUserNamePasswordIncorrect.text =
-                    if(userEmailID == "" || password == "")
-                        userIDPasswordProperString
-                    else
-                        userIDPasswordIncorrectString
+                if(user == null){
 
+                    textViewUserNamePasswordIncorrect.text =
+                        if(userEmailID == "" || password == "")
+                            userIDPasswordProperString
+                        else
+                            userIDPasswordIncorrectString
+
+                }
+                else{
+                    saveUserData(user)
+                    goToMainPage(user)
+                }
             }
-            else{
-                mainPage(user)
-            }
-
         }
     }
 
-    private fun mainPage(user : User){
-
+    private fun goToMainPage(user : User){
         val intent = Intent(this, MainPageActivity::class.java)
         val bundle = Bundle()
         bundle.putString("userName", user.name)
@@ -64,11 +75,11 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-//    private fun addColleges(){
-//
-//        val collegeDAO = CollegeDAO(dbHelper)
-//        collegeDAO.insert(College(collegeDAO.getNewID(),"PTU","PONDY","0000000000"))
-//        collegeDAO.insert(College(collegeDAO.getNewID(),"EDU","CHENNAI","0000000002"))
-//        collegeDAO.insert(College(collegeDAO.getNewID(),"DTU","DELHI","0000000003"))
-//    }
+    private fun saveUserData(user : User){
+        val editor = getSharedPreferences("UMSPreferences", Context.MODE_PRIVATE).edit()
+        editor.putString("email",user.emailID)
+        editor.putString("password", user.password)
+        editor.putBoolean("isLoggedOut", false)
+        editor.apply()
+    }
 }

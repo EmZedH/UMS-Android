@@ -13,11 +13,12 @@
         >
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <com.google.android.material.appbar.MaterialToolbar
 
-                android:id="@+id/topAppBar"
+                android:id="@+id/top_app_bar"
                 app:title="@string/home_string"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -38,6 +39,7 @@
             tools:layout="@layout/fragment_main_page" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
+            style="@style/FloatingActionButtonStyle"
             android:id="@+id/add_floating_action_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,7 +49,7 @@
             android:src="@drawable/ic_plus_24"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            app:shapeAppearanceOverlay="@style/FabShapeStyle1" />
+            />
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -58,6 +60,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/navigation_drawer"
+        app:headerLayout="@layout/nav_header_custom"
         android:background="@color/light_surface"
         android:maxWidth="280dp"
         android:fitsSystemWindows="true"
