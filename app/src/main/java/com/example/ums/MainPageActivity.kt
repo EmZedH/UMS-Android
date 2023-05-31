@@ -90,13 +90,13 @@ class MainPageActivity: AppCompatActivity(), FragmentRefreshListener{
             commit()
         }
 
-        val bottomSheet = AddCollegeBottomSheet(collegeDAO, this)
-
-        val addFloatingButton = findViewById<FloatingActionButton>(R.id.add_floating_action_button)
-
-        addFloatingButton.setOnClickListener {
-            bottomSheet.show(supportFragmentManager, "bottomSheetDialog")
-        }
+//        val bottomSheet = AddCollegeBottomSheet(collegeDAO, this)
+//
+//        val addFloatingButton = findViewById<FloatingActionButton>(R.id.add_floating_action_button)
+//
+//        addFloatingButton.setOnClickListener {
+//            bottomSheet.show(supportFragmentManager, "bottomSheetDialog")
+//        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.model.databaseAccessObject.CollegeDAO
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class SuperAdminMainPage : Fragment(), FragmentRefreshListener {
 
@@ -23,6 +24,14 @@ class SuperAdminMainPage : Fragment(), FragmentRefreshListener {
         val view = inflater.inflate(R.layout.fragment_main_page, container, false)
         val firstTextView = view.findViewById<TextView>(R.id.no_colleges_text_view)
         val secondTextView = view.findViewById<TextView>(R.id.add_to_get_started_text_view)
+
+        val bottomSheet = AddCollegeBottomSheet(collegeDAO, this)
+
+        val addFloatingButton = view.findViewById<FloatingActionButton>(R.id.add_floating_action_button)
+
+        addFloatingButton.setOnClickListener {
+            bottomSheet.show(requireActivity().supportFragmentManager, "bottomSheetDialog")
+        }
 
         if(collegeDAO.getList().isNotEmpty()){
 

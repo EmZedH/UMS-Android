@@ -38,18 +38,6 @@
             android:name="com.example.ums.SuperAdminMainPage"
             tools:layout="@layout/fragment_main_page" />
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            style="@style/FloatingActionButtonStyle"
-            android:id="@+id/add_floating_action_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:backgroundTint="@color/light_primary"
-            android:contentDescription="@string/fab_content_description"
-            android:src="@drawable/ic_plus_24"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentEnd="true"
-            />
     </RelativeLayout>
 
     <com.google.android.material.navigation.NavigationView
