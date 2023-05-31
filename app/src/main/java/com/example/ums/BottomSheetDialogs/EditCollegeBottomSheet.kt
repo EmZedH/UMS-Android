@@ -1,4 +1,4 @@
-package com.example.ums
+package com.example.ums.BottomSheetDialogs
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,8 @@ import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import com.example.ums.Listeners.EditCollegeListener
+import com.example.ums.R
+import com.example.ums.Utility
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -22,7 +24,6 @@ class EditCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val col
     ): View? {
         // Inflate the layout for this fragment
 //        val collegeID = arguments?.getInt("collegeID")
-        retainInstance = true
         val college = collegeDAO.get(collegeID)
 
         val view = inflater.inflate(R.layout.fragment_edit_college, container, false)

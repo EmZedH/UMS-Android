@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ums.BottomSheetDialogs.AddCollegeBottomSheet
 import com.example.ums.Listeners.AddCollegeListener
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -56,6 +57,7 @@ class SuperAdminMainPage : Fragment(), AddCollegeListener {
     }
 
     override fun addItemToAdapter(position: Int) {
+        collegeListItemViewAdapter.addItem(position)
         collegeListItemViewAdapter.notifyItemInserted(position)
     }
 

@@ -4,12 +4,10 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SearchView
 import android.widget.TextView
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -18,7 +16,6 @@ import com.example.ums.model.User
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.example.ums.model.databaseAccessObject.UserDAO
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 
 class MainPageActivity: AppCompatActivity(){
@@ -46,17 +43,12 @@ class MainPageActivity: AppCompatActivity(){
         user = userDAO.get(userID)!!
         userRole = bundle.getString("userRole")!!
 
-        val collegeDAO = CollegeDAO(DatabaseHelper(this))
+        CollegeDAO(DatabaseHelper(this))
         drawerLayout = findViewById(R.id.main_page_drawer_layout)
-        val toggle = ActionBarDrawerToggle(
-            this,
-            drawerLayout,
-            toolBar,
-            R.string.navigation_drawer_open,
-            R.string.navigation_drawer_close
-        )
 
-        toggle.syncState()
+        toolBar.setNavigationOnClickListener {
+            drawerLayout.openDrawer(GravityCompat.START)
+        }
 
         navigationView = findViewById(R.id.navigation_view)
         navigationView.setNavigationItemSelectedListener { menuItem ->
@@ -74,11 +66,11 @@ class MainPageActivity: AppCompatActivity(){
             true
         }
         if(userRole == "SUPER_ADMIN"){
-            superAdminProcesses(collegeDAO)
+            superAdminProcesses()
         }
     }
 
-    private fun superAdminProcesses(collegeDAO: CollegeDAO){
+    private fun superAdminProcesses() {
         navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_welcome_text_view).append(" ${user.name}")
         navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_user_id).append(" SA/${user.id}")
 
@@ -95,7 +87,6 @@ class MainPageActivity: AppCompatActivity(){
                 toolBar.menu.clear()
                 true
             }
-            // Handle other menu items here
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -121,7 +112,7 @@ class MainPageActivity: AppCompatActivity(){
 
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-        // Close the Navigation Drawer when the back button is pressed
+
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
         }
@@ -132,22 +123,17 @@ class MainPageActivity: AppCompatActivity(){
     private fun showExitConfirmationDialog(context: Context) {
         val builder = AlertDialog.Builder(context)
 
-        // Set the dialog title and message
         builder.setTitle("Confirmation")
             .setMessage("Are you sure you want to exit?")
 
-        // Set the positive button (delete)
         builder.setPositiveButton("Confirm") { _, _ ->
-            // Perform the delete operation
             finish()
         }
 
-        // Set the negative button (cancel)
         builder.setNegativeButton("Cancel") { dialog, _ ->
             dialog.dismiss()
         }
 
-        // Create and show the dialog
         val dialog = builder.create()
         dialog.show()
     }

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ums.BottomSheetDialogs.ChangePasswordBottomSheet
 import com.example.ums.model.databaseAccessObject.UserDAO
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton

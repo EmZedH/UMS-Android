@@ -6,9 +6,9 @@ import com.example.ums.model.College
 
 class CollegeDAO(private val databaseHelper: DatabaseHelper) {
 
-    fun get(userID : Int) : College?{
+    fun get(collegeID : Int) : College?{
         var college : College? = null
-        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM COLLEGE WHERE C_ID = $userID", null)
+        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM COLLEGE WHERE C_ID = $collegeID", null)
         if(cursor.moveToFirst()){
             college = College(
                 cursor.getInt(0),

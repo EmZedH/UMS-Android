@@ -1,4 +1,4 @@
-package com.example.ums
+package com.example.ums.BottomSheetDialogs
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import com.example.ums.Listeners.AddCollegeListener
+import com.example.ums.R
+import com.example.ums.Utility
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment

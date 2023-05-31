@@ -6,17 +6,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ums.BottomSheetDialogs.EditCollegeBottomSheet
 import com.example.ums.Listeners.EditCollegeListener
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 
 class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO) : RecyclerView.Adapter<CollegeListItemViewAdapter.CollegeListItemViewHolder>(),
-    EditCollegeListener {
+    EditCollegeListener, Filterable {
+
+    private var filteredList : MutableList<College> = collegeDAO.getList().toMutableList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollegeListItemViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_layout, parent, false)
@@ -24,24 +29,25 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO) : RecyclerV
     }
 
     override fun getItemCount(): Int {
-        return collegeDAO.getList().size
+//        return collegeDAO.getList().size
+        return filteredList.size
     }
 
     override fun onBindViewHolder(holder: CollegeListItemViewHolder, position: Int) {
-        val college = collegeDAO.getList()[position]
+//        val college = collegeDAO.getList()[position]
+        val college = filteredList[position]
         holder.itemIDTextView.setText(R.string.college_id_string)
         holder.itemIDTextView.append(college.id.toString())
         holder.itemNameTextView.text = college.name
 
         holder.itemView.setOnClickListener {
-//            holder.itemNameTextView.text = "PRESSED"
         }
         holder.optionsButton.setOnClickListener {
-            showOptionsPopupMenu(college, holder, position)
+            showOptionsPopupMenu(college, holder)
         }
     }
 
-    private fun showOptionsPopupMenu(college : College, holder: CollegeListItemViewHolder, position: Int){
+    private fun showOptionsPopupMenu(college : College, holder: CollegeListItemViewHolder){
         val context = holder.itemView.context
         val popupMenu = PopupMenu(context, holder.optionsButton)
 
@@ -72,10 +78,13 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO) : RecyclerV
             .setMessage("Are you sure you want to delete this college?")
 
         builder.setPositiveButton("Delete") { dialog, _ ->
-            val updatedPosition = collegeDAO.getList().indexOf(college)
+//            val updatedPosition = collegeDAO.getList().indexOf(college)
+            val updatedPosition = filteredList.indexOf(college)
             collegeDAO.delete(college.id)
-
+            filteredList.removeAt(updatedPosition)
             notifyItemRemoved(updatedPosition)
+//            notifyItemRangeChanged(updatedPosition, itemCount - updatedPosition)
+            Log.i("CollegeItemListViewAdapter->showConfirmationDialog","updated Position : $updatedPosition")
             dialog.dismiss()
         }
 
@@ -95,6 +104,35 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO) : RecyclerV
 
     override fun updateItemInAdapter(position: Int) {
         Log.i("SuperAdminMainPagerefreshFragment","position $position")
+        filteredList[position] = collegeDAO.get(position+1)!!
         notifyItemChanged(position)
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter(){
+            override fun performFiltering(p0: CharSequence?): FilterResults {
+                val searchText = p0?.toString()?.trim() ?: ""
+                val results = FilterResults()
+                val filteredItems = if (searchText.isEmpty()) {
+                    collegeDAO.getList()
+                } else {
+                    collegeDAO.getList().filter { item ->
+                        // Implement your filtering logic here
+                        item.name.contains(searchText, ignoreCase = true)
+                    }
+                }
+                results.values = filteredItems
+                results.count = filteredItems.size
+                return results
+            }
+
+            override fun publishResults(p0: CharSequence?, p1: FilterResults?) {
+            }
+
+        }
+    }
+
+    fun addItem(position: Int){
+        filteredList.add(position, collegeDAO.get(position+1)!!)
     }
 }
