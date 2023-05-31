@@ -27,7 +27,6 @@ class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val frag
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        retainInstance = true
         val view = inflater.inflate(R.layout.fragment_add_college, container, false)
         val bottomSheetCloseButton =
             view.findViewById<ImageButton>(R.id.close_button)

@@ -1,6 +1,5 @@
 package com.example.ums
 
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -23,11 +22,9 @@ class ChangePasswordBottomSheet(private val userID : Int, private val userDAO: U
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
-        retainInstance = true
         view = inflater.inflate(R.layout.fragment_change_password, container, false)
-
         val closeButton = view.findViewById<ImageButton>(R.id.close_button)
         val emailTextView = view.findViewById<TextView>(R.id.college_id_text_view)
         currentPassword = view.findViewById(R.id.college_name_layout)

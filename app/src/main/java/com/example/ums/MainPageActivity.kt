@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.SearchView
@@ -74,7 +75,6 @@ class MainPageActivity: AppCompatActivity(), FragmentRefreshListener{
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
-
         if(userRole == "SUPER_ADMIN"){
             superAdminProcesses(collegeDAO)
         }
@@ -189,5 +189,13 @@ class MainPageActivity: AppCompatActivity(), FragmentRefreshListener{
     override fun refreshFragment() {
         supportFragmentManager.beginTransaction().detach(userFragment).commit()
         supportFragmentManager.beginTransaction().attach(userFragment).commit()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        user = UserDAO(DatabaseHelper(this)).get(user.id)!!
+        val welcomeTextView = navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_welcome_text_view)
+        welcomeTextView.setText(R.string.hi_string)
+        welcomeTextView.append(" ${user.name}")
     }
 }
