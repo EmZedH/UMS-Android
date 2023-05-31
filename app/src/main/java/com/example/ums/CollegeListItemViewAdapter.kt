@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 
-class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val fragment: Fragment, private val fragmentRefreshListener: FragmentRefreshListener) : RecyclerView.Adapter<CollegeListItemViewAdapter.CollegeListItemViewHolder>(){
+class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val fragmentRefreshListener: FragmentRefreshListener) : RecyclerView.Adapter<CollegeListItemViewAdapter.CollegeListItemViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollegeListItemViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_layout, parent, false)
@@ -74,13 +74,7 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
             notifyItemRemoved(updatedPosition)
             dialog.dismiss()
 
-            if(collegeDAO.getList().isEmpty()){
-                val noCollegeTextView = fragment.requireView().findViewById<TextView>(R.id.no_colleges_text_view)
-                val tapAddButtonTextView = fragment.requireView().findViewById<TextView>(R.id.add_to_get_started_text_view)
-
-                noCollegeTextView.visibility = View.VISIBLE
-                tapAddButtonTextView.visibility = View.VISIBLE
-            }
+            fragmentRefreshListener.refreshFragment()
         }
 
         builder.setNegativeButton("Cancel") { dialog, _ ->

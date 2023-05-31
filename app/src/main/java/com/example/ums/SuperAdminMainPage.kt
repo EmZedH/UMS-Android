@@ -30,9 +30,14 @@ class SuperAdminMainPage : Fragment(), FragmentRefreshListener {
             secondTextView.visibility = View.INVISIBLE
 
             val recyclerView: RecyclerView = view.findViewById(R.id.college_list_view)
-            val collegeListItemViewAdapter = CollegeListItemViewAdapter(collegeDAO, this, this)
+            val collegeListItemViewAdapter = CollegeListItemViewAdapter(collegeDAO, this)
             recyclerView.adapter = collegeListItemViewAdapter
             recyclerView.layoutManager = LinearLayoutManager(this.context)
+        }
+        else{
+
+            firstTextView.visibility = View.VISIBLE
+            secondTextView.visibility = View.VISIBLE
         }
         return view
     }
@@ -40,8 +45,5 @@ class SuperAdminMainPage : Fragment(), FragmentRefreshListener {
     override fun refreshFragment() {
         requireActivity().supportFragmentManager.beginTransaction().detach(this).commit()
         requireActivity().supportFragmentManager.beginTransaction().attach(this).commit()
-
-//        parentFragmentManager.beginTransaction().detach(this).commit()
-//        parentFragmentManager.beginTransaction().attach(this).commit()
     }
 }
