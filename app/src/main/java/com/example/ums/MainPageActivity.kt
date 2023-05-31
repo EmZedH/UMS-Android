@@ -21,7 +21,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 
-class MainPageActivity: AppCompatActivity(), FragmentRefreshListener{
+class MainPageActivity: AppCompatActivity(){
 
     private lateinit var userFragment: Fragment
     private lateinit var drawerLayout: DrawerLayout
@@ -59,8 +59,6 @@ class MainPageActivity: AppCompatActivity(), FragmentRefreshListener{
         toggle.syncState()
 
         navigationView = findViewById(R.id.navigation_view)
-
-
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when(menuItem.itemId){
                 R.id.manage_profile_tab -> {
@@ -89,14 +87,6 @@ class MainPageActivity: AppCompatActivity(), FragmentRefreshListener{
             replace(R.id.super_admin_fragment_container, userFragment)
             commit()
         }
-
-//        val bottomSheet = AddCollegeBottomSheet(collegeDAO, this)
-//
-//        val addFloatingButton = findViewById<FloatingActionButton>(R.id.add_floating_action_button)
-//
-//        addFloatingButton.setOnClickListener {
-//            bottomSheet.show(supportFragmentManager, "bottomSheetDialog")
-//        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -176,19 +166,12 @@ class MainPageActivity: AppCompatActivity(), FragmentRefreshListener{
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
         }
-        // Set the negative button (cancel)
         builder.setNegativeButton("Cancel") { dialog, _ ->
             dialog.dismiss()
         }
 
-        // Create and show the dialog
         val dialog = builder.create()
         dialog.show()
-    }
-
-    override fun refreshFragment() {
-        supportFragmentManager.beginTransaction().detach(userFragment).commit()
-        supportFragmentManager.beginTransaction().attach(userFragment).commit()
     }
 
     override fun onResume() {

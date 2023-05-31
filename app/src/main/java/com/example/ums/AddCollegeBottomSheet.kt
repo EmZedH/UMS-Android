@@ -6,13 +6,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import com.example.ums.Listeners.AddCollegeListener
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val fragmentRefreshListener: FragmentRefreshListener) : BottomSheetDialogFragment() {
+class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val addCollegeListener: AddCollegeListener) : BottomSheetDialogFragment() {
 
     private lateinit var collegeName : TextInputLayout
     private lateinit var collegeAddress : TextInputLayout
@@ -28,6 +29,7 @@ class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val frag
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_add_college, container, false)
+//        retainInstance = true
         val bottomSheetCloseButton =
             view.findViewById<ImageButton>(R.id.close_button)
 
@@ -81,10 +83,11 @@ class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val frag
                 collegeTelephone.error = "Enter 10 digit contact number"
             }
             if (flag) {
+                val newID = collegeDAO.getNewID()
 
                 collegeDAO.insert(
                     College(
-                        collegeDAO.getNewID(),
+                        newID,
                         collegeNameText,
                         collegeAddressText,
                         collegeTelephoneText
@@ -100,7 +103,8 @@ class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val frag
                 collegeName.editText?.setText("")
                 collegeAddress.editText?.setText("")
                 collegeTelephone.editText?.setText("")
-
+//                fragmentRefreshListener.refreshFragment()
+                addCollegeListener.addItemToAdapter(newID-1)
                 dismiss()
             }
 
@@ -110,19 +114,16 @@ class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val frag
 
     override fun dismiss() {
         super.dismiss()
-        collegeName.error = null
-        collegeAddress.error = null
-        collegeTelephone.error = null
+        finalize()
 
-        collegeNameText = collegeName.editText?.text.toString()
-        collegeAddressText = collegeAddress.editText?.text.toString()
-        collegeTelephoneText = collegeTelephone.editText?.text.toString()
-
-        fragmentRefreshListener.refreshFragment()
     }
 
     override fun onStop() {
         super.onStop()
+        finalize()
+    }
+
+    private fun finalize(){
         collegeName.error = null
         collegeAddress.error = null
         collegeTelephone.error = null
@@ -130,7 +131,6 @@ class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val frag
         collegeNameText = collegeName.editText?.text.toString()
         collegeAddressText = collegeAddress.editText?.text.toString()
         collegeTelephoneText = collegeTelephone.editText?.text.toString()
-        fragmentRefreshListener.refreshFragment()
     }
 
     private fun setCollegeIDTextView(view : View){

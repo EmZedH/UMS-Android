@@ -7,13 +7,14 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
+import com.example.ums.Listeners.EditCollegeListener
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class EditCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val collegeID : Int, private val fragmentRefreshListener: FragmentRefreshListener) : BottomSheetDialogFragment() {
+class EditCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val collegeID : Int, private val editCollegeListener: EditCollegeListener) : BottomSheetDialogFragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,7 +74,8 @@ class EditCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val col
                         collegeTelephoneText
                     )
                 collegeDAO.update(collegeID, newCollege)
-                fragmentRefreshListener.refreshFragment()
+//                fragmentRefreshListener.refreshFragment()
+                editCollegeListener.updateItemInAdapter(collegeDAO.getList().indexOf(collegeDAO.get(collegeID)))
                 Toast.makeText(requireContext(), "Details Updated!", Toast.LENGTH_SHORT).show()
                 dismiss()
             }

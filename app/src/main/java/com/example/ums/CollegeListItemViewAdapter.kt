@@ -2,6 +2,7 @@ package com.example.ums
 
 import android.app.AlertDialog
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +10,13 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ums.Listeners.EditCollegeListener
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 
-class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val fragmentRefreshListener: FragmentRefreshListener) : RecyclerView.Adapter<CollegeListItemViewAdapter.CollegeListItemViewHolder>(){
+class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO) : RecyclerView.Adapter<CollegeListItemViewAdapter.CollegeListItemViewHolder>(),
+    EditCollegeListener {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollegeListItemViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_layout, parent, false)
@@ -48,9 +50,8 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
         popupMenu.setOnMenuItemClickListener{menuItem ->
             when (menuItem.itemId) {
                 R.id.edit_college -> {
-                    val editFragment = EditCollegeBottomSheet(collegeDAO, college.id, fragmentRefreshListener)
+                    val editFragment = EditCollegeBottomSheet(collegeDAO, college.id, this)
                     editFragment.show((context as AppCompatActivity).supportFragmentManager, "bottomSheetDialog")
-                    notifyItemChanged(position)
                     true
                 }
                 R.id.delete_college -> {
@@ -76,8 +77,6 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
 
             notifyItemRemoved(updatedPosition)
             dialog.dismiss()
-
-            fragmentRefreshListener.refreshFragment()
         }
 
         builder.setNegativeButton("Cancel") { dialog, _ ->
@@ -92,5 +91,10 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
         val optionsButton : ImageButton = itemView.findViewById(R.id.options_button)
         val itemIDTextView : TextView = itemView.findViewById(R.id.element_id)
         val itemNameTextView : TextView = itemView.findViewById(R.id.element_name)
+    }
+
+    override fun updateItemInAdapter(position: Int) {
+        Log.i("SuperAdminMainPagerefreshFragment","position $position")
+        notifyItemChanged(position)
     }
 }

@@ -8,10 +8,14 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ums.Listeners.AddCollegeListener
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class SuperAdminMainPage : Fragment(), FragmentRefreshListener {
+class SuperAdminMainPage : Fragment(), AddCollegeListener {
+
+    private lateinit var addCollegeBottomSheet : AddCollegeBottomSheet
+    private lateinit var collegeListItemViewAdapter : CollegeListItemViewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,12 +29,12 @@ class SuperAdminMainPage : Fragment(), FragmentRefreshListener {
         val firstTextView = view.findViewById<TextView>(R.id.no_colleges_text_view)
         val secondTextView = view.findViewById<TextView>(R.id.add_to_get_started_text_view)
 
-        val bottomSheet = AddCollegeBottomSheet(collegeDAO, this)
+        addCollegeBottomSheet = AddCollegeBottomSheet(collegeDAO, this)
 
         val addFloatingButton = view.findViewById<FloatingActionButton>(R.id.add_floating_action_button)
 
         addFloatingButton.setOnClickListener {
-            bottomSheet.show(requireActivity().supportFragmentManager, "bottomSheetDialog")
+            addCollegeBottomSheet.show(requireActivity().supportFragmentManager, "bottomSheetDialog")
         }
 
         if(collegeDAO.getList().isNotEmpty()){
@@ -39,7 +43,7 @@ class SuperAdminMainPage : Fragment(), FragmentRefreshListener {
             secondTextView.visibility = View.INVISIBLE
 
             val recyclerView: RecyclerView = view.findViewById(R.id.college_list_view)
-            val collegeListItemViewAdapter = CollegeListItemViewAdapter(collegeDAO, this)
+            collegeListItemViewAdapter = CollegeListItemViewAdapter(collegeDAO)
             recyclerView.adapter = collegeListItemViewAdapter
             recyclerView.layoutManager = LinearLayoutManager(this.context)
         }
@@ -51,8 +55,8 @@ class SuperAdminMainPage : Fragment(), FragmentRefreshListener {
         return view
     }
 
-    override fun refreshFragment() {
-        requireActivity().supportFragmentManager.beginTransaction().detach(this).commit()
-        requireActivity().supportFragmentManager.beginTransaction().attach(this).commit()
+    override fun addItemToAdapter(position: Int) {
+        collegeListItemViewAdapter.notifyItemInserted(position)
     }
+
 }
