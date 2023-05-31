@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 
-class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val fragment: Fragment) : RecyclerView.Adapter<CollegeListItemViewAdapter.CollegeListItemViewHolder>(){
+class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val fragment: Fragment, private val fragmentRefreshListener: FragmentRefreshListener) : RecyclerView.Adapter<CollegeListItemViewAdapter.CollegeListItemViewHolder>(){
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CollegeListItemViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_layout, parent, false)
@@ -45,7 +45,7 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
         popupMenu.setOnMenuItemClickListener{menuItem ->
             when (menuItem.itemId) {
                 R.id.edit_college -> {
-                    val editFragment = EditCollegeBottomSheet(collegeDAO, college.id, fragment)
+                    val editFragment = EditCollegeBottomSheet(collegeDAO, college.id, fragmentRefreshListener)
                     editFragment.show((context as AppCompatActivity).supportFragmentManager, "bottomSheetDialog")
                     notifyItemChanged(position)
                     true

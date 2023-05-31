@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 
-class SuperAdminMainPage : Fragment() {
+class SuperAdminMainPage : Fragment(), FragmentRefreshListener {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,10 +30,18 @@ class SuperAdminMainPage : Fragment() {
             secondTextView.visibility = View.INVISIBLE
 
             val recyclerView: RecyclerView = view.findViewById(R.id.college_list_view)
-            val collegeListItemViewAdapter = CollegeListItemViewAdapter(collegeDAO, this)
+            val collegeListItemViewAdapter = CollegeListItemViewAdapter(collegeDAO, this, this)
             recyclerView.adapter = collegeListItemViewAdapter
             recyclerView.layoutManager = LinearLayoutManager(this.context)
         }
         return view
+    }
+
+    override fun refreshFragment() {
+        requireActivity().supportFragmentManager.beginTransaction().detach(this).commit()
+        requireActivity().supportFragmentManager.beginTransaction().attach(this).commit()
+
+//        parentFragmentManager.beginTransaction().detach(this).commit()
+//        parentFragmentManager.beginTransaction().attach(this).commit()
     }
 }

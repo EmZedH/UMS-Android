@@ -81,7 +81,6 @@ class MainPageActivity: AppCompatActivity(), FragmentRefreshListener{
     }
 
     private fun superAdminProcesses(collegeDAO: CollegeDAO){
-
         navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_welcome_text_view).append(" ${user.name}")
         navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_user_id).append(" SA/${user.id}")
 
