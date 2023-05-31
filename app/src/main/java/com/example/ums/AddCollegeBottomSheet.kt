@@ -6,14 +6,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.fragment.app.Fragment
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val fragment: Fragment) : BottomSheetDialogFragment() {
+class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val fragmentRefreshListener: FragmentRefreshListener) : BottomSheetDialogFragment() {
 
     private lateinit var collegeName : TextInputLayout
     private lateinit var collegeAddress : TextInputLayout
@@ -120,8 +119,7 @@ class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val frag
         collegeAddressText = collegeAddress.editText?.text.toString()
         collegeTelephoneText = collegeTelephone.editText?.text.toString()
 
-        requireActivity().supportFragmentManager.beginTransaction().detach(fragment).commit()
-        requireActivity().supportFragmentManager.beginTransaction().attach(fragment).commit()
+        fragmentRefreshListener.refreshFragment()
     }
 
     override fun onStop() {
@@ -133,6 +131,7 @@ class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val frag
         collegeNameText = collegeName.editText?.text.toString()
         collegeAddressText = collegeAddress.editText?.text.toString()
         collegeTelephoneText = collegeTelephone.editText?.text.toString()
+        fragmentRefreshListener.refreshFragment()
     }
 
     private fun setCollegeIDTextView(view : View){

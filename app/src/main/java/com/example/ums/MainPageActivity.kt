@@ -20,7 +20,7 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 
-class MainPageActivity: AppCompatActivity(){
+class MainPageActivity: AppCompatActivity(), FragmentRefreshListener{
 
     private lateinit var userFragment: Fragment
     private lateinit var drawerLayout: DrawerLayout
@@ -91,7 +91,7 @@ class MainPageActivity: AppCompatActivity(){
             commit()
         }
 
-        val bottomSheet = AddCollegeBottomSheet(collegeDAO, userFragment)
+        val bottomSheet = AddCollegeBottomSheet(collegeDAO, this)
 
         val addFloatingButton = findViewById<FloatingActionButton>(R.id.add_floating_action_button)
 
@@ -185,5 +185,10 @@ class MainPageActivity: AppCompatActivity(){
         // Create and show the dialog
         val dialog = builder.create()
         dialog.show()
+    }
+
+    override fun refreshFragment() {
+        supportFragmentManager.beginTransaction().detach(userFragment).commit()
+        supportFragmentManager.beginTransaction().attach(userFragment).commit()
     }
 }

@@ -64,18 +64,14 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
     private fun showConfirmationDialog(context: Context, college: College) {
         val builder = AlertDialog.Builder(context)
 
-        // Set the dialog title and message
         builder.setTitle("Confirmation")
             .setMessage("Are you sure you want to delete this college?")
 
-        // Set the positive button (delete)
         builder.setPositiveButton("Delete") { dialog, _ ->
-            // Perform the delete operation
+            val updatedPosition = collegeDAO.getList().indexOf(college)
             collegeDAO.delete(college.id)
 
-            val updatedPosition = collegeDAO.getList().indexOf(college)
             notifyItemRemoved(updatedPosition)
-            notifyItemRangeChanged(updatedPosition, itemCount - updatedPosition)
             dialog.dismiss()
 
             if(collegeDAO.getList().isEmpty()){
@@ -87,12 +83,10 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
             }
         }
 
-        // Set the negative button (cancel)
         builder.setNegativeButton("Cancel") { dialog, _ ->
             dialog.dismiss()
         }
 
-        // Create and show the dialog
         val dialog = builder.create()
         dialog.show()
     }
