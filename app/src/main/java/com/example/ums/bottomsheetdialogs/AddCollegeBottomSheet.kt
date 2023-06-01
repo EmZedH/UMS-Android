@@ -1,4 +1,4 @@
-package com.example.ums.BottomSheetDialogs
+package com.example.ums.bottomsheetdialogs
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import com.example.ums.Listeners.AddCollegeListener
+import com.example.ums.listener.AddCollegeListener
 import com.example.ums.R
 import com.example.ums.Utility
 import com.example.ums.model.College
@@ -29,9 +29,7 @@ class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val addC
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_add_college, container, false)
-//        retainInstance = true
         val bottomSheetCloseButton =
             view.findViewById<ImageButton>(R.id.close_button)
 
@@ -105,7 +103,6 @@ class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val addC
                 collegeName.editText?.setText("")
                 collegeAddress.editText?.setText("")
                 collegeTelephone.editText?.setText("")
-//                fragmentRefreshListener.refreshFragment()
                 addCollegeListener.addItemToAdapter(newID-1)
                 dismiss()
             }

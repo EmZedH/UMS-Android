@@ -1,6 +1,4 @@
-package com.example.ums.Listeners
-
-import java.text.FieldPosition
+package com.example.ums.listener
 
 interface EditCollegeListener {
     fun updateItemInAdapter(position: Int)

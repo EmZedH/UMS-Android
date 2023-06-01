@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import com.example.ums.listener.SearchListener
 import com.example.ums.model.User
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.example.ums.model.databaseAccessObject.UserDAO
@@ -26,6 +27,7 @@ class MainPageActivity: AppCompatActivity(){
     private lateinit var navigationView: NavigationView
     private lateinit var user: User
     private lateinit var toolBar: MaterialToolbar
+    private lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -36,7 +38,6 @@ class MainPageActivity: AppCompatActivity(){
 
         toolBar = findViewById(R.id.top_app_bar)
         setSupportActionBar(toolBar)
-
         val bundle = intent.extras
 
         val userID = bundle!!.getInt("userID")
@@ -94,7 +95,7 @@ class MainPageActivity: AppCompatActivity(){
         if(userRole=="SUPER_ADMIN") {
             menuInflater.inflate(R.menu.top_app_bar, menu)
             val menuItem = menu.findItem(R.id.search)
-            val searchView = menuItem.actionView as SearchView
+            searchView = menuItem.actionView as SearchView
             searchView.queryHint = getString(R.string.search)
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                 override fun onQueryTextSubmit(p0: String?): Boolean {
@@ -102,6 +103,8 @@ class MainPageActivity: AppCompatActivity(){
                 }
 
                 override fun onQueryTextChange(p0: String?): Boolean {
+
+                    (userFragment as SearchListener).onSearch(p0!!)
                     return false
                 }
 
@@ -110,16 +113,16 @@ class MainPageActivity: AppCompatActivity(){
         return true
     }
 
-    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
-
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START) || !searchView.isIconified) {
             drawerLayout.closeDrawer(GravityCompat.START)
+            searchView.isIconified = true
         }
         else{
             showExitConfirmationDialog(this)
         }
     }
+
     private fun showExitConfirmationDialog(context: Context) {
         val builder = AlertDialog.Builder(context)
 

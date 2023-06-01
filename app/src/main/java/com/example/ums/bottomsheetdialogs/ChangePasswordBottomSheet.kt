@@ -1,4 +1,4 @@
-package com.example.ums.BottomSheetDialogs
+package com.example.ums.bottomsheetdialogs
 
 import android.os.Bundle
 import android.view.LayoutInflater
