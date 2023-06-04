@@ -6,25 +6,47 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import com.example.ums.listener.AddCollegeListener
+import androidx.lifecycle.ViewModelProvider
+import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.Utility
+import com.example.ums.listener.AddCollegeListener
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
+import com.example.ums.viewmodels.AddCollegeBottomSheetViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val addCollegeListener: AddCollegeListener) : BottomSheetDialogFragment() {
+class AddCollegeBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var collegeName : TextInputLayout
     private lateinit var collegeAddress : TextInputLayout
     private lateinit var collegeTelephone : TextInputLayout
+    private lateinit var collegeDAO: CollegeDAO
+
+    private var addCollegeListener: AddCollegeListener? = null
+
+    private lateinit var addCollegeBottomSheetViewModel: AddCollegeBottomSheetViewModel
 
     private var collegeNameText = ""
     private var collegeAddressText = ""
     private var collegeTelephoneText = ""
 
+    fun setListener(listener: AddCollegeListener){
+        addCollegeListener = listener
+    }
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        addCollegeBottomSheetViewModel = ViewModelProvider(this)[AddCollegeBottomSheetViewModel::class.java]
+        if(addCollegeListener==null){
+            addCollegeListener = addCollegeBottomSheetViewModel.getListener().value
+        }
+        else{
+            addCollegeBottomSheetViewModel.setListener(addCollegeListener!!)
+        }
+        collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
+    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -44,6 +66,25 @@ class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val addC
         collegeTelephone =
             view.findViewById(R.id.college_telephone_layout)
 
+        collegeNameText =
+            if(addCollegeBottomSheetViewModel.getCollegeName()==null){
+                ""
+            }else{
+                addCollegeBottomSheetViewModel.getCollegeName()!!
+            }
+        collegeAddressText =
+            if(addCollegeBottomSheetViewModel.getCollegeAddress()==null){
+                ""
+            }else{
+                addCollegeBottomSheetViewModel.getCollegeAddress()!!
+            }
+
+        collegeTelephoneText =
+            if(addCollegeBottomSheetViewModel.getCollegeTelephone()==null){
+                ""
+            }else{
+                addCollegeBottomSheetViewModel.getCollegeTelephone()!!
+            }
         if(collegeNameText.isNotEmpty()){
             collegeName.editText?.setText(collegeNameText)
         }
@@ -95,15 +136,9 @@ class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val addC
                 )
 
                 setCollegeIDTextView(view)
-
-                collegeNameText = ""
-                collegeAddressText = ""
-                collegeTelephoneText = ""
-
-                collegeName.editText?.setText("")
-                collegeAddress.editText?.setText("")
-                collegeTelephone.editText?.setText("")
-                addCollegeListener.addItemToAdapter(newID-1)
+                addCollegeBottomSheetViewModel.getListener().observe(viewLifecycleOwner){ listener->
+                    listener.addItemToAdapter(newID-1)
+                }
                 dismiss()
             }
 
@@ -126,10 +161,9 @@ class AddCollegeBottomSheet(private val collegeDAO: CollegeDAO, private val addC
         collegeName.error = null
         collegeAddress.error = null
         collegeTelephone.error = null
-
-        collegeNameText = collegeName.editText?.text.toString()
-        collegeAddressText = collegeAddress.editText?.text.toString()
-        collegeTelephoneText = collegeTelephone.editText?.text.toString()
+        addCollegeBottomSheetViewModel.setCollegeName(collegeName.editText?.text.toString())
+        addCollegeBottomSheetViewModel.setCollegeAddress(collegeAddress.editText?.text.toString())
+        addCollegeBottomSheetViewModel.setCollegeTelephone(collegeTelephone.editText?.text.toString())
     }
 
     private fun setCollegeIDTextView(view : View){
