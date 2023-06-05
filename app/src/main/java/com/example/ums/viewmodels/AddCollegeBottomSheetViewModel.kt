@@ -6,15 +6,9 @@ import com.example.ums.listener.AddCollegeListener
 
 class AddCollegeBottomSheetViewModel: ViewModel() {
 
-    private val _addCollegeListener = MutableLiveData<AddCollegeListener>()
     private val _collegeNameText = MutableLiveData<String>()
     private val _collegeAddressText = MutableLiveData<String>()
     private val _collegeTelephoneText = MutableLiveData<String>()
-
-    fun getListener() = _addCollegeListener
-    fun setListener(adapter: AddCollegeListener){
-        _addCollegeListener.value = adapter
-    }
     fun getCollegeName() = _collegeNameText.value
     fun setCollegeName(text: String){
         _collegeNameText.value = text

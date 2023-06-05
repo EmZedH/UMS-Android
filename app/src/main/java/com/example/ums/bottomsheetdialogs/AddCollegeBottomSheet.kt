@@ -1,11 +1,13 @@
 package com.example.ums.bottomsheetdialogs
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
@@ -14,6 +16,7 @@ import com.example.ums.listener.AddCollegeListener
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.example.ums.viewmodels.AddCollegeBottomSheetViewModel
+import com.example.ums.viewmodels.SuperAdminMainPageViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
@@ -28,6 +31,7 @@ class AddCollegeBottomSheet : BottomSheetDialogFragment() {
     private var addCollegeListener: AddCollegeListener? = null
 
     private lateinit var addCollegeBottomSheetViewModel: AddCollegeBottomSheetViewModel
+    private val superAdminMainPageViewModel: SuperAdminMainPageViewModel by activityViewModels ()
 
     private var collegeNameText = ""
     private var collegeAddressText = ""
@@ -36,15 +40,10 @@ class AddCollegeBottomSheet : BottomSheetDialogFragment() {
     fun setListener(listener: AddCollegeListener){
         addCollegeListener = listener
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         addCollegeBottomSheetViewModel = ViewModelProvider(this)[AddCollegeBottomSheetViewModel::class.java]
-        if(addCollegeListener==null){
-            addCollegeListener = addCollegeBottomSheetViewModel.getListener().value
-        }
-        else{
-            addCollegeBottomSheetViewModel.setListener(addCollegeListener!!)
-        }
         collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
     }
     override fun onCreateView(
@@ -136,7 +135,8 @@ class AddCollegeBottomSheet : BottomSheetDialogFragment() {
                 )
 
                 setCollegeIDTextView(view)
-                addCollegeBottomSheetViewModel.getListener().observe(viewLifecycleOwner){ listener->
+                superAdminMainPageViewModel.getListener().observe(viewLifecycleOwner){listener->
+                    addCollegeListener = listener
                     listener.addItemToAdapter(newID-1)
                 }
                 dismiss()
@@ -148,22 +148,26 @@ class AddCollegeBottomSheet : BottomSheetDialogFragment() {
 
     override fun dismiss() {
         super.dismiss()
-        finalize()
+        clearErrors()
+        finalizeView()
 
     }
 
     override fun onStop() {
         super.onStop()
-        finalize()
+        finalizeView()
     }
 
-    private fun finalize(){
-        collegeName.error = null
-        collegeAddress.error = null
-        collegeTelephone.error = null
+    private fun finalizeView(){
         addCollegeBottomSheetViewModel.setCollegeName(collegeName.editText?.text.toString())
         addCollegeBottomSheetViewModel.setCollegeAddress(collegeAddress.editText?.text.toString())
         addCollegeBottomSheetViewModel.setCollegeTelephone(collegeTelephone.editText?.text.toString())
+    }
+
+    private fun clearErrors(){
+        collegeName.error = null
+        collegeAddress.error = null
+        collegeTelephone.error = null
     }
 
     private fun setCollegeIDTextView(view : View){

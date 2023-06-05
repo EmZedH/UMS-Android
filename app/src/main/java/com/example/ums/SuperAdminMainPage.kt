@@ -1,5 +1,6 @@
 package com.example.ums
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,6 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,18 +28,13 @@ class SuperAdminMainPage : Fragment(), AddCollegeListener, SearchListener, Fragm
     private lateinit var collegeDAO: CollegeDAO
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
+    private val superAdminMainPageViewModel: SuperAdminMainPageViewModel by activityViewModels ()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
-        val superAdminMainPageViewModel = ViewModelProvider(this)[SuperAdminMainPageViewModel::class.java]
-        if(superAdminMainPageViewModel.getAdapter().value==null){
-            collegeListItemViewAdapter = CollegeListItemViewAdapter(collegeDAO, this)
-            superAdminMainPageViewModel.setAdapter(collegeListItemViewAdapter)
-        }
-        else{
-            collegeListItemViewAdapter = superAdminMainPageViewModel.getAdapter().value!!
-        }
-
+        collegeListItemViewAdapter = CollegeListItemViewAdapter(collegeDAO, this)
+        superAdminMainPageViewModel.setListener(this)
     }
 
     override fun onCreateView(
@@ -61,10 +59,8 @@ class SuperAdminMainPage : Fragment(), AddCollegeListener, SearchListener, Fragm
 
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
-
         }
         else{
-
             firstTextView.visibility = View.VISIBLE
             secondTextView.visibility = View.VISIBLE
         }
@@ -75,7 +71,6 @@ class SuperAdminMainPage : Fragment(), AddCollegeListener, SearchListener, Fragm
     }
 
     override fun addItemToAdapter(position: Int) {
-        Log.i("SuperAdminMainPageListener","position: $position listener: $this adapter: $collegeListItemViewAdapter")
         collegeListItemViewAdapter.addItem(position)
         collegeListItemViewAdapter.notifyItemInserted(position)
         onRefresh()
@@ -87,13 +82,10 @@ class SuperAdminMainPage : Fragment(), AddCollegeListener, SearchListener, Fragm
 
     override fun onRefresh() {
         if(collegeDAO.getList().isNotEmpty()){
-
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
-
         }
         else{
-
             firstTextView.visibility = View.VISIBLE
             secondTextView.visibility = View.VISIBLE
         }
