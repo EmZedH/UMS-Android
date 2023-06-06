@@ -3,19 +3,18 @@ package com.example.ums.viewmodels
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.ums.CollegeListItemViewAdapter
-import com.example.ums.listener.CollegeAddListener
+import com.example.ums.listener.AddListener
 
 class SuperAdminSharedViewModel: ViewModel() {
-    private val _listener = MutableLiveData<CollegeAddListener>()
+    private val _addListener = MutableLiveData<AddListener>()
     private val _collegeID = MutableLiveData<Int>()
     private val _adapter = MutableLiveData<CollegeListItemViewAdapter>()
 
-    fun getListener(): MutableLiveData<CollegeAddListener> {
-        return _listener
+    fun getAddListener() = _addListener
+    fun setAddListener(listener: AddListener){
+        _addListener.value = listener
     }
-    fun setListener(listener: CollegeAddListener){
-        _listener.value = listener
-    }
+
     fun getID() = _collegeID
     fun setID(id: Int){
         _collegeID.value = id

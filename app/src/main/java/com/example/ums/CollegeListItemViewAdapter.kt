@@ -1,7 +1,5 @@
 package com.example.ums
 
-import android.app.AlertDialog
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +7,11 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.listener.FragmentRefreshListener
-import com.example.ums.listener.CollegeEditListener
+import com.example.ums.listener.ItemListener
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 
-class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val deleteListener: FragmentRefreshListener, private val editCollegeListener: CollegeEditListener) : RecyclerView.Adapter<CollegeListItemViewAdapter.CollegeListItemViewHolder>() {
+class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val itemListener: ItemListener) : RecyclerView.Adapter<CollegeListItemViewAdapter.CollegeListItemViewHolder>() {
 
     private var originalList : MutableList<College> = collegeDAO.getList().toMutableList()
 
@@ -54,11 +51,12 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
         popupMenu.setOnMenuItemClickListener{menuItem ->
             when (menuItem.itemId) {
                 R.id.edit_college -> {
-                    editCollegeListener.updateItemInAdapter(college.id)
+                    itemListener.onUpdate(college.id)
                     true
                 }
                 R.id.delete_college -> {
-                    showConfirmationDialog(context, college)
+                    itemListener.onDelete(college.id)
+//                    showConfirmationDialog(context, college)
                     true
                 }
 
@@ -68,28 +66,28 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
             }}
         popupMenu.show()
     }
-    private fun showConfirmationDialog(context: Context, college: College) {
-        val builder = AlertDialog.Builder(context)
-
-        builder.setTitle("Confirmation")
-            .setMessage("Are you sure you want to delete this college?")
-
-        builder.setPositiveButton("Delete") { dialog, _ ->
-            val updatedPosition = originalList.indexOf(college)
-            collegeDAO.delete(college.id)
-            originalList.removeAt(updatedPosition)
-            notifyItemRemoved(updatedPosition)
-            deleteListener.onRefresh()
-            dialog.dismiss()
-        }
-
-        builder.setNegativeButton("Cancel") { dialog, _ ->
-            dialog.dismiss()
-        }
-
-        val dialog = builder.create()
-        dialog.show()
-    }
+//    private fun showConfirmationDialog(context: Context, college: College) {
+//        val builder = AlertDialog.Builder(context)
+//
+//        builder.setTitle("Confirmation")
+//            .setMessage("Are you sure you want to delete this college?")
+//
+//        builder.setPositiveButton("Delete") { dialog, _ ->
+//            val updatedPosition = originalList.indexOf(college)
+//            collegeDAO.delete(college.id)
+//            originalList.removeAt(updatedPosition)
+//            notifyItemRemoved(updatedPosition)
+//            refreshListener.onRefresh()
+//            dialog.dismiss()
+//        }
+//
+//        builder.setNegativeButton("Cancel") { dialog, _ ->
+//            dialog.dismiss()
+//        }
+//
+//        val dialog = builder.create()
+//        dialog.show()
+//    }
 
     fun filter(query: String){
         val filteredList =
@@ -104,6 +102,15 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
     }
     fun addItem(position: Int){
         originalList.add(position, collegeDAO.get(position+1)!!)
+    }
+
+    fun deleteItem(id: Int){
+        val college = collegeDAO.get(id)
+        val updatedPosition = originalList.indexOf(college)
+        collegeDAO.delete(id)
+        originalList.removeAt(updatedPosition)
+        notifyItemRemoved(updatedPosition)
+//        refreshListener.onRefresh()
     }
 
     inner class CollegeListItemViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {

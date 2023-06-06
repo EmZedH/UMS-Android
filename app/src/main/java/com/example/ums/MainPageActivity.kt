@@ -1,7 +1,5 @@
 package com.example.ums
 
-import android.app.AlertDialog
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -12,10 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.example.ums.dialogFragments.ExitDialog
+import com.example.ums.dialogFragments.LogOutDialog
 import com.example.ums.listener.SearchListener
 import com.example.ums.model.User
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.example.ums.model.databaseAccessObject.UserDAO
+import com.example.ums.viewmodels.MainPageViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.navigation.NavigationView
 
@@ -29,11 +31,13 @@ class MainPageActivity: AppCompatActivity(){
     private lateinit var toolBar: MaterialToolbar
     private lateinit var searchView: SearchView
 
+    private lateinit var mainPageViewModel: MainPageViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_page)
-
+        mainPageViewModel = ViewModelProvider(this)[MainPageViewModel::class.java]
         val userDAO = UserDAO(DatabaseHelper(this))
 
         toolBar = findViewById(R.id.top_app_bar)
@@ -54,15 +58,20 @@ class MainPageActivity: AppCompatActivity(){
         navigationView = findViewById(R.id.navigation_view)
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when(menuItem.itemId){
+
                 R.id.manage_profile_tab -> {
                     val intent = Intent(this, ManageProfileActivity::class.java)
                     intent.putExtras(bundle)
                     startActivity(intent)
                 }
+
                 R.id.log_out_tab -> {
-                    showLogOutConfirmation(this)
+                    val logOutDialog = LogOutDialog()
+                    logOutDialog.show(supportFragmentManager, "Log Out Dialog")
                 }
+
             }
+
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
@@ -84,10 +93,12 @@ class MainPageActivity: AppCompatActivity(){
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+
             R.id.search -> {
                 toolBar.menu.clear()
                 true
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -119,48 +130,13 @@ class MainPageActivity: AppCompatActivity(){
             searchView.isIconified = true
         }
         else{
-            showExitConfirmationDialog(this)
+            showExitConfirmationDialog()
         }
     }
 
-    private fun showExitConfirmationDialog(context: Context) {
-        val builder = AlertDialog.Builder(context)
-
-        builder.setTitle("Confirmation")
-            .setMessage("Are you sure you want to exit?")
-
-        builder.setPositiveButton("Confirm") { _, _ ->
-            finish()
-        }
-
-        builder.setNegativeButton("Cancel") { dialog, _ ->
-            dialog.dismiss()
-        }
-
-        val dialog = builder.create()
-        dialog.show()
-    }
-
-    private fun showLogOutConfirmation(context: Context){
-        val builder = AlertDialog.Builder(context)
-
-        builder.setTitle("Log Out").setMessage("Are you sure you want to Log Out")
-
-        builder.setPositiveButton("Confirm"){ _, _ ->
-            val editor = getSharedPreferences("UMSPreferences", Context.MODE_PRIVATE).edit()
-            editor.putBoolean("isLoggedOut", true)
-            editor.apply()
-
-            val intent = Intent(this, LoginActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-            startActivity(intent)
-        }
-        builder.setNegativeButton("Cancel") { dialog, _ ->
-            dialog.dismiss()
-        }
-
-        val dialog = builder.create()
-        dialog.show()
+    private fun showExitConfirmationDialog() {
+        val exitDialogFragment = ExitDialog()
+        exitDialogFragment.show(supportFragmentManager, "ExitDialog")
     }
 
     override fun onResume() {

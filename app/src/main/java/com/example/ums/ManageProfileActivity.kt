@@ -52,51 +52,11 @@ class ManageProfileActivity : AppCompatActivity() {
         }
 
         confirmButton.isEnabled = false
-        userNameTextLayout.editText!!.addTextChangedListener(object: TextWatcher{
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
 
-            }
+        userNameTextLayout.editText!!.addTextChangedListener(textListener(user.name))
+        userContactTextLayout.editText!!.addTextChangedListener(textListener(user.contactNumber))
+        userAddressTextLayout.editText!!.addTextChangedListener(textListener(user.address))
 
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if(p0!=null){
-                    confirmButton.isEnabled = p0.toString()!=user.name
-                }
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-            }
-
-        })
-        userContactTextLayout.editText!!.addTextChangedListener(object: TextWatcher{
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if(p0!=null){
-                    confirmButton.isEnabled = p0.toString()!=user.contactNumber
-                }
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-            }
-
-        })
-        userAddressTextLayout.editText!!.addTextChangedListener(object: TextWatcher{
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                if(p0!=null){
-                    confirmButton.isEnabled = p0.toString()!=user.address
-                }
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-            }
-
-        })
         confirmButton.setOnClickListener {
             var flag = true
             if(userNameTextLayout.editText!!.text.isEmpty()){
@@ -133,6 +93,21 @@ class ManageProfileActivity : AppCompatActivity() {
 
         changePasswordButton.setOnClickListener {
             changePasswordBottomSheet.show(supportFragmentManager, "bottomSheetDialog")
+        }
+    }
+
+    private fun textListener(userDetails: String): TextWatcher{
+        return object: TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                confirmButton.isEnabled = p0?.toString() != userDetails
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+
         }
     }
 }

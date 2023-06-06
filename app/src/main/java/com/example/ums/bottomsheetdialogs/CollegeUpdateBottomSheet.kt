@@ -1,6 +1,8 @@
 package com.example.ums.bottomsheetdialogs
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,14 +22,19 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class CollegeEditBottomSheet : BottomSheetDialogFragment() {
+class CollegeUpdateBottomSheet : BottomSheetDialogFragment() {
     private val superAdminSharedViewModel: SuperAdminSharedViewModel by activityViewModels()
     private lateinit var collegeTextfieldViewModel: CollegeTextfieldsViewModel
     private lateinit var college: College
     private lateinit var collegeNameTextLayout: TextInputLayout
     private lateinit var collegeTelephoneTextLayout: TextInputLayout
     private lateinit var collegeAddressTextLayout: TextInputLayout
+    private lateinit var updateButton: MaterialButton
+    private var isRotate: Boolean = false
 
+    fun setRotate(isRotate: Boolean){
+        this.isRotate = isRotate
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         collegeTextfieldViewModel = ViewModelProvider(requireActivity())[CollegeTextfieldsViewModel::class.java]
@@ -38,20 +45,34 @@ class CollegeEditBottomSheet : BottomSheetDialogFragment() {
     ): View? {
         val collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
         val view = inflater.inflate(R.layout.fragment_edit_college, container, false)
-        superAdminSharedViewModel.getID().observe(viewLifecycleOwner){collegeID->
+        superAdminSharedViewModel.getID().observe(viewLifecycleOwner){ collegeID ->
             college = collegeDAO.get(collegeID)!!
             val closeButton = view.findViewById<ImageButton>(R.id.close_button)
             val collegeIDTextView = view.findViewById<TextView>(R.id.college_id_text_view)
             collegeNameTextLayout = view.findViewById(R.id.college_name_layout)
             collegeTelephoneTextLayout = view.findViewById(R.id.college_telephone_layout)
             collegeAddressTextLayout = view.findViewById(R.id.college_address_layout)
-            val updateButton = view.findViewById<MaterialButton>(R.id.update_college_button)
+            updateButton = view.findViewById(R.id.update_college_button)
 
             collegeIDTextView.append(collegeID.toString())
 
-            collegeNameTextLayout.editText!!.setText(college.name)
-            collegeAddressTextLayout.editText!!.setText(college.address)
-            collegeTelephoneTextLayout.editText!!.setText(college.telephone)
+            if(isRotate){
+                collegeNameTextLayout.editText!!.setText(college.name)
+                collegeAddressTextLayout.editText!!.setText(college.address)
+                collegeTelephoneTextLayout.editText!!.setText(college.telephone)
+            }
+            else{
+                collegeNameTextLayout.editText!!.setText(collegeTextfieldViewModel.getCollegeName())
+                collegeAddressTextLayout.editText!!.setText(collegeTextfieldViewModel.getCollegeAddress())
+                collegeTelephoneTextLayout.editText!!.setText(collegeTextfieldViewModel.getCollegeTelephone())
+            }
+
+            updateButton.isEnabled = false
+
+            collegeNameTextLayout.editText!!.addTextChangedListener(textListener(college.name))
+            collegeAddressTextLayout.editText!!.addTextChangedListener(textListener(college.address))
+            collegeTelephoneTextLayout.editText!!.addTextChangedListener(textListener(college.telephone))
+
             closeButton.setOnClickListener {
                 dismiss()
             }
@@ -95,5 +116,26 @@ class CollegeEditBottomSheet : BottomSheetDialogFragment() {
             }
         }
         return view
+    }
+
+    override fun onStop() {
+        super.onStop()
+        collegeTextfieldViewModel.setCollegeName(collegeNameTextLayout.editText!!.text.toString())
+        collegeTextfieldViewModel.setCollegeAddress(collegeAddressTextLayout.editText!!.text.toString())
+        collegeTextfieldViewModel.setCollegeTelephone(collegeTelephoneTextLayout.editText!!.text.toString())
+    }
+
+    private fun textListener(collegeDetail: String): TextWatcher{
+        return object: TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                updateButton.isEnabled = p0?.toString() != collegeDetail
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        }
     }
 }

@@ -11,17 +11,16 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.bottomsheetdialogs.CollegeAddBottomSheet
-import com.example.ums.bottomsheetdialogs.CollegeEditBottomSheet
-import com.example.ums.listener.CollegeAddListener
-import com.example.ums.listener.CollegeEditListener
-import com.example.ums.listener.FragmentRefreshListener
+import com.example.ums.bottomsheetdialogs.CollegeUpdateBottomSheet
+import com.example.ums.dialogFragments.DeleteDialog
+import com.example.ums.listener.AddListener
+import com.example.ums.listener.ItemListener
 import com.example.ums.listener.SearchListener
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.example.ums.viewmodels.SuperAdminSharedViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class SuperAdminMainPage : Fragment(), CollegeAddListener, SearchListener, CollegeEditListener,
-    FragmentRefreshListener {
+class SuperAdminMainPage : Fragment(), AddListener, SearchListener, ItemListener {
 
     private lateinit var addCollegeBottomSheet : CollegeAddBottomSheet
     private lateinit var collegeListItemViewAdapter : CollegeListItemViewAdapter
@@ -35,8 +34,9 @@ class SuperAdminMainPage : Fragment(), CollegeAddListener, SearchListener, Colle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
-        collegeListItemViewAdapter = CollegeListItemViewAdapter(collegeDAO, this, this)
-        superAdminSharedViewModel.setListener(this)
+        collegeListItemViewAdapter = CollegeListItemViewAdapter(collegeDAO, this)
+        superAdminSharedViewModel.setAddListener(this)
+        superAdminSharedViewModel.setAdapter(collegeListItemViewAdapter)
     }
 
     override fun onCreateView(
@@ -71,7 +71,7 @@ class SuperAdminMainPage : Fragment(), CollegeAddListener, SearchListener, Colle
         return view
     }
 
-    override fun addItemToAdapter(position: Int) {
+    override fun onAdd(position: Int) {
         collegeListItemViewAdapter.addItem(position)
         collegeListItemViewAdapter.notifyItemInserted(position)
         onRefresh()
@@ -81,7 +81,24 @@ class SuperAdminMainPage : Fragment(), CollegeAddListener, SearchListener, Colle
         collegeListItemViewAdapter.filter(query)
     }
 
-    override fun onRefresh() {
+    override fun onUpdate(id: Int) {
+        superAdminSharedViewModel.setID(id)
+//        superAdminSharedViewModel.setAdapter(collegeListItemViewAdapter)
+        val editFragment = CollegeUpdateBottomSheet()
+        editFragment.setRotate(true)
+        editFragment.show((context as AppCompatActivity).supportFragmentManager, "bottomSheetDialog")
+    }
+
+    override fun onDelete(id: Int) {
+//        superAdminSharedViewModel.setID(id)
+//        superAdminSharedViewModel.setAdapter(collegeListItemViewAdapter)
+        val deleteFragment = DeleteDialog()
+        deleteFragment.setCollegeID(id)
+        deleteFragment.show((context as AppCompatActivity).supportFragmentManager, "deleteDialog")
+        onRefresh()
+    }
+
+    private fun onRefresh(){
         if(collegeDAO.getList().isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
@@ -90,13 +107,6 @@ class SuperAdminMainPage : Fragment(), CollegeAddListener, SearchListener, Colle
             firstTextView.visibility = View.VISIBLE
             secondTextView.visibility = View.VISIBLE
         }
-    }
-
-    override fun updateItemInAdapter(collegeID: Int) {
-        superAdminSharedViewModel.setID(collegeID)
-        superAdminSharedViewModel.setAdapter(collegeListItemViewAdapter)
-        val editFragment = CollegeEditBottomSheet()
-        editFragment.show((context as AppCompatActivity).supportFragmentManager, "bottomSheetDialog")
     }
 }
 

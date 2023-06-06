@@ -128,8 +128,8 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
                 )
 
                 setCollegeIDTextView(view)
-                superAdminMainPageViewModel.getListener().observe(viewLifecycleOwner){listener->
-                    listener.addItemToAdapter(newID-1)
+                superAdminMainPageViewModel.getAddListener().observe(viewLifecycleOwner){ listener->
+                    listener.onAdd(newID-1)
                 }
                 dismiss()
             }
@@ -142,8 +142,7 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
     override fun dismiss() {
         super.dismiss()
         clearErrors()
-        finalizeView()
-
+//        finalizeView()
     }
 
     //for all close and rotate actions
