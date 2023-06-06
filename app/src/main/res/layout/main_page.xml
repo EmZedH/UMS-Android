@@ -37,7 +37,8 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:name="com.example.ums.SuperAdminMainPage"
-            tools:layout="@layout/fragment_main_page" />
+            tools:layout="@layout/fragment_main_page"
+            />
 
     </RelativeLayout>
 

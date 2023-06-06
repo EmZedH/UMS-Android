@@ -1,6 +1,6 @@
 package com.example.ums.listener
 
-interface AddCollegeListener {
+interface CollegeAddListener {
 
     fun addItemToAdapter(position : Int)
 }

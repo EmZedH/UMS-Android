@@ -7,17 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.bottomsheetdialogs.FragmentRefreshListener
-import com.example.ums.bottomsheetdialogs.EditCollegeBottomSheet
-import com.example.ums.listener.EditCollegeListener
+import com.example.ums.listener.FragmentRefreshListener
+import com.example.ums.listener.CollegeEditListener
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 
-class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val deleteListener: FragmentRefreshListener) : RecyclerView.Adapter<CollegeListItemViewAdapter.CollegeListItemViewHolder>(),
-    EditCollegeListener {
+class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val deleteListener: FragmentRefreshListener, private val editCollegeListener: CollegeEditListener) : RecyclerView.Adapter<CollegeListItemViewAdapter.CollegeListItemViewHolder>() {
 
     private var originalList : MutableList<College> = collegeDAO.getList().toMutableList()
 
@@ -27,12 +24,10 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
     }
 
     override fun getItemCount(): Int {
-//        return collegeDAO.getList().size
         return originalList.size
     }
 
     override fun onBindViewHolder(holder: CollegeListItemViewHolder, position: Int) {
-//        val college = collegeDAO.getList()[position]
         val college = originalList[position]
         holder.itemIDTextView.setText(R.string.college_id_string)
         holder.itemIDTextView.append(college.id.toString())
@@ -45,7 +40,7 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
         }
     }
 
-    override fun updateItemInAdapter(position: Int) {
+    fun updateItemInAdapter(position: Int) {
         originalList[position] = collegeDAO.get(position+1)!!
         notifyItemChanged(position)
     }
@@ -59,8 +54,7 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
         popupMenu.setOnMenuItemClickListener{menuItem ->
             when (menuItem.itemId) {
                 R.id.edit_college -> {
-                    val editFragment = EditCollegeBottomSheet(collegeDAO, college.id, this)
-                    editFragment.show((context as AppCompatActivity).supportFragmentManager, "bottomSheetDialog")
+                    editCollegeListener.updateItemInAdapter(college.id)
                     true
                 }
                 R.id.delete_college -> {
@@ -81,13 +75,11 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
             .setMessage("Are you sure you want to delete this college?")
 
         builder.setPositiveButton("Delete") { dialog, _ ->
-//            val updatedPosition = collegeDAO.getList().indexOf(college)
             val updatedPosition = originalList.indexOf(college)
             collegeDAO.delete(college.id)
             originalList.removeAt(updatedPosition)
             notifyItemRemoved(updatedPosition)
             deleteListener.onRefresh()
-//            notifyItemRangeChanged(updatedPosition, itemCount - updatedPosition)
             dialog.dismiss()
         }
 

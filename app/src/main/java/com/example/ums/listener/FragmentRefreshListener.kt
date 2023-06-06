@@ -1,4 +1,4 @@
-package com.example.ums.bottomsheetdialogs
+package com.example.ums.listener
 
 interface FragmentRefreshListener {
     fun onRefresh()
