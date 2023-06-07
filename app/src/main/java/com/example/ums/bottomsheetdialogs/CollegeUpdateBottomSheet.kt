@@ -56,6 +56,7 @@ class CollegeUpdateBottomSheet : BottomSheetDialogFragment() {
 
             collegeIDTextView.append(collegeID.toString())
 
+            updateButton.isEnabled = false
             if(isRotate){
                 collegeNameTextLayout.editText!!.setText(college.name)
                 collegeAddressTextLayout.editText!!.setText(college.address)
@@ -67,8 +68,11 @@ class CollegeUpdateBottomSheet : BottomSheetDialogFragment() {
                 collegeTelephoneTextLayout.editText!!.setText(collegeTextfieldViewModel.getCollegeTelephone())
             }
 
-            updateButton.isEnabled = false
-
+            if(collegeNameTextLayout.editText!!.text.toString() != college.name ||
+                    collegeAddressTextLayout.editText!!.text.toString() != college.address ||
+                    collegeTelephoneTextLayout.editText!!.text.toString() != college.telephone){
+                updateButton.isEnabled = true
+            }
             collegeNameTextLayout.editText!!.addTextChangedListener(textListener(college.name))
             collegeAddressTextLayout.editText!!.addTextChangedListener(textListener(college.address))
             collegeTelephoneTextLayout.editText!!.addTextChangedListener(textListener(college.telephone))
