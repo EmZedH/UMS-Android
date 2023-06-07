@@ -1,14 +1,21 @@
 package com.example.ums.viewmodels
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 
 class MainPageViewModel: ViewModel() {
-    private val _isSearchViewOpen = MutableLiveData<Boolean>()
+    private val _isSearchViewOpen = MutableLiveData<Boolean?>()
     private val _query = MutableLiveData<String>()
 
-    var isSearchViewOpen: LiveData<Boolean> = _isSearchViewOpen
-    var query: LiveData<String> = _query
+    val isSearchViewOpen = _isSearchViewOpen
+    val query = _query
+
+    fun setSearchView(isSearchViewOpen: Boolean?){
+        _isSearchViewOpen.value = isSearchViewOpen
+    }
+
+    fun setQuery(query: String){
+        _query.value = query
+    }
 
 }

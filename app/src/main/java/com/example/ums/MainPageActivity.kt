@@ -75,6 +75,9 @@ class MainPageActivity: AppCompatActivity(){
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
+        if(mainPageViewModel.isSearchViewOpen.value==null){
+            mainPageViewModel.setSearchView(true)
+        }
         if(userRole == "SUPER_ADMIN"){
             superAdminProcesses()
         }
@@ -108,18 +111,21 @@ class MainPageActivity: AppCompatActivity(){
             val menuItem = menu.findItem(R.id.search)
             searchView = menuItem.actionView as SearchView
             searchView.queryHint = getString(R.string.search)
+            searchView.isIconified = mainPageViewModel.isSearchViewOpen.value!!
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                 override fun onQueryTextSubmit(p0: String?): Boolean {
                     return false
                 }
 
                 override fun onQueryTextChange(p0: String?): Boolean {
-
-                    (userFragment as SearchListener).onSearch(p0!!)
+                    mainPageViewModel.setQuery(p0!!)
+                    (userFragment as SearchListener).onSearch(p0)
                     return false
                 }
-
             })
+        }
+        if(mainPageViewModel.query.value!=null){
+            searchView.setQuery(mainPageViewModel.query.value, true)
         }
         return true
     }
@@ -145,5 +151,10 @@ class MainPageActivity: AppCompatActivity(){
         val welcomeTextView = navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_welcome_text_view)
         welcomeTextView.setText(R.string.hi_string)
         welcomeTextView.append(" ${user.name}")
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mainPageViewModel.setSearchView(searchView.isIconified)
     }
 }
