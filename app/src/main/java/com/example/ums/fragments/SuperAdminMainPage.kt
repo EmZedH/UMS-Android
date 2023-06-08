@@ -1,5 +1,6 @@
-package com.example.ums
+package com.example.ums.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,6 +11,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ums.CollegeActivity
+import com.example.ums.DatabaseHelper
+import com.example.ums.R
+import com.example.ums.adapters.CollegeListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.CollegeAddBottomSheet
 import com.example.ums.bottomsheetdialogs.CollegeUpdateBottomSheet
 import com.example.ums.dialogFragments.DeleteDialog
@@ -27,7 +32,6 @@ class SuperAdminMainPage : Fragment(), AddListener, SearchListener, ItemListener
     private lateinit var collegeDAO: CollegeDAO
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
-
     private val superAdminSharedViewModel: SuperAdminSharedViewModel by activityViewModels ()
 
 
@@ -44,13 +48,15 @@ class SuperAdminMainPage : Fragment(), AddListener, SearchListener, ItemListener
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_main_page, container, false)
-        firstTextView = view.findViewById(R.id.no_colleges_text_view)
+
+        val view = inflater.inflate(R.layout.fragment_college_page, container, false)
+        val addFloatingButton = view.findViewById<FloatingActionButton>(R.id.add_floating_action_button)
+        val recyclerView: RecyclerView = view.findViewById(R.id.college_list_view)
+
+        firstTextView = view.findViewById(R.id.no_departments_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
 
         addCollegeBottomSheet = CollegeAddBottomSheet()
-
-        val addFloatingButton = view.findViewById<FloatingActionButton>(R.id.add_floating_action_button)
 
         addFloatingButton.setOnClickListener {
             addCollegeBottomSheet.show(requireActivity().supportFragmentManager, "bottomSheetDialog")
@@ -65,11 +71,11 @@ class SuperAdminMainPage : Fragment(), AddListener, SearchListener, ItemListener
             firstTextView.visibility = View.VISIBLE
             secondTextView.visibility = View.VISIBLE
         }
-        val recyclerView: RecyclerView = view.findViewById(R.id.college_list_view)
         recyclerView.adapter = collegeListItemViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(this.context)
         return view
     }
+
 
     override fun onAdd(position: Int) {
         collegeListItemViewAdapter.addItem(position)
@@ -82,20 +88,27 @@ class SuperAdminMainPage : Fragment(), AddListener, SearchListener, ItemListener
     }
 
     override fun onUpdate(id: Int) {
-        superAdminSharedViewModel.setID(id)
-//        superAdminSharedViewModel.setAdapter(collegeListItemViewAdapter)
         val editFragment = CollegeUpdateBottomSheet()
         editFragment.setRotate(true)
+        editFragment.arguments = Bundle().apply {
+            putInt("college_update_college_id", id)
+        }
         editFragment.show((context as AppCompatActivity).supportFragmentManager, "bottomSheetDialog")
     }
 
     override fun onDelete(id: Int) {
-//        superAdminSharedViewModel.setID(id)
-//        superAdminSharedViewModel.setAdapter(collegeListItemViewAdapter)
         val deleteFragment = DeleteDialog()
         deleteFragment.setCollegeID(id)
         deleteFragment.show((context as AppCompatActivity).supportFragmentManager, "deleteDialog")
         onRefresh()
+    }
+
+    override fun onClick(bundle: Bundle?) {
+        val intent = Intent(requireContext(), CollegeActivity::class.java)
+        if(bundle!=null){
+            intent.putExtras(bundle)
+            startActivity(intent)
+        }
     }
 
     private fun onRefresh(){

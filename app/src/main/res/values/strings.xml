@@ -56,4 +56,11 @@
     <string name="change_password_string">Change Password</string>
     <string name="person_image_string">Person image</string>
     <string name="hi_string">Hi</string>
+    <string name="no_departments_string">No Departments</string>
+    <string name="tab_layout_string">Tab Layout</string>
+    <string name="departments_string">Departments</string>
+    <string name="college_admins_string">College Admins</string>
+    <string name="id_string">ID :</string>
+    <string name="department_name_string">Department Name</string>
+    <string name="add_department_string">Add Department</string>
 </resources>

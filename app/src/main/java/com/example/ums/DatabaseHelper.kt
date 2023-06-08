@@ -39,9 +39,9 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
             ")"
 
     private val createTableDepartment = "CREATE TABLE IF NOT EXISTS \"DEPARTMENT\" (\n" +
-            "\t\"DEPT_ID\"\tTEXT,\n" +
+            "\t\"DEPT_ID\"\tINTEGER,\n" +
             "\t\"DEPT_NAME\"\tTEXT,\n" +
-            "\t\"COLLEGE_ID\"\tTEXT,\n" +
+            "\t\"COLLEGE_ID\"\tINTEGER,\n" +
             "\tPRIMARY KEY(\"DEPT_ID\",\"COLLEGE_ID\")\n" +
             ")"
 

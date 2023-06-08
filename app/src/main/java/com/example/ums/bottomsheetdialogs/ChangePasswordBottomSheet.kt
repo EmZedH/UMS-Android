@@ -9,11 +9,9 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import androidx.lifecycle.ViewModelProvider
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.model.databaseAccessObject.UserDAO
-import com.example.ums.viewmodels.ChangePasswordBottomSheetViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
@@ -23,7 +21,10 @@ class ChangePasswordBottomSheet : BottomSheetDialogFragment() {
     private lateinit var currentPassword : TextInputLayout
     private lateinit var newPassword : TextInputLayout
     private lateinit var confirmNewPassword : TextInputLayout
-    private lateinit var changePasswordBottomSheetViewModel: ChangePasswordBottomSheetViewModel
+
+    private var currentPasswordText: String? = null
+    private var newPasswordText: String? = null
+    private var confirmPasswordText: String? = null
 
     private var userID: Int? = null
 
@@ -35,19 +36,19 @@ class ChangePasswordBottomSheet : BottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        changePasswordBottomSheetViewModel = ViewModelProvider(this)[ChangePasswordBottomSheetViewModel::class.java]
-        if(userID==null){
-            userID = changePasswordBottomSheetViewModel.getUserID().value
-        }
-        else{
-            changePasswordBottomSheetViewModel.setUserID(userID!!)
+//        changePasswordBottomSheetViewModel = ViewModelProvider(this)[ChangePasswordBottomSheetViewModel::class.java]
+        if(savedInstanceState!=null){
+            userID = savedInstanceState.getInt("change_password_bottom_sheet_user_id")
+            currentPasswordText = savedInstanceState.getString("change_password_bottom_sheet_current_password")
+            newPasswordText = savedInstanceState.getString("change_password_bottom_sheet_new_password")
+            confirmPasswordText = savedInstanceState.getString("change_password_bottom_sheet_confirm_password")
         }
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
+        Log.i("ChangePasswordBottomSheetClass","userID: $userID")
         val userDAO = UserDAO(DatabaseHelper(requireActivity()))
         view = inflater.inflate(R.layout.fragment_change_password, container, false)
         val closeButton = view.findViewById<ImageButton>(R.id.close_button)
@@ -56,16 +57,16 @@ class ChangePasswordBottomSheet : BottomSheetDialogFragment() {
         newPassword = view.findViewById(R.id.college_address_layout)
         confirmNewPassword = view.findViewById(R.id.college_telephone_layout)
         val updateButton = view.findViewById<MaterialButton>(R.id.update_button)
+        if(currentPasswordText!=null){
+            currentPassword.editText?.setText(currentPasswordText)
+        }
+        if(newPasswordText!=null){
+            newPassword.editText?.setText(newPasswordText)
+        }
+        if(confirmPasswordText!=null){
+            confirmNewPassword.editText?.setText(confirmPasswordText)
+        }
 
-        if(changePasswordBottomSheetViewModel.getNewPassword().value!=null){
-            newPassword.editText?.setText(changePasswordBottomSheetViewModel.getNewPassword().value)
-        }
-        if(changePasswordBottomSheetViewModel.getCurrentPassword().value!=null){
-            currentPassword.editText?.setText(changePasswordBottomSheetViewModel.getCurrentPassword().value)
-        }
-        if(changePasswordBottomSheetViewModel.getConfirmPassword().value!=null){
-            confirmNewPassword.editText?.setText(changePasswordBottomSheetViewModel.getConfirmPassword().value)
-        }
         val user = userDAO.get(userID!!)
 
         emailTextView.text = user?.emailID
@@ -127,9 +128,13 @@ class ChangePasswordBottomSheet : BottomSheetDialogFragment() {
         currentPassword.error = null
         newPassword.error = null
         confirmNewPassword.error = null
+    }
 
-        changePasswordBottomSheetViewModel.setCurrentPassword(currentPassword.editText?.text.toString())
-        changePasswordBottomSheetViewModel.setNewPassword(newPassword.editText?.text.toString())
-        changePasswordBottomSheetViewModel.setConfirmPassword(confirmNewPassword.editText?.text.toString())
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("change_password_bottom_sheet_user_id",userID!!)
+        outState.putString("change_password_bottom_sheet_current_password", currentPassword.editText?.text.toString())
+        outState.putString("change_password_bottom_sheet_new_password", newPassword.editText?.text.toString())
+        outState.putString("change_password_bottom_sheet_confirm_password", confirmNewPassword.editText?.text.toString())
     }
 }

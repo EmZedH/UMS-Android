@@ -6,9 +6,15 @@ import com.example.ums.model.College
 
 class CollegeDAO(private val databaseHelper: DatabaseHelper) {
 
+    private val tableName = "COLLEGE"
+    private val primaryKey = "C_ID"
+    private val collegeName = "C_NAME"
+    private val collegeAddress = "C_ADDRESS"
+    private val collegeTelephone = "C_TELEPHONE"
+
     fun get(collegeID : Int) : College?{
         var college : College? = null
-        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM COLLEGE WHERE C_ID = $collegeID", null)
+        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName WHERE $primaryKey = $collegeID", null)
         if(cursor.moveToFirst()){
             college = College(
                 cursor.getInt(0),
@@ -23,7 +29,7 @@ class CollegeDAO(private val databaseHelper: DatabaseHelper) {
     }
     fun getList() : List<College>{
         val collegeList = mutableListOf<College>()
-        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM COLLEGE", null)
+        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName", null)
         cursor.moveToFirst()
         while (!cursor.isAfterLast){
             collegeList.add(
@@ -41,17 +47,16 @@ class CollegeDAO(private val databaseHelper: DatabaseHelper) {
 
     fun insert(college : College){
         val contentValues = ContentValues().apply {
-            put("C_ID", college.id)
-            put("C_NAME",college.name)
-            put("C_ADDRESS",college.address)
-            put("C_TELEPHONE",college.telephone)
+            put(primaryKey, college.id)
+            put(collegeName,college.name)
+            put(collegeAddress,college.address)
+            put(collegeTelephone,college.telephone)
         }
-        databaseHelper.writableDatabase.insert("COLLEGE",null, contentValues)
+        databaseHelper.writableDatabase.insert(tableName,null, contentValues)
     }
 
     fun delete(collegeID : Int){
-        println("COLLEGE ID = $collegeID")
-        val deleteQuery = "DELETE FROM COLLEGE WHERE C_ID = $collegeID"
+        val deleteQuery = "DELETE FROM $tableName WHERE $primaryKey = $collegeID"
 
         databaseHelper.writableDatabase.execSQL(deleteQuery)
 
@@ -64,10 +69,10 @@ class CollegeDAO(private val databaseHelper: DatabaseHelper) {
                 "  UNION ALL\n" +
                 "  SELECT number + 1\n" +
                 "  FROM number_range\n" +
-                "  WHERE number <= (SELECT MAX(C_ID) FROM COLLEGE) \n" +
+                "  WHERE number <= (SELECT MAX($primaryKey) FROM $tableName) \n" +
                 ")\n" +
                 "SELECT number FROM number_range EXCEPT \n" +
-                "SELECT C_ID AS number FROM COLLEGE;"
+                "SELECT $primaryKey AS number FROM $tableName;"
             , null)
 
 
@@ -80,12 +85,12 @@ class CollegeDAO(private val databaseHelper: DatabaseHelper) {
     fun update(collegeID : Int, college : College){
         val db = databaseHelper.writableDatabase
         val contentValues = ContentValues().apply{
-            put("C_NAME", college.name)
-            put("C_ADDRESS", college.address)
-            put("C_TELEPHONE", college.telephone)
+            put(collegeName, college.name)
+            put(collegeAddress, college.address)
+            put(collegeTelephone, college.telephone)
         }
 
-        db.update("COLLEGE",contentValues, "C_ID=?", arrayOf(collegeID.toString()))
+        db.update(tableName,contentValues, "$primaryKey=?", arrayOf(collegeID.toString()))
         db.close()
     }
 }

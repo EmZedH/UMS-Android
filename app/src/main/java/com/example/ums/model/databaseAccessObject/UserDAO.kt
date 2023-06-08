@@ -6,12 +6,20 @@ import com.example.ums.model.User
 
 class UserDAO(private val databaseHelper : DatabaseHelper) {
 
+    private val tableName = "USER"
+    private val primaryKey = "U_ID"
+    private val userName = "U_NAME"
+    private val userEmail = "U_EMAIL_ID"
+    private val userPassword = "U_PASSWORD"
+    private val userContact = "U_CONTACT"
+    private val userAddress = "U_ADDRESS"
+
     fun get(userEmailID : String, password : String) : User? {
 
         var user : User? = null
         val db = databaseHelper.readableDatabase
 
-        val cursor = db.rawQuery("SELECT * FROM USER WHERE U_EMAIL_ID = \"$userEmailID\" AND U_PASSWORD = \"$password\"", null)
+        val cursor = db.rawQuery("SELECT * FROM $tableName WHERE $userEmail = \"$userEmailID\" AND $userPassword = \"$password\"", null)
 
         if(cursor.moveToFirst()){
 
@@ -41,7 +49,7 @@ class UserDAO(private val databaseHelper : DatabaseHelper) {
 
         var user : User? = null
         val db = databaseHelper.readableDatabase
-        val cursor = db.rawQuery("SELECT * FROM USER WHERE U_ID = $userID", null)
+        val cursor = db.rawQuery("SELECT * FROM $tableName WHERE $primaryKey = $userID", null)
 
         if(cursor.moveToFirst()){
 
@@ -66,7 +74,7 @@ class UserDAO(private val databaseHelper : DatabaseHelper) {
 
     fun getList() : List<User>{
         val userList = mutableListOf<User>()
-        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM USER", null)
+        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName", null)
         cursor.moveToFirst()
         while (!cursor.isAfterLast){
             userList.add(
@@ -93,13 +101,13 @@ class UserDAO(private val databaseHelper : DatabaseHelper) {
         val db = databaseHelper.writableDatabase
 
         val contentValues = ContentValues().apply{
-            put("U_NAME", user.name)
-            put("U_CONTACT", user.contactNumber)
-            put("U_ADDRESS", user.address)
-            put("U_PASSWORD", user.password)
+            put(userName, user.name)
+            put(userContact, user.contactNumber)
+            put(userAddress, user.address)
+            put(userPassword, user.password)
         }
 
-        db.update("USER",contentValues, "U_ID=?", arrayOf(userID.toString()))
+        db.update(tableName,contentValues, "$primaryKey=?", arrayOf(userID.toString()))
         db.close()
     }
 

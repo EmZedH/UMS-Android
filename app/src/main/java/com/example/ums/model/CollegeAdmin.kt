@@ -1,6 +1,6 @@
 package com.example.ums.model
 
 data class CollegeAdmin(
-    var user : User,
-    var college : College
+    var id: Int,
+    var collegeID: Int
     )

@@ -26,6 +26,7 @@
         <activity android:name=".LoginActivity"/>
         <activity android:name=".MainPageActivity"/>
         <activity android:name=".ManageProfileActivity"/>
+        <activity android:name=".CollegeActivity"/>
     </application>
 
 </manifest>

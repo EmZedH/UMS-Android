@@ -7,13 +7,11 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModelProvider
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.Utility
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
-import com.example.ums.viewmodels.CollegeTextfieldsViewModel
 import com.example.ums.viewmodels.SuperAdminSharedViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
@@ -26,18 +24,20 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
     private lateinit var collegeTelephone : TextInputLayout
     private lateinit var collegeDAO: CollegeDAO
 
-    private lateinit var collegeTextfieldsViewModel: CollegeTextfieldsViewModel
     private val superAdminMainPageViewModel: SuperAdminSharedViewModel by activityViewModels ()
 
-    private var collegeNameText = ""
-    private var collegeAddressText = ""
-    private var collegeTelephoneText = ""
-
+    private lateinit var collegeNameText: String
+    private lateinit var collegeAddressText: String
+    private lateinit var collegeTelephoneText: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        collegeTextfieldsViewModel = ViewModelProvider(this)[CollegeTextfieldsViewModel::class.java]
+
+        collegeNameText = savedInstanceState?.getString("college_add_name_text") ?: ""
+        collegeAddressText = savedInstanceState?.getString("college_add_address_text") ?: ""
+        collegeTelephoneText = savedInstanceState?.getString("college_add_telephone_text") ?: ""
         collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
+//        Log.i("SuperAdminMainPageClass","addBottomSheet: ${requireParentFragment()}")
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,26 +57,6 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
             view.findViewById(R.id.college_address_layout)
         collegeTelephone =
             view.findViewById(R.id.college_telephone_layout)
-
-        collegeNameText =
-            if(collegeTextfieldsViewModel.getCollegeName()==null){
-                ""
-            }else{
-                collegeTextfieldsViewModel.getCollegeName()!!
-            }
-        collegeAddressText =
-            if(collegeTextfieldsViewModel.getCollegeAddress()==null){
-                ""
-            }else{
-                collegeTextfieldsViewModel.getCollegeAddress()!!
-            }
-
-        collegeTelephoneText =
-            if(collegeTextfieldsViewModel.getCollegeTelephone()==null){
-                ""
-            }else{
-                collegeTextfieldsViewModel.getCollegeTelephone()!!
-            }
         if(collegeNameText.isNotEmpty()){
             collegeName.editText?.setText(collegeNameText)
         }
@@ -131,6 +111,7 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
                 superAdminMainPageViewModel.getAddListener().observe(viewLifecycleOwner){ listener->
                     listener.onAdd(newID-1)
                 }
+//                listener.onAdd(newID-1)
                 dismiss()
             }
 
@@ -138,24 +119,9 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
         return view
     }
 
-    //only close button
     override fun dismiss() {
         super.dismiss()
         clearErrors()
-//        finalizeView()
-    }
-
-    //for all close and rotate actions
-    override fun onStop() {
-        super.onStop()
-        finalizeView()
-    }
-
-
-    private fun finalizeView(){
-        collegeTextfieldsViewModel.setCollegeName(collegeName.editText?.text.toString())
-        collegeTextfieldsViewModel.setCollegeAddress(collegeAddress.editText?.text.toString())
-        collegeTextfieldsViewModel.setCollegeTelephone(collegeTelephone.editText?.text.toString())
     }
 
     private fun clearErrors(){
@@ -168,4 +134,18 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
         view.findViewById<TextView>(R.id.college_id_text_view)!!.setText(R.string.college_id_string)
         view.findViewById<TextView>(R.id.college_id_text_view)!!.append(collegeDAO.getNewID().toString())
     }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("college_add_name_text",collegeName.editText?.text.toString())
+        outState.putString("college_add_address_text", collegeAddress.editText?.text.toString())
+        outState.putString("college_add_telephone_text",collegeTelephone.editText?.text.toString())
+    }
+
+//    override fun onAttach(context: Context) {
+//        super.onAttach(context)
+//        if(context is MainPageActivity){
+////            val superAdminPage = context.userFragment as SuperAdminMainPage
+//        }
+//    }
 }
