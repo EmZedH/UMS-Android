@@ -8,7 +8,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.activityViewModels
 import com.example.ums.viewmodels.SuperAdminSharedViewModel
 
-class DeleteDialog: DialogFragment() {
+class CollegeDeleteDialog: DialogFragment() {
     private val superAdminSharedViewModel: SuperAdminSharedViewModel by activityViewModels()
     private var collegeID: Int? = null
 
@@ -29,7 +29,6 @@ class DeleteDialog: DialogFragment() {
         dialogBuilder.setTitle("Confirmation").setMessage("Are you sure you want to delete this college?")
         dialogBuilder.setPositiveButton("Delete") { dialog, _ ->
             val adapter = superAdminSharedViewModel.getAdapter().value
-            Log.i("SuperAdminMainPageClass","adapter: $adapter")
             adapter?.deleteItem(collegeID!!)
             dialog.dismiss()
         }

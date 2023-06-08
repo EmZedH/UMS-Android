@@ -28,7 +28,7 @@ class MainPageActivity: AppCompatActivity(){
     private lateinit var navigationView: NavigationView
     private lateinit var user: User
     private lateinit var toolBar: MaterialToolbar
-    private lateinit var searchView: SearchView
+    private var searchView: SearchView? = null
     private var searchQuery: String? = null
     private var isSearchViewOpen: Boolean = true
 
@@ -110,9 +110,9 @@ class MainPageActivity: AppCompatActivity(){
             menuInflater.inflate(R.menu.top_app_bar, menu)
             val menuItem = menu.findItem(R.id.search)
             searchView = menuItem.actionView as SearchView
-            searchView.queryHint = getString(R.string.search)
-            searchView.isIconified = isSearchViewOpen
-            searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            searchView?.queryHint = getString(R.string.search)
+            searchView?.isIconified = isSearchViewOpen
+            searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                 override fun onQueryTextSubmit(p0: String?): Boolean {
                     return false
                 }
@@ -125,19 +125,23 @@ class MainPageActivity: AppCompatActivity(){
             })
         }
         if(searchQuery!=null){
-            searchView.setQuery(searchQuery, true)
+            searchView?.setQuery(searchQuery, true)
         }
         return true
     }
 
     override fun onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START) || !searchView.isIconified) {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
-            searchView.isIconified = true
+            return
         }
-        else{
-            showExitConfirmationDialog()
+        if(searchView!=null){
+            if(!searchView!!.isIconified){
+                searchView?.isIconified = true
+                return
+            }
         }
+        showExitConfirmationDialog()
     }
 
     private fun showExitConfirmationDialog() {
@@ -157,6 +161,8 @@ class MainPageActivity: AppCompatActivity(){
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putString("main_page_activity_search_query",searchQuery)
-        outState.putBoolean("main_page_activity_is_search_query_open",searchView.isIconified)
+        if(searchView!=null){
+            outState.putBoolean("main_page_activity_is_search_query_open",searchView!!.isIconified)
+        }
     }
 }

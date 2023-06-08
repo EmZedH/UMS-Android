@@ -11,9 +11,9 @@ class DepartmentDAO(private val databaseHelper: DatabaseHelper) {
     private val departmentName = "DEPT_NAME"
     private val collegeID = "COLLEGE_ID"
 
-    fun get(departmentID : Int) : Department?{
+    fun get(departmentID : Int, collegeID: Int) : Department?{
         var department : Department? = null
-        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName WHERE $primaryKey = $departmentID", null)
+        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName WHERE $primaryKey = $departmentID AND ${this.collegeID} = $collegeID", null)
         if(cursor.moveToFirst()){
             department = Department(
                 cursor.getInt(0),
@@ -82,7 +82,7 @@ class DepartmentDAO(private val databaseHelper: DatabaseHelper) {
     fun update(id : Int, department: Department){
         val db = databaseHelper.writableDatabase
         val contentValues = ContentValues().apply{
-            put(tableName, department.name)
+            put(departmentName, department.name)
         }
 
         db.update(tableName,contentValues, "$primaryKey=?", arrayOf(id.toString()))

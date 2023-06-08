@@ -1,18 +1,20 @@
 package com.example.ums.bottomsheetdialogs
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
-import androidx.fragment.app.activityViewModels
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.Utility
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
-import com.example.ums.viewmodels.SuperAdminSharedViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
@@ -24,11 +26,13 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
     private lateinit var collegeTelephone : TextInputLayout
     private lateinit var collegeDAO: CollegeDAO
 
-    private val superAdminMainPageViewModel: SuperAdminSharedViewModel by activityViewModels ()
+//    private val superAdminMainPageViewModel: SuperAdminSharedViewModel by activityViewModels ()
 
     private lateinit var collegeNameText: String
     private lateinit var collegeAddressText: String
     private lateinit var collegeTelephoneText: String
+
+    private lateinit var addCollegeButton: MaterialButton
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,10 +71,14 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
             collegeTelephone.editText?.setText(collegeTelephoneText)
         }
 
-        val addCollegeButton =
-            view.findViewById<MaterialButton>(R.id.update_college_button)
+        addCollegeButton =
+            view.findViewById(R.id.update_college_button)
 
         setCollegeIDTextView(view)
+
+        collegeName.editText?.addTextChangedListener(textListener(collegeName))
+        collegeAddress.editText?.addTextChangedListener(textListener(collegeAddress))
+        collegeTelephone.editText?.addTextChangedListener(textListener(collegeTelephone))
 
         addCollegeButton.setOnClickListener {
             var flag = true
@@ -108,10 +116,12 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
                 )
 
                 setCollegeIDTextView(view)
-                superAdminMainPageViewModel.getAddListener().observe(viewLifecycleOwner){ listener->
-                    listener.onAdd(newID-1)
-                }
+//                superAdminMainPageViewModel.getAddListener().observe(viewLifecycleOwner){ listener->
+//                    listener.onAdd(newID-1)
+//                }
 //                listener.onAdd(newID-1)
+
+                setFragmentResult("collegeAddBottomSheet", bundleOf("collegeAddResultKey" to (newID-1)))
                 dismiss()
             }
 
@@ -140,6 +150,21 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
         outState.putString("college_add_name_text",collegeName.editText?.text.toString())
         outState.putString("college_add_address_text", collegeAddress.editText?.text.toString())
         outState.putString("college_add_telephone_text",collegeTelephone.editText?.text.toString())
+    }
+
+    private fun textListener(layout: TextInputLayout): TextWatcher {
+        return object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                layout.error = null
+//                addCollegeButton.isEnabled = p0?.toString() != collegeDetail
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        }
     }
 
 //    override fun onAttach(context: Context) {

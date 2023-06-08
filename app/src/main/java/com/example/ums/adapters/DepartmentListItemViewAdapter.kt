@@ -1,6 +1,5 @@
 package com.example.ums.adapters
 
-import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -28,21 +27,20 @@ class DepartmentListItemViewAdapter(private val collegeID: Int, private val depa
     override fun onBindViewHolder(holder: ListItemViewHolder, position: Int) {
         val college = originalList[position]
         holder.itemIDTextView.text = "ID: C/$collegeID-D/${college.id}"
-//        holder.itemIDTextView.append(college.id.toString())
         holder.itemNameTextView.text = college.name
 
-        holder.itemView.setOnClickListener {
-            val bundle = Bundle()
-            bundle.putInt("collegeID",college.id)
-            itemListener.onClick(bundle)
-        }
+//        holder.itemView.setOnClickListener {
+//            val bundle = Bundle()
+//            bundle.putInt("collegeID",college.id)
+//            itemListener.onClick(bundle)
+//        }
         holder.optionsButton.setOnClickListener {
             showOptionsPopupMenu(college, holder)
         }
     }
 
     fun updateItemInAdapter(position: Int) {
-        originalList[position] = departmentDAO.get(position+1)!!
+        originalList[position] = departmentDAO.get(position+1, collegeID)!!
         notifyItemChanged(position)
     }
 
@@ -83,13 +81,12 @@ class DepartmentListItemViewAdapter(private val collegeID: Int, private val depa
         notifyDataSetChanged()
     }
     fun addItem(position: Int){
-        Log.i("DepartmentFragmentClass","position: $position")
-        originalList.add(position, departmentDAO.get(position+1)!!)
+        originalList.add(position, departmentDAO.get(position+1, collegeID)!!)
     }
 
     fun deleteItem(id: Int){
-        val college = departmentDAO.get(id)
-        val updatedPosition = originalList.indexOf(college)
+        val department = departmentDAO.get(id, collegeID)
+        val updatedPosition = originalList.indexOf(department)
         departmentDAO.delete(id)
         originalList.removeAt(updatedPosition)
         notifyItemRemoved(updatedPosition)
