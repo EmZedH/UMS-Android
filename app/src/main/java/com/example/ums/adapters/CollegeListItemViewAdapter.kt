@@ -1,6 +1,7 @@
 package com.example.ums.adapters
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
@@ -86,6 +87,7 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
     }
 
     fun deleteItem(id: Int){
+        Log.i("CollegeDeleteDialogClass","collegeID: $id")
         val college = collegeDAO.get(id)
         val updatedPosition = originalList.indexOf(college)
         collegeDAO.delete(id)

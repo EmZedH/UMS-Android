@@ -9,19 +9,18 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
-import androidx.fragment.app.activityViewModels
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.Utility
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
-import com.example.ums.viewmodels.SuperAdminSharedViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
 class CollegeUpdateBottomSheet : BottomSheetDialogFragment() {
-    private val superAdminSharedViewModel: SuperAdminSharedViewModel by activityViewModels()
     private var collegeID: Int? = null
     private lateinit var college: College
     private lateinit var collegeNameTextLayout: TextInputLayout
@@ -31,23 +30,26 @@ class CollegeUpdateBottomSheet : BottomSheetDialogFragment() {
     private lateinit var collegeNameText: String
     private lateinit var collegeAddressText: String
     private lateinit var collegeTelephoneText: String
-    private var isRotate: Boolean = false
+    private var isRotate: Boolean = true
 
-    fun setRotate(isRotate: Boolean){
-        this.isRotate = isRotate
-    }
+//    fun setRotate(isRotate: Boolean){
+//        this.isRotate = isRotate
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle = arguments
         collegeID = bundle?.getInt("college_update_college_id")
+        if(savedInstanceState!=null){
+            isRotate = savedInstanceState.getBoolean("college_update_is_rotate")
+        }
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
-        val view = inflater.inflate(R.layout.fragment_edit_college, container, false)
+        val view = inflater.inflate(R.layout.fragment_update_college, container, false)
         val collegeID = collegeID
         if(collegeID!=null){
             college = collegeDAO.get(collegeID)!!
@@ -121,11 +123,7 @@ class CollegeUpdateBottomSheet : BottomSheetDialogFragment() {
                         collegeTelephoneText
                     )
                     collegeDAO.update(collegeID, newCollege)
-                    superAdminSharedViewModel.getAdapter().observe(viewLifecycleOwner){adapter->
-                        adapter.updateItemInAdapter(collegeDAO.getList().indexOf(collegeDAO.get(
-                            collegeID
-                        )))
-                    }
+                    setFragmentResult("CollegeUpdateBottomSheet", bundleOf("collegeID" to collegeID))
                     Toast.makeText(requireContext(), "Details Updated!", Toast.LENGTH_SHORT).show()
                     dismiss()
                 }
@@ -154,5 +152,6 @@ class CollegeUpdateBottomSheet : BottomSheetDialogFragment() {
         outState.putString("college_add_name_text",collegeNameTextLayout.editText?.text.toString())
         outState.putString("college_add_address_text", collegeAddressTextLayout.editText?.text.toString())
         outState.putString("college_add_telephone_text",collegeTelephoneTextLayout.editText?.text.toString())
+        outState.putBoolean("college_update_is_rotate", false)
     }
 }

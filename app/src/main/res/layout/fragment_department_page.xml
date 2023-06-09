@@ -39,16 +39,16 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="15dp"/>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        style="@style/FloatingActionButtonStyle"
-        android:id="@+id/add_floating_action_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:backgroundTint="@color/light_primary"
-        android:contentDescription="@string/fab_content_description"
-        android:src="@drawable/ic_plus_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        />
+<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--        style="@style/FloatingActionButtonStyle"-->
+<!--        android:id="@+id/add_floating_action_button"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_margin="16dp"-->
+<!--        android:backgroundTint="@color/light_primary"-->
+<!--        android:contentDescription="@string/fab_content_description"-->
+<!--        android:src="@drawable/ic_plus_24"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        />-->
 </androidx.constraintlayout.widget.ConstraintLayout>

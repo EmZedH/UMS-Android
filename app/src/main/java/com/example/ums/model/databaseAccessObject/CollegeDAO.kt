@@ -3,6 +3,7 @@ package com.example.ums.model.databaseAccessObject
 import android.content.ContentValues
 import com.example.ums.DatabaseHelper
 import com.example.ums.model.College
+import java.lang.Exception
 
 class CollegeDAO(private val databaseHelper: DatabaseHelper) {
 
@@ -11,6 +12,8 @@ class CollegeDAO(private val databaseHelper: DatabaseHelper) {
     private val collegeName = "C_NAME"
     private val collegeAddress = "C_ADDRESS"
     private val collegeTelephone = "C_TELEPHONE"
+    private val departmentTable = "DEPARTMENT"
+    private val departmentForeignKey = "COLLEGE_ID"
 
     fun get(collegeID : Int) : College?{
         var college : College? = null
@@ -56,10 +59,20 @@ class CollegeDAO(private val databaseHelper: DatabaseHelper) {
     }
 
     fun delete(collegeID : Int){
-        val deleteQuery = "DELETE FROM $tableName WHERE $primaryKey = $collegeID"
-
-        databaseHelper.writableDatabase.execSQL(deleteQuery)
-
+        val db = databaseHelper.writableDatabase
+        db.beginTransaction()
+        try{
+            db.execSQL("DELETE FROM $departmentTable WHERE $departmentForeignKey = $collegeID")
+            db.execSQL("DELETE FROM $tableName WHERE $primaryKey = $collegeID")
+            db.setTransactionSuccessful()
+        }
+        catch (e: Exception){
+            e.printStackTrace()
+        }
+        finally {
+            db.endTransaction()
+        }
+        db.close()
     }
 
     fun getNewID() : Int {

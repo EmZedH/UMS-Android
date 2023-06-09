@@ -1,27 +1,26 @@
 package com.example.ums.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ums.AddableFragment
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.adapters.DepartmentListItemViewAdapter
-import com.example.ums.bottomsheetdialogs.DepartmentAddFragment
+import com.example.ums.bottomsheetdialogs.DepartmentAddBottomSheet
+import com.example.ums.bottomsheetdialogs.DepartmentUpdateBottomSheet
 import com.example.ums.dialogFragments.DepartmentDeleteDialog
 import com.example.ums.listener.ItemListener
 import com.example.ums.model.databaseAccessObject.DepartmentDAO
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class DepartmentFragment: Fragment(), ItemListener {
-    private lateinit var departmentAddFragment: DepartmentAddFragment
+class DepartmentFragment: AddableFragment(), ItemListener {
+    private lateinit var departmentAddFragment: DepartmentAddBottomSheet
     private lateinit var departmentDAO: DepartmentDAO
     private lateinit var departmentListItemViewAdapter: DepartmentListItemViewAdapter
     private lateinit var firstTextView: TextView
@@ -44,15 +43,15 @@ class DepartmentFragment: Fragment(), ItemListener {
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_department_page, container, false)
-        val addFloatingButton = view.findViewById<FloatingActionButton>(R.id.add_floating_action_button)
+//        val addFloatingButton = view.findViewById<FloatingActionButton>(R.id.add_floating_action_button)
         val recyclerView: RecyclerView = view.findViewById(R.id.college_list_view)
-        departmentAddFragment = DepartmentAddFragment()
+        departmentAddFragment = DepartmentAddBottomSheet()
         departmentAddFragment.arguments = Bundle().apply {
             putInt("college_activity_college_id", collegeID!!)
         }
-        addFloatingButton.setOnClickListener {
-            departmentAddFragment.show(requireActivity().supportFragmentManager, "bottomSheetDialog")
-        }
+//        addFloatingButton.setOnClickListener {
+//            departmentAddFragment.show(requireActivity().supportFragmentManager, "bottomSheetDialog")
+//        }
 
         firstTextView = view.findViewById(R.id.no_departments_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
@@ -67,7 +66,7 @@ class DepartmentFragment: Fragment(), ItemListener {
         setFragmentResultListener("departmentAddFragmentPosition"){_, result->
 
             val position = result.getInt("position")
-            onAdd(position)
+            addAt(position)
         }
 
         setFragmentResultListener("departmentDeleteDialog"){_, result->
@@ -75,15 +74,31 @@ class DepartmentFragment: Fragment(), ItemListener {
             departmentListItemViewAdapter.deleteItem(id)
             onRefresh()
         }
+        setFragmentResultListener("DepartmentUpdateBottomSheet"){_, result->
+            val id = result.getInt("departmentID")
+            departmentListItemViewAdapter.updateItemInAdapter(departmentDAO.getList(collegeID!!).indexOf(departmentDAO.get(id, collegeID!!)))
+        }
     }
 
-    private fun onAdd(position: Int){
+    override fun onAdd() {
+        departmentAddFragment.show(requireActivity().supportFragmentManager, "bottomSheetDialog")
+    }
+
+    private fun addAt(position: Int){
         departmentListItemViewAdapter.addItem(position)
         departmentListItemViewAdapter.notifyItemInserted(position)
         onRefresh()
     }
 
     override fun onUpdate(id: Int) {
+        val updateBottomSheet = DepartmentUpdateBottomSheet()
+
+        updateBottomSheet.arguments = Bundle().apply{
+            putInt("department_update_college_id", collegeID!!)
+            putInt("department_update_department_id", id)
+        }
+
+        updateBottomSheet.show((context as AppCompatActivity).supportFragmentManager, "updateDialog")
     }
 
     override fun onDelete(id: Int) {

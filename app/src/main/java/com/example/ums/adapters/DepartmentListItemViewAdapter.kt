@@ -1,6 +1,5 @@
 package com.example.ums.adapters
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
@@ -25,9 +24,9 @@ class DepartmentListItemViewAdapter(private val collegeID: Int, private val depa
     }
 
     override fun onBindViewHolder(holder: ListItemViewHolder, position: Int) {
-        val college = originalList[position]
-        holder.itemIDTextView.text = "ID: C/$collegeID-D/${college.id}"
-        holder.itemNameTextView.text = college.name
+        val department = originalList[position]
+        holder.itemIDTextView.text = "ID: C/$collegeID-D/${department.id}"
+        holder.itemNameTextView.text = department.name
 
 //        holder.itemView.setOnClickListener {
 //            val bundle = Bundle()
@@ -35,7 +34,7 @@ class DepartmentListItemViewAdapter(private val collegeID: Int, private val depa
 //            itemListener.onClick(bundle)
 //        }
         holder.optionsButton.setOnClickListener {
-            showOptionsPopupMenu(college, holder)
+            showOptionsPopupMenu(department, holder)
         }
     }
 
@@ -58,7 +57,6 @@ class DepartmentListItemViewAdapter(private val collegeID: Int, private val depa
                 }
                 R.id.delete_college -> {
                     itemListener.onDelete(department.id)
-//                    showConfirmationDialog(context, college)
                     true
                 }
 
@@ -87,7 +85,7 @@ class DepartmentListItemViewAdapter(private val collegeID: Int, private val depa
     fun deleteItem(id: Int){
         val department = departmentDAO.get(id, collegeID)
         val updatedPosition = originalList.indexOf(department)
-        departmentDAO.delete(id)
+        departmentDAO.delete(id, collegeID)
         originalList.removeAt(updatedPosition)
         notifyItemRemoved(updatedPosition)
     }

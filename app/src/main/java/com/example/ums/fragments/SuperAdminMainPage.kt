@@ -18,28 +18,24 @@ import com.example.ums.adapters.CollegeListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.CollegeAddBottomSheet
 import com.example.ums.bottomsheetdialogs.CollegeUpdateBottomSheet
 import com.example.ums.dialogFragments.CollegeDeleteDialog
-import com.example.ums.listener.AddListener
 import com.example.ums.listener.ItemListener
 import com.example.ums.listener.SearchListener
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class SuperAdminMainPage : Fragment(), AddListener, SearchListener, ItemListener {
+class SuperAdminMainPage : Fragment(), SearchListener, ItemListener {
 
     private lateinit var addCollegeBottomSheet : CollegeAddBottomSheet
     private lateinit var collegeListItemViewAdapter : CollegeListItemViewAdapter
     private lateinit var collegeDAO: CollegeDAO
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
-//    private val superAdminSharedViewModel: SuperAdminSharedViewModel by activityViewModels ()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
         collegeListItemViewAdapter = CollegeListItemViewAdapter(collegeDAO, this)
-//        superAdminSharedViewModel.setAddListener(this)
-//        superAdminSharedViewModel.setAdapter(collegeListItemViewAdapter)
     }
 
     override fun onCreateView(
@@ -81,10 +77,18 @@ class SuperAdminMainPage : Fragment(), AddListener, SearchListener, ItemListener
             val position = result.getInt("collegeAddResultKey")
             onAdd(position)
         }
+        setFragmentResultListener("collegeDeleteDialog"){_, result->
+            val id = result.getInt("collegeID")
+            collegeListItemViewAdapter.deleteItem(id)
+        }
+        setFragmentResultListener("CollegeUpdateBottomSheet"){_, result->
+            val id = result.getInt("collegeID")
+            collegeListItemViewAdapter.updateItemInAdapter(collegeDAO.getList().indexOf(collegeDAO.get(id)))
+        }
     }
 
 
-    override fun onAdd(position: Int) {
+    private fun onAdd(position: Int) {
         collegeListItemViewAdapter.addItem(position)
         collegeListItemViewAdapter.notifyItemInserted(position)
         onRefresh()
@@ -96,7 +100,6 @@ class SuperAdminMainPage : Fragment(), AddListener, SearchListener, ItemListener
 
     override fun onUpdate(id: Int) {
         val editFragment = CollegeUpdateBottomSheet()
-        editFragment.setRotate(true)
         editFragment.arguments = Bundle().apply {
             putInt("college_update_college_id", id)
         }

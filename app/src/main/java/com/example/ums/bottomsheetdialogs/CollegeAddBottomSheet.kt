@@ -26,8 +26,6 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
     private lateinit var collegeTelephone : TextInputLayout
     private lateinit var collegeDAO: CollegeDAO
 
-//    private val superAdminMainPageViewModel: SuperAdminSharedViewModel by activityViewModels ()
-
     private lateinit var collegeNameText: String
     private lateinit var collegeAddressText: String
     private lateinit var collegeTelephoneText: String
@@ -41,7 +39,6 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
         collegeAddressText = savedInstanceState?.getString("college_add_address_text") ?: ""
         collegeTelephoneText = savedInstanceState?.getString("college_add_telephone_text") ?: ""
         collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
-//        Log.i("SuperAdminMainPageClass","addBottomSheet: ${requireParentFragment()}")
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -159,7 +156,6 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 layout.error = null
-//                addCollegeButton.isEnabled = p0?.toString() != collegeDetail
             }
 
             override fun afterTextChanged(p0: Editable?) {

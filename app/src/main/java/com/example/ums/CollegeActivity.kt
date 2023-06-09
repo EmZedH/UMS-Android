@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ums.adapters.CollegePageAdapter
+import com.example.ums.fragments.CollegeAdminFragment
+import com.example.ums.fragments.DepartmentFragment
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -15,6 +18,7 @@ class CollegeActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.page_layout)
+        val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.add_floating_action_button)
         val collegeDAO = CollegeDAO(DatabaseHelper(this))
         val bundle = intent.extras
         val collegeID = bundle?.getInt("collegeID")
@@ -25,7 +29,8 @@ class CollegeActivity: AppCompatActivity() {
             toolBar.setNavigationOnClickListener {
                 finish()
             }
-            val tabAdapter = CollegePageAdapter(this, collegeID)
+            val fragments: List<Fragment> = listOf(DepartmentFragment(), CollegeAdminFragment() )
+            val tabAdapter = CollegePageAdapter(this, collegeID, fragments)
             val viewPager = findViewById<ViewPager2>(R.id.view_pager)
             val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
             viewPager.adapter = tabAdapter
@@ -35,7 +40,19 @@ class CollegeActivity: AppCompatActivity() {
                     0->tab.setText(R.string.departments_string)
                     1->tab.setText(R.string.college_admins_string)
                 }
+                viewPager.adapter
             }.attach()
+
+            viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback(){
+                override fun onPageSelected(position: Int) {
+                    val selectedFragment = supportFragmentManager.fragments[position]
+                    if (selectedFragment is AddableFragment) {
+                        addFloatingActionButton.setOnClickListener {
+                            selectedFragment.onAdd()
+                        }
+                    }
+                }
+            })
         }
     }
 }

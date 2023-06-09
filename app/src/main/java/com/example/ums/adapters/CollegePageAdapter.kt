@@ -4,11 +4,9 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.example.ums.fragments.CollegeAdminFragment
-import com.example.ums.fragments.DepartmentFragment
+import androidx.viewpager2.adapter.FragmentViewHolder
 
-class CollegePageAdapter(fragmentActivity: FragmentActivity, private val collegeID: Int): FragmentStateAdapter(fragmentActivity) {
-    private val fragments: List<Fragment> = listOf(DepartmentFragment(), CollegeAdminFragment() )
+class CollegePageAdapter(fragmentActivity: FragmentActivity, private val collegeID: Int, private val fragments: List<Fragment>): FragmentStateAdapter(fragmentActivity) {
 
     init {
         for (fragment in fragments){
@@ -24,5 +22,15 @@ class CollegePageAdapter(fragmentActivity: FragmentActivity, private val college
 
     override fun createFragment(position: Int): Fragment {
         return fragments[position]
+    }
+
+    override fun onBindViewHolder(
+        holder: FragmentViewHolder,
+        position: Int,
+        payloads: MutableList<Any>
+    ) {
+
+        super.onBindViewHolder(holder, position, payloads)
+
     }
 }

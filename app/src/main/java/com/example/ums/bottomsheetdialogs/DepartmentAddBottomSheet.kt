@@ -16,7 +16,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class DepartmentAddFragment: BottomSheetDialogFragment() {
+class DepartmentAddBottomSheet: BottomSheetDialogFragment() {
 
 
     private lateinit var collegeName : TextInputLayout

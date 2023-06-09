@@ -22,10 +22,6 @@ class DepartmentDeleteDialog: DialogFragment() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-//        if(savedInstanceState!=null){
-//            departmentID = savedInstanceState.getInt("delete_dialog_college_id")
-//        }
         departmentID = arguments?.getInt("delete_dialog_department_id")
         super.onCreate(savedInstanceState)
     }
@@ -34,9 +30,6 @@ class DepartmentDeleteDialog: DialogFragment() {
         val dialogBuilder = AlertDialog.Builder(requireContext())
         dialogBuilder.setTitle("Confirmation").setMessage("Are you sure you want to delete this department?")
         dialogBuilder.setPositiveButton("Delete") { dialog, _ ->
-//            val adapter = superAdminSharedViewModel.getAdapter().value
-//            Log.i("SuperAdminMainPageClass","adapter: $adapter")
-//            adapter?.deleteItem(collegeID!!)
             setFragmentResult("departmentDeleteDialog", bundleOf("departmentID" to departmentID))
             dialog.dismiss()
         }
@@ -46,11 +39,4 @@ class DepartmentDeleteDialog: DialogFragment() {
         }
         return dialogBuilder.create()
     }
-
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        if(departmentID!=null){
-//            outState.putInt("delete_dialog_college_id",departmentID!!)
-//        }
-//    }
 }

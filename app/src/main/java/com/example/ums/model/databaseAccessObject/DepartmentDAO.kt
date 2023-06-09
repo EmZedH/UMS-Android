@@ -9,11 +9,11 @@ class DepartmentDAO(private val databaseHelper: DatabaseHelper) {
     private val tableName = "DEPARTMENT"
     private val primaryKey = "DEPT_ID"
     private val departmentName = "DEPT_NAME"
-    private val collegeID = "COLLEGE_ID"
+    private val collegeIDKey = "COLLEGE_ID"
 
     fun get(departmentID : Int, collegeID: Int) : Department?{
         var department : Department? = null
-        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName WHERE $primaryKey = $departmentID AND ${this.collegeID} = $collegeID", null)
+        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName WHERE $primaryKey = $departmentID AND ${this.collegeIDKey} = $collegeID", null)
         if(cursor.moveToFirst()){
             department = Department(
                 cursor.getInt(0),
@@ -27,7 +27,7 @@ class DepartmentDAO(private val databaseHelper: DatabaseHelper) {
     }
     fun getList(collegeID: Int) : List<Department>{
         val departments = mutableListOf<Department>()
-        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName WHERE ${this.collegeID} = $collegeID", null)
+        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName WHERE ${this.collegeIDKey} = $collegeID", null)
         cursor.moveToFirst()
         while (!cursor.isAfterLast){
             departments.add(
@@ -52,8 +52,8 @@ class DepartmentDAO(private val databaseHelper: DatabaseHelper) {
         databaseHelper.writableDatabase.insert(tableName,null, contentValues)
     }
 
-    fun delete(id : Int){
-        val deleteQuery = "DELETE FROM DEPARTMENT WHERE DEPT_ID = $id"
+    fun delete(id : Int, collegeID: Int){
+        val deleteQuery = "DELETE FROM $tableName WHERE $primaryKey = $id AND $collegeIDKey = $collegeID"
 
         databaseHelper.writableDatabase.execSQL(deleteQuery)
 
@@ -66,10 +66,10 @@ class DepartmentDAO(private val databaseHelper: DatabaseHelper) {
                 "  UNION ALL\n" +
                 "  SELECT number + 1\n" +
                 "  FROM number_range\n" +
-                "  WHERE number <= (SELECT MAX($primaryKey) FROM $tableName WHERE ${this.collegeID} = $collegeID) \n" +
+                "  WHERE number <= (SELECT MAX($primaryKey) FROM $tableName WHERE ${this.collegeIDKey} = $collegeID) \n" +
                 ")\n" +
                 "SELECT number FROM number_range EXCEPT \n" +
-                "SELECT $primaryKey AS number FROM $tableName WHERE ${this.collegeID} = $collegeID;"
+                "SELECT $primaryKey AS number FROM $tableName WHERE ${this.collegeIDKey} = $collegeID;"
             , null)
 
 
@@ -79,13 +79,13 @@ class DepartmentDAO(private val databaseHelper: DatabaseHelper) {
         return newID
     }
 
-    fun update(id : Int, department: Department){
+    fun update(id : Int, collegeID: Int, department: Department){
         val db = databaseHelper.writableDatabase
         val contentValues = ContentValues().apply{
             put(departmentName, department.name)
         }
 
-        db.update(tableName,contentValues, "$primaryKey=?", arrayOf(id.toString()))
+        db.update(tableName,contentValues, "$primaryKey=? AND ${this.collegeIDKey} = ?", arrayOf(id.toString(), collegeID.toString()))
         db.close()
     }
 }
