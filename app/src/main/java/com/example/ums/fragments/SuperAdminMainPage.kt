@@ -19,11 +19,11 @@ import com.example.ums.bottomsheetdialogs.CollegeAddBottomSheet
 import com.example.ums.bottomsheetdialogs.CollegeUpdateBottomSheet
 import com.example.ums.dialogFragments.CollegeDeleteDialog
 import com.example.ums.listener.ItemListener
-import com.example.ums.listener.SearchListener
+import com.example.ums.listener.Searchable
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class SuperAdminMainPage : Fragment(), SearchListener, ItemListener {
+class SuperAdminMainPage : Fragment(), Searchable, ItemListener {
 
     private lateinit var addCollegeBottomSheet : CollegeAddBottomSheet
     private lateinit var collegeListItemViewAdapter : CollegeListItemViewAdapter

@@ -3,7 +3,6 @@ package com.example.ums
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import android.view.MenuItem
 import android.widget.SearchView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -13,7 +12,7 @@ import androidx.fragment.app.Fragment
 import com.example.ums.dialogFragments.ExitDialog
 import com.example.ums.dialogFragments.LogOutDialog
 import com.example.ums.fragments.SuperAdminMainPage
-import com.example.ums.listener.SearchListener
+import com.example.ums.listener.Searchable
 import com.example.ums.model.User
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.example.ums.model.databaseAccessObject.UserDAO
@@ -41,13 +40,13 @@ class MainPageActivity: AppCompatActivity(){
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_page)
+
         val userDAO = UserDAO(DatabaseHelper(this))
+        val bundle = intent.extras
+        val userID = bundle!!.getInt("userID")
 
         toolBar = findViewById(R.id.top_app_bar)
         setSupportActionBar(toolBar)
-        val bundle = intent.extras
-
-        val userID = bundle!!.getInt("userID")
         user = userDAO.get(userID)!!
         userRole = bundle.getString("userRole")!!
 
@@ -60,24 +59,23 @@ class MainPageActivity: AppCompatActivity(){
 
         navigationView = findViewById(R.id.navigation_view)
         navigationView.setNavigationItemSelectedListener { menuItem ->
-            when(menuItem.itemId){
 
+            when(menuItem.itemId){
                 R.id.manage_profile_tab -> {
                     val intent = Intent(this, ManageProfileActivity::class.java)
                     intent.putExtras(bundle)
                     startActivity(intent)
                 }
-
                 R.id.log_out_tab -> {
                     val logOutDialog = LogOutDialog()
                     logOutDialog.show(supportFragmentManager, "Log Out Dialog")
                 }
-
             }
 
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
+
         if(userRole == UserRole.SUPER_ADMIN.role){
             superAdminProcesses()
         }
@@ -91,18 +89,6 @@ class MainPageActivity: AppCompatActivity(){
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.super_admin_fragment_container, userFragment!!)
             commit()
-        }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-
-            R.id.search -> {
-                toolBar.menu.clear()
-                true
-            }
-
-            else -> super.onOptionsItemSelected(item)
         }
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -119,7 +105,7 @@ class MainPageActivity: AppCompatActivity(){
 
                 override fun onQueryTextChange(p0: String?): Boolean {
                     searchQuery = p0
-                    (userFragment as SearchListener).onSearch(p0)
+                    (userFragment as Searchable).onSearch(p0)
                     return false
                 }
             })
@@ -146,7 +132,7 @@ class MainPageActivity: AppCompatActivity(){
 
     private fun showExitConfirmationDialog() {
         val exitDialogFragment = ExitDialog()
-        exitDialogFragment.show(supportFragmentManager, "ExitDialog")
+        exitDialogFragment.show(supportFragmentManager, "exitDialog")
     }
 
     override fun onResume() {

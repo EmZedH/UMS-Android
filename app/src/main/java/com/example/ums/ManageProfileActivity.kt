@@ -26,10 +26,6 @@ class ManageProfileActivity : AppCompatActivity() {
         val userID = bundle!!.getInt("userID")
         val user = userDAO.get(userID)!!
 
-        val changePasswordBottomSheet = ChangePasswordBottomSheet()
-        changePasswordBottomSheet.setUserID(userID)
-        changePasswordBottomSheet.arguments = bundle
-
         val userIDTextView = findViewById<TextView>(R.id.college_id_text_view)
         val userEmailIDTextView = findViewById<TextView>(R.id.user_email)
         val userNameTextLayout = findViewById<TextInputLayout>(R.id.college_name_layout)
@@ -92,6 +88,8 @@ class ManageProfileActivity : AppCompatActivity() {
         }
 
         changePasswordButton.setOnClickListener {
+            val changePasswordBottomSheet = ChangePasswordBottomSheet()
+            changePasswordBottomSheet.arguments = bundle
             changePasswordBottomSheet.show(supportFragmentManager, "bottomSheetDialog")
         }
     }

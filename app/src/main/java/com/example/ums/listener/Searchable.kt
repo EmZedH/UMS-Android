@@ -1,6 +1,6 @@
 package com.example.ums.listener
 
-interface SearchListener {
+interface Searchable {
 
     fun onSearch(query: String?)
 }

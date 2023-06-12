@@ -1,5 +1,5 @@
 package com.example.ums.listener
 
-interface AddListener {
+interface Addable {
     fun onAdd()
 }
