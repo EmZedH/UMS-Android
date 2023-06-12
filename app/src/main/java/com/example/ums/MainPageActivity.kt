@@ -119,7 +119,7 @@ class MainPageActivity: AppCompatActivity(){
 
                 override fun onQueryTextChange(p0: String?): Boolean {
                     searchQuery = p0
-                    (userFragment as SearchListener).onSearch(p0!!)
+                    (userFragment as SearchListener).onSearch(p0)
                     return false
                 }
             })

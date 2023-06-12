@@ -67,9 +67,9 @@ class DepartmentListItemViewAdapter(private val collegeID: Int, private val depa
         popupMenu.show()
     }
 
-    fun filter(query: String){
+    fun filter(query: String?){
         val filteredList =
-            if(query.isEmpty())
+            if(query.isNullOrEmpty())
                 departmentDAO.getList(collegeID)
             else
                 departmentDAO.getList(collegeID).filter { item -> item.name.contains(query, ignoreCase = true) }

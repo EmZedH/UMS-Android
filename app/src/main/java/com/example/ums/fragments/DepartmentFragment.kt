@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.AddableFragment
+import com.example.ums.AddableSearchableFragment
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.adapters.DepartmentListItemViewAdapter
@@ -19,7 +19,7 @@ import com.example.ums.dialogFragments.DepartmentDeleteDialog
 import com.example.ums.listener.ItemListener
 import com.example.ums.model.databaseAccessObject.DepartmentDAO
 
-class DepartmentFragment: AddableFragment(), ItemListener {
+class DepartmentFragment: AddableSearchableFragment(), ItemListener {
     private lateinit var departmentAddFragment: DepartmentAddBottomSheet
     private lateinit var departmentDAO: DepartmentDAO
     private lateinit var departmentListItemViewAdapter: DepartmentListItemViewAdapter
@@ -43,15 +43,11 @@ class DepartmentFragment: AddableFragment(), ItemListener {
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_department_page, container, false)
-//        val addFloatingButton = view.findViewById<FloatingActionButton>(R.id.add_floating_action_button)
         val recyclerView: RecyclerView = view.findViewById(R.id.college_list_view)
         departmentAddFragment = DepartmentAddBottomSheet()
         departmentAddFragment.arguments = Bundle().apply {
             putInt("college_activity_college_id", collegeID!!)
         }
-//        addFloatingButton.setOnClickListener {
-//            departmentAddFragment.show(requireActivity().supportFragmentManager, "bottomSheetDialog")
-//        }
 
         firstTextView = view.findViewById(R.id.no_departments_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
@@ -63,6 +59,19 @@ class DepartmentFragment: AddableFragment(), ItemListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//        val searchView = requireActivity().findViewById<SearchView>(R.id.search)
+//
+//        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+//            override fun onQueryTextSubmit(p0: String?): Boolean {
+//                return false
+//            }
+//
+//            override fun onQueryTextChange(p0: String?): Boolean {
+//                onSearch(p0!!)
+//                return false
+//            }
+//        })
+
         setFragmentResultListener("departmentAddFragmentPosition"){_, result->
 
             val position = result.getInt("position")
@@ -82,6 +91,10 @@ class DepartmentFragment: AddableFragment(), ItemListener {
 
     override fun onAdd() {
         departmentAddFragment.show(requireActivity().supportFragmentManager, "bottomSheetDialog")
+    }
+
+    override fun onSearch(query: String?) {
+        departmentListItemViewAdapter.filter(query)
     }
 
     private fun addAt(position: Int){

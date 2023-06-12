@@ -36,14 +36,14 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:contentDescription="@string/tab_layout_string"
             >
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/departments_string"/>
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/college_admins_string"/>
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/departments_string"/>-->
+<!--            <com.google.android.material.tabs.TabItem-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="@string/college_admins_string"/>-->
         </com.google.android.material.tabs.TabLayout>
 
     </com.google.android.material.appbar.AppBarLayout>

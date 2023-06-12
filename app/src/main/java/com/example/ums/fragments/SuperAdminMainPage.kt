@@ -72,6 +72,7 @@ class SuperAdminMainPage : Fragment(), SearchListener, ItemListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
         setFragmentResultListener("collegeAddBottomSheet"){_, result->
             val position = result.getInt("collegeAddResultKey")
@@ -94,7 +95,7 @@ class SuperAdminMainPage : Fragment(), SearchListener, ItemListener {
         onRefresh()
     }
 
-    override fun onSearch(query: String) {
+    override fun onSearch(query: String?) {
         collegeListItemViewAdapter.filter(query)
     }
 
@@ -103,7 +104,7 @@ class SuperAdminMainPage : Fragment(), SearchListener, ItemListener {
         editFragment.arguments = Bundle().apply {
             putInt("college_update_college_id", id)
         }
-        editFragment.show((context as AppCompatActivity).supportFragmentManager, "bottomSheetDialog")
+        editFragment.show((context as AppCompatActivity).supportFragmentManager, "updateBottomSheetDialog")
     }
 
     override fun onDelete(id: Int) {
