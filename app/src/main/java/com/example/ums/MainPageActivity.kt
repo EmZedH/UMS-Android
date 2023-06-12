@@ -8,20 +8,19 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
 import com.example.ums.dialogFragments.ExitDialog
 import com.example.ums.dialogFragments.LogOutDialog
 import com.example.ums.fragments.SuperAdminMainPage
-import com.example.ums.listener.Searchable
 import com.example.ums.model.User
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.example.ums.model.databaseAccessObject.UserDAO
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 
 class MainPageActivity: AppCompatActivity(){
 
-    var userFragment: Fragment? = null
+    var userFragment: AddableSearchableFragment? = null
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var userRole : String
     private lateinit var navigationView: NavigationView
@@ -44,7 +43,10 @@ class MainPageActivity: AppCompatActivity(){
         val userDAO = UserDAO(DatabaseHelper(this))
         val bundle = intent.extras
         val userID = bundle!!.getInt("userID")
-
+        val floatingActionButton = findViewById<FloatingActionButton>(R.id.add_floating_action_button)
+        floatingActionButton.setOnClickListener {
+            userFragment?.onAdd()
+        }
         toolBar = findViewById(R.id.top_app_bar)
         setSupportActionBar(toolBar)
         user = userDAO.get(userID)!!
@@ -105,7 +107,7 @@ class MainPageActivity: AppCompatActivity(){
 
                 override fun onQueryTextChange(p0: String?): Boolean {
                     searchQuery = p0
-                    (userFragment as Searchable).onSearch(p0)
+                    userFragment?.onSearch(p0)
                     return false
                 }
             })

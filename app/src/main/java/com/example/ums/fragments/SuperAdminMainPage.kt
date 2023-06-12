@@ -7,10 +7,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ums.AddableSearchableFragment
 import com.example.ums.CollegeActivity
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
@@ -19,11 +19,9 @@ import com.example.ums.bottomsheetdialogs.CollegeAddBottomSheet
 import com.example.ums.bottomsheetdialogs.CollegeUpdateBottomSheet
 import com.example.ums.dialogFragments.CollegeDeleteDialog
 import com.example.ums.listener.ItemListener
-import com.example.ums.listener.Searchable
 import com.example.ums.model.databaseAccessObject.CollegeDAO
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class SuperAdminMainPage : Fragment(), Searchable, ItemListener {
+class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
 
     private lateinit var addCollegeBottomSheet : CollegeAddBottomSheet
     private lateinit var collegeListItemViewAdapter : CollegeListItemViewAdapter
@@ -45,17 +43,13 @@ class SuperAdminMainPage : Fragment(), Searchable, ItemListener {
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_college_page, container, false)
-        val addFloatingButton = view.findViewById<FloatingActionButton>(R.id.add_floating_action_button)
+//        val addFloatingButton = view.findViewById<FloatingActionButton>(R.id.add_floating_action_button)
         val recyclerView: RecyclerView = view.findViewById(R.id.college_list_view)
 
         firstTextView = view.findViewById(R.id.no_departments_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
 
         addCollegeBottomSheet = CollegeAddBottomSheet()
-
-        addFloatingButton.setOnClickListener {
-            addCollegeBottomSheet.show(requireActivity().supportFragmentManager, "bottomSheetDialog")
-        }
 
         if(collegeDAO.getList().isNotEmpty()){
 
@@ -76,7 +70,7 @@ class SuperAdminMainPage : Fragment(), Searchable, ItemListener {
         super.onViewCreated(view, savedInstanceState)
         setFragmentResultListener("collegeAddBottomSheet"){_, result->
             val position = result.getInt("collegeAddResultKey")
-            onAdd(position)
+            addAt(position)
         }
         setFragmentResultListener("collegeDeleteDialog"){_, result->
             val id = result.getInt("collegeID")
@@ -88,8 +82,11 @@ class SuperAdminMainPage : Fragment(), Searchable, ItemListener {
         }
     }
 
+    override fun onAdd() {
+        addCollegeBottomSheet.show(requireActivity().supportFragmentManager, "bottomSheetDialog")
+    }
 
-    private fun onAdd(position: Int) {
+    private fun addAt(position: Int) {
         collegeListItemViewAdapter.addItem(position)
         collegeListItemViewAdapter.notifyItemInserted(position)
         onRefresh()
