@@ -23,8 +23,6 @@ class DepartmentAddBottomSheet: BottomSheetDialogFragment() {
     private var collegeID: Int? = null
     private lateinit var departmentDAO: DepartmentDAO
 
-//    private val superAdminMainPageViewModel: SuperAdminSharedViewModel by activityViewModels ()
-
     private lateinit var collegeNameText: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +46,7 @@ class DepartmentAddBottomSheet: BottomSheetDialogFragment() {
         }
 
         collegeName =
-            view.findViewById(R.id.college_name_layout)
+            view.findViewById(R.id.user_password_layout)
         if(collegeNameText.isNotEmpty()){
             collegeName.editText?.setText(collegeNameText)
         }

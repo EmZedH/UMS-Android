@@ -1,6 +1,7 @@
 package com.example.ums
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
@@ -73,6 +74,7 @@ class CollegeActivity: AppCompatActivity() {
                 super.onPageSelected(position)
                 try {
                     searchView?.setQuery(null, true)
+                    Log.i("CollegeActivityClass","position: $position selectedFragment: ${supportFragmentManager.fragments[position]}")
                     selectedFragment = supportFragmentManager.fragments[position] as AddableSearchableFragment
                     if (selectedFragment is AddableSearchableFragment) {
                         addFloatingActionButton.setOnClickListener {

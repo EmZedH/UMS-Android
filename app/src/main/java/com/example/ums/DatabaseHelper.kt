@@ -14,8 +14,8 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
             ")"
 
     private val createTableCollegeAdmin = "CREATE TABLE IF NOT EXISTS \"COLLEGE_ADMIN\" (\n" +
-            "\t\"CA_ID\"\tTEXT,\n" +
-            "\t\"COLLEGE_ID\"\tTEXT,\n" +
+            "\t\"CA_ID\"\tINTEGER,\n" +
+            "\t\"COLLEGE_ID\"\tINTEGER,\n" +
             "\tPRIMARY KEY(\"CA_ID\")\n" +
             ")"
 
@@ -31,10 +31,10 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
             ")"
 
     private val createTableCourseProfessor = "CREATE TABLE IF NOT EXISTS \"COURSE_PROFESSOR_TABLE\" (\n" +
-            "\t\"PROF_ID\"\tTEXT,\n" +
-            "\t\"COURSE_ID\"\tTEXT,\n" +
-            "\t\"DEPT_ID\"\tTEXT,\n" +
-            "\t\"COLLEGE_ID\"\tTEXT,\n" +
+            "\t\"PROF_ID\"\tINTEGER,\n" +
+            "\t\"COURSE_ID\"\tINTEGER,\n" +
+            "\t\"DEPT_ID\"\tINTEGER,\n" +
+            "\t\"COLLEGE_ID\"\tINTEGER,\n" +
             "\tPRIMARY KEY(\"PROF_ID\",\"COURSE_ID\",\"DEPT_ID\",\"COLLEGE_ID\")\n" +
             ")"
 
@@ -47,17 +47,17 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
 
     private val createTableProfessor = "CREATE TABLE IF NOT EXISTS \"PROFESSOR\" (\n" +
             "\t\"PROF_ID\"\tINTEGER,\n" +
-            "\t\"DEPT_ID\"\tTEXT,\n" +
-            "\t\"COLLEGE_ID\"\tTEXT,\n" +
+            "\t\"DEPT_ID\"\tINTEGER,\n" +
+            "\t\"COLLEGE_ID\"\tINTEGER,\n" +
             "\tPRIMARY KEY(\"PROF_ID\")\n" +
             ")"
 
     private val createTableRecords = "CREATE TABLE IF NOT EXISTS \"RECORDS\" (\n" +
             "\t\"STUDENT_ID\"\tINTEGER,\n" +
-            "\t\"COURSE_ID\"\tTEXT,\n" +
-            "\t\"DEPT_ID\"\tTEXT,\n" +
-            "\t\"PROF_ID\"\tTEXT,\n" +
-            "\t\"COLLEGE_ID\"\tTEXT,\n" +
+            "\t\"COURSE_ID\"\tINTEGER,\n" +
+            "\t\"DEPT_ID\"\tINTEGER,\n" +
+            "\t\"PROF_ID\"\tINTEGER,\n" +
+            "\t\"COLLEGE_ID\"\tINTEGER,\n" +
             "\t\"TRANSACT_ID\"\tTEXT,\n" +
             "\t\"EXT_MARK\"\tINTEGER,\n" +
             "\t\"ATTENDANCE\"\tINTEGER,\n" +

@@ -28,11 +28,6 @@ class DepartmentListItemViewAdapter(private val collegeID: Int, private val depa
         holder.itemIDTextView.text = "ID: C/$collegeID-D/${department.id}"
         holder.itemNameTextView.text = department.name
 
-//        holder.itemView.setOnClickListener {
-//            val bundle = Bundle()
-//            bundle.putInt("collegeID",college.id)
-//            itemListener.onClick(bundle)
-//        }
         holder.optionsButton.setOnClickListener {
             showOptionsPopupMenu(department, holder)
         }

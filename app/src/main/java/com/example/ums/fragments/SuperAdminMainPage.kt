@@ -2,6 +2,7 @@ package com.example.ums.fragments
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -75,6 +76,7 @@ class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
         setFragmentResultListener("collegeDeleteDialog"){_, result->
             val id = result.getInt("collegeID")
             collegeListItemViewAdapter.deleteItem(id)
+            onRefresh()
         }
         setFragmentResultListener("CollegeUpdateBottomSheet"){_, result->
             val id = result.getInt("collegeID")
@@ -108,7 +110,6 @@ class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
         val deleteFragment = CollegeDeleteDialog()
         deleteFragment.setCollegeID(id)
         deleteFragment.show((context as AppCompatActivity).supportFragmentManager, "deleteDialog")
-        onRefresh()
     }
 
     override fun onClick(bundle: Bundle?) {
@@ -121,6 +122,7 @@ class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
 
     private fun onRefresh(){
         if(collegeDAO.getList().isNotEmpty()){
+            Log.i("SuperAdminMainPageClass","inside onRefresh()")
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }

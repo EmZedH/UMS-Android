@@ -55,7 +55,7 @@ class CollegeUpdateBottomSheet : BottomSheetDialogFragment() {
             college = collegeDAO.get(collegeID)!!
             val closeButton = view.findViewById<ImageButton>(R.id.close_button)
             val collegeIDTextView = view.findViewById<TextView>(R.id.college_id_text_view)
-            collegeNameTextLayout = view.findViewById(R.id.college_name_layout)
+            collegeNameTextLayout = view.findViewById(R.id.user_password_layout)
             collegeTelephoneTextLayout = view.findViewById(R.id.college_telephone_layout)
             collegeAddressTextLayout = view.findViewById(R.id.college_address_layout)
             updateButton = view.findViewById(R.id.update_college_button)
@@ -122,7 +122,7 @@ class CollegeUpdateBottomSheet : BottomSheetDialogFragment() {
                         collegeAddressText,
                         collegeTelephoneText
                     )
-                    collegeDAO.update(collegeID, newCollege)
+                    collegeDAO.update(newCollege)
                     setFragmentResult("CollegeUpdateBottomSheet", bundleOf("collegeID" to collegeID))
                     Toast.makeText(requireContext(), "Details Updated!", Toast.LENGTH_SHORT).show()
                     dismiss()

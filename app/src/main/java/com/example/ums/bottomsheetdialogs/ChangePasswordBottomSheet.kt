@@ -47,7 +47,7 @@ class ChangePasswordBottomSheet : BottomSheetDialogFragment() {
         val emailTextView = view.findViewById<TextView>(R.id.college_id_text_view)
         val updateButton = view.findViewById<MaterialButton>(R.id.update_button)
         val user = userDAO.get(userID!!)
-        currentPassword = view.findViewById(R.id.college_name_layout)
+        currentPassword = view.findViewById(R.id.user_password_layout)
         newPassword = view.findViewById(R.id.college_address_layout)
         confirmNewPassword = view.findViewById(R.id.college_telephone_layout)
 

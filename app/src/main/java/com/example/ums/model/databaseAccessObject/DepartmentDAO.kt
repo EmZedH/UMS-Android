@@ -79,13 +79,13 @@ class DepartmentDAO(private val databaseHelper: DatabaseHelper) {
         return newID
     }
 
-    fun update(id : Int, collegeID: Int, department: Department){
+    fun update(department: Department){
         val db = databaseHelper.writableDatabase
         val contentValues = ContentValues().apply{
             put(departmentName, department.name)
         }
 
-        db.update(tableName,contentValues, "$primaryKey=? AND ${this.collegeIDKey} = ?", arrayOf(id.toString(), collegeID.toString()))
+        db.update(tableName,contentValues, "$primaryKey=? AND ${this.collegeIDKey} = ?", arrayOf(department.id.toString(), department.collegeID.toString()))
         db.close()
     }
 }

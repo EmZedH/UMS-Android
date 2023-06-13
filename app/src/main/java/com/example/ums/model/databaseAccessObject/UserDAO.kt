@@ -111,4 +111,21 @@ class UserDAO(private val databaseHelper : DatabaseHelper) {
         db.close()
     }
 
+//    fun delete(userID: Int){
+//        val db = databaseHelper.writableDatabase
+//        db.beginTransaction()
+//        try{
+//            db.execSQL("DELETE FROM USER WHERE U_ID = $userID")
+//            db.execSQL("DELETE FROM COLLEGE_ADMIN WHERE CA_ID = $userID")
+//            db.execSQL("DELETE FROM PROFESSOR WHERE P_ID = $userID")
+//            db.setTransactionSuccessful()
+//        }
+//        catch (e: Exception){
+//            e.printStackTrace()
+//        }
+//        finally {
+//            db.endTransaction()
+//        }
+//        db.close()
+//    }
 }

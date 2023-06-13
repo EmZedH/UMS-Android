@@ -62,6 +62,8 @@ class CollegeDAO(private val databaseHelper: DatabaseHelper) {
         val db = databaseHelper.writableDatabase
         db.beginTransaction()
         try{
+            db.execSQL("DELETE FROM USER WHERE U_ID = (SELECT CA_ID FROM COLLEGE_ADMIN WHERE COLLEGE_ID = $collegeID)")
+            db.execSQL("DELETE FROM COLLEGE_ADMIN WHERE COLLEGE_ID = $collegeID")
             db.execSQL("DELETE FROM $departmentTable WHERE $departmentForeignKey = $collegeID")
             db.execSQL("DELETE FROM $tableName WHERE $primaryKey = $collegeID")
             db.setTransactionSuccessful()
@@ -95,7 +97,7 @@ class CollegeDAO(private val databaseHelper: DatabaseHelper) {
         return newID
     }
 
-    fun update(collegeID : Int, college : College){
+    fun update(college : College){
         val db = databaseHelper.writableDatabase
         val contentValues = ContentValues().apply{
             put(collegeName, college.name)
@@ -103,7 +105,7 @@ class CollegeDAO(private val databaseHelper: DatabaseHelper) {
             put(collegeTelephone, college.telephone)
         }
 
-        db.update(tableName,contentValues, "$primaryKey=?", arrayOf(collegeID.toString()))
+        db.update(tableName,contentValues, "$primaryKey=?", arrayOf(college.id.toString()))
         db.close()
     }
 }

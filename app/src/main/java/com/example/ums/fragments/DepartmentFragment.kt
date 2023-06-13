@@ -59,18 +59,6 @@ class DepartmentFragment: AddableSearchableFragment(), ItemListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        val searchView = requireActivity().findViewById<SearchView>(R.id.search)
-//
-//        searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
-//            override fun onQueryTextSubmit(p0: String?): Boolean {
-//                return false
-//            }
-//
-//            override fun onQueryTextChange(p0: String?): Boolean {
-//                onSearch(p0!!)
-//                return false
-//            }
-//        })
 
         setFragmentResultListener("departmentAddFragmentPosition"){_, result->
 
@@ -117,10 +105,10 @@ class DepartmentFragment: AddableSearchableFragment(), ItemListener {
     override fun onDelete(id: Int) {
         val deleteFragment = DepartmentDeleteDialog.getInstance(id)
         deleteFragment.show((context as AppCompatActivity).supportFragmentManager, "deleteDialog")
-        onRefresh()
     }
 
     override fun onClick(bundle: Bundle?) {
+
     }
 
     private fun onRefresh(){

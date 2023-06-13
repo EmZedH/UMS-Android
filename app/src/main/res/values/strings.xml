@@ -63,4 +63,12 @@
     <string name="id_string">ID :</string>
     <string name="department_name_string">Department Name</string>
     <string name="add_department_string">Add Department</string>
+    <string name="add_user_string">Add User</string>
+    <string name="date_of_birth_string">Date of Birth (yyyy-dd-mm)</string>
+    <string name="male_string">Male</string>
+    <string name="female_string">Female</string>
+    <string name="other_string">Other</string>
+    <string name="email_address_string">Email Address</string>
+    <string name="no_college_admin_string">No College Admin</string>
+    <string name="select_the_gender_string">Select the Gender:</string>
 </resources>

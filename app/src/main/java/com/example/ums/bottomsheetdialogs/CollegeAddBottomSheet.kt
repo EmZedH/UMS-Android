@@ -38,6 +38,8 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
         collegeNameText = savedInstanceState?.getString("college_add_name_text") ?: ""
         collegeAddressText = savedInstanceState?.getString("college_add_address_text") ?: ""
         collegeTelephoneText = savedInstanceState?.getString("college_add_telephone_text") ?: ""
+
+
         collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
     }
     override fun onCreateView(
@@ -53,11 +55,12 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
         }
 
         collegeName =
-            view.findViewById(R.id.college_name_layout)
+            view.findViewById(R.id.user_password_layout)
         collegeAddress =
             view.findViewById(R.id.college_address_layout)
         collegeTelephone =
             view.findViewById(R.id.college_telephone_layout)
+
         if(collegeNameText.isNotEmpty()){
             collegeName.editText?.setText(collegeNameText)
         }
@@ -76,6 +79,10 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
         collegeName.editText?.addTextChangedListener(textListener(collegeName))
         collegeAddress.editText?.addTextChangedListener(textListener(collegeAddress))
         collegeTelephone.editText?.addTextChangedListener(textListener(collegeTelephone))
+
+        collegeName.error = null
+        collegeAddress.error = null
+        collegeTelephone.error = null
 
         addCollegeButton.setOnClickListener {
             var flag = true
@@ -101,8 +108,8 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
                 collegeTelephone.error = "Enter 10 digit contact number"
             }
             if (flag) {
-                val newID = collegeDAO.getNewID()
 
+                val newID = collegeDAO.getNewID()
                 collegeDAO.insert(
                     College(
                         newID,
@@ -113,15 +120,10 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
                 )
 
                 setCollegeIDTextView(view)
-//                superAdminMainPageViewModel.getAddListener().observe(viewLifecycleOwner){ listener->
-//                    listener.onAdd(newID-1)
-//                }
-//                listener.onAdd(newID-1)
 
                 setFragmentResult("collegeAddBottomSheet", bundleOf("collegeAddResultKey" to (newID-1)))
                 dismiss()
             }
-
         }
         return view
     }
@@ -138,15 +140,17 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
     }
 
     private fun setCollegeIDTextView(view : View){
+
         view.findViewById<TextView>(R.id.college_id_text_view)!!.setText(R.string.college_id_string)
         view.findViewById<TextView>(R.id.college_id_text_view)!!.append(collegeDAO.getNewID().toString())
+
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("college_add_name_text",collegeName.editText?.text.toString())
+        outState.putString("college_add_name_text", collegeName.editText?.text.toString())
         outState.putString("college_add_address_text", collegeAddress.editText?.text.toString())
-        outState.putString("college_add_telephone_text",collegeTelephone.editText?.text.toString())
+        outState.putString("college_add_telephone_text", collegeTelephone.editText?.text.toString())
     }
 
     private fun textListener(layout: TextInputLayout): TextWatcher {
@@ -162,11 +166,4 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
             }
         }
     }
-
-//    override fun onAttach(context: Context) {
-//        super.onAttach(context)
-//        if(context is MainPageActivity){
-////            val superAdminPage = context.userFragment as SuperAdminMainPage
-//        }
-//    }
 }
