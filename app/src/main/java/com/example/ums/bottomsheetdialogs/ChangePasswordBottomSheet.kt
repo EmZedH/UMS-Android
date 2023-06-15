@@ -13,11 +13,10 @@ import android.widget.Toast
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.model.databaseAccessObject.UserDAO
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class ChangePasswordBottomSheet : BottomSheetDialogFragment() {
+class ChangePasswordBottomSheet : FullScreenBottomSheetDialogFragment() {
 
     private lateinit var currentPassword : TextInputLayout
     private lateinit var newPassword : TextInputLayout

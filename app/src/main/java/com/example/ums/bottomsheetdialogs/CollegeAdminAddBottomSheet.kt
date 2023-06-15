@@ -23,12 +23,11 @@ import com.example.ums.Utility
 import com.example.ums.model.CollegeAdmin
 import com.example.ums.model.User
 import com.example.ums.model.databaseAccessObject.CollegeAdminDAO
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import java.util.Calendar
 
-class CollegeAdminAddBottomSheet : BottomSheetDialogFragment() {
+class CollegeAdminAddBottomSheet : FullScreenBottomSheetDialogFragment() {
 
     private lateinit var userName : TextInputLayout
     private lateinit var contactNumber: TextInputLayout

@@ -15,11 +15,10 @@ import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.model.Department
 import com.example.ums.model.databaseAccessObject.DepartmentDAO
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class DepartmentUpdateBottomSheet: BottomSheetDialogFragment() {
+class DepartmentUpdateBottomSheet: FullScreenBottomSheetDialogFragment() {
 
     private var collegeID: Int? = null
     private var departmentID: Int? = null

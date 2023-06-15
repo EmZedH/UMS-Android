@@ -16,11 +16,10 @@ import com.example.ums.R
 import com.example.ums.Utility
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class CollegeUpdateBottomSheet : BottomSheetDialogFragment() {
+class CollegeUpdateBottomSheet : FullScreenBottomSheetDialogFragment() {
     private var collegeID: Int? = null
     private lateinit var college: College
     private lateinit var collegeNameTextLayout: TextInputLayout

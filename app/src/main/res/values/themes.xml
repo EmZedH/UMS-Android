@@ -12,7 +12,8 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <item name = "colorOnSurface">@color/light_onSurface</item>
-        <!-- Customize your theme here. -->
+
+        <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
     </style>
     
     <style name="FloatingActionButtonStyle" parent="Widget.Design.FloatingActionButton">
@@ -21,5 +22,20 @@
 
     <style name="FabShapeStyle1" parent="ShapeAppearanceOverlay.Material3.FloatingActionButton">
         <item name = "cornerSize">16dp</item>
+    </style>
+
+<!--    Hello Mans-->
+    <style name="CustomBottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
+        <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
+    </style>
+
+    <style name="CustomBottomSheet" parent="Widget.MaterialComponents.BottomSheet">
+        <item name="shapeAppearanceOverlay">@style/CustomShapeAppearanceBottomSheetDialog</item>
+    </style>
+
+    <style name="CustomShapeAppearanceBottomSheetDialog" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopRight">16dp</item>
+        <item name="cornerSizeTopLeft">16dp</item>
     </style>
 </resources>

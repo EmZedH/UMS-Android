@@ -15,11 +15,10 @@ import com.example.ums.R
 import com.example.ums.Utility
 import com.example.ums.model.College
 import com.example.ums.model.databaseAccessObject.CollegeDAO
-import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class CollegeAddBottomSheet : BottomSheetDialogFragment() {
+class CollegeAddBottomSheet : FullScreenBottomSheetDialogFragment() {
 
     private lateinit var collegeName : TextInputLayout
     private lateinit var collegeAddress : TextInputLayout
@@ -48,12 +47,14 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
         collegeTelephoneError = savedInstanceState?.getString("college_add_telephone_error")
 
         collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
+
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_add_college, container, false)
+
         val bottomSheetCloseButton =
             view.findViewById<ImageButton>(R.id.close_button)
 
@@ -190,5 +191,9 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
             override fun afterTextChanged(p0: Editable?) {
             }
         }
+    }
+
+    override fun getTheme(): Int {
+        return R.style.CustomBottomSheetDialog
     }
 }

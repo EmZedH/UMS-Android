@@ -2,7 +2,6 @@ package com.example.ums.fragments
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -44,7 +43,6 @@ class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_college_page, container, false)
-//        val addFloatingButton = view.findViewById<FloatingActionButton>(R.id.add_floating_action_button)
         val recyclerView: RecyclerView = view.findViewById(R.id.college_list_view)
 
         firstTextView = view.findViewById(R.id.no_departments_text_view)
@@ -122,7 +120,6 @@ class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
 
     private fun onRefresh(){
         if(collegeDAO.getList().isNotEmpty()){
-            Log.i("SuperAdminMainPageClass","inside onRefresh()")
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }
