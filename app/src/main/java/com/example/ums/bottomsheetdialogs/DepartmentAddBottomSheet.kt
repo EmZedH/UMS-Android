@@ -1,6 +1,8 @@
 package com.example.ums.bottomsheetdialogs
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,18 +21,22 @@ import com.google.android.material.textfield.TextInputLayout
 class DepartmentAddBottomSheet: BottomSheetDialogFragment() {
 
 
-    private lateinit var collegeName : TextInputLayout
+    private lateinit var departmentName : TextInputLayout
     private var collegeID: Int? = null
     private lateinit var departmentDAO: DepartmentDAO
 
-    private lateinit var collegeNameText: String
+    private lateinit var departmentNameText: String
+
+    private var departmentNameError: String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         collegeID = arguments?.getInt("college_activity_college_id")
-        collegeNameText = savedInstanceState?.getString("department_add_name_text") ?: ""
+        departmentNameText = savedInstanceState?.getString("department_add_name_text") ?: ""
 
+        departmentNameError = savedInstanceState?.getString("department_add_name_error")
         departmentDAO = DepartmentDAO(DatabaseHelper(requireActivity()))
     }
     override fun onCreateView(
@@ -45,10 +51,11 @@ class DepartmentAddBottomSheet: BottomSheetDialogFragment() {
             dismiss()
         }
 
-        collegeName =
+        departmentName =
             view.findViewById(R.id.user_password_layout)
-        if(collegeNameText.isNotEmpty()){
-            collegeName.editText?.setText(collegeNameText)
+
+        if(departmentNameText.isNotEmpty()){
+            departmentName.editText?.setText(departmentNameText)
         }
 
         val addCollegeButton =
@@ -56,14 +63,19 @@ class DepartmentAddBottomSheet: BottomSheetDialogFragment() {
 
         setCollegeIDTextView(view)
 
+        departmentName.editText?.addTextChangedListener(textListener(departmentName) {
+            departmentNameError = null
+        })
+
         addCollegeButton.setOnClickListener {
             var flag = true
 
-            collegeNameText = collegeName.editText?.text.toString()
+            departmentNameText = departmentName.editText?.text.toString()
 
-            if (collegeNameText.isEmpty()) {
+            if (departmentNameText.isEmpty()) {
                 flag = false
-                collegeName.error = "Don't leave name field blank"
+                departmentNameError = "Don't leave name field blank"
+                departmentName.error = departmentNameError
             }
             if (flag) {
                 val newID = departmentDAO.getNewID(collegeID!!)
@@ -72,7 +84,7 @@ class DepartmentAddBottomSheet: BottomSheetDialogFragment() {
                     departmentDAO.insert(
                         Department(
                             newID,
-                            collegeNameText,
+                            departmentNameText,
                             collegeID!!
                         )
                     )
@@ -90,13 +102,18 @@ class DepartmentAddBottomSheet: BottomSheetDialogFragment() {
         return view
     }
 
-    override fun dismiss() {
-        super.dismiss()
+//    override fun dismiss() {
+//        super.dismiss()
+//        clearErrors()
+//    }
+
+    override fun onStop() {
+        super.onStop()
         clearErrors()
     }
 
     private fun clearErrors(){
-        collegeName.error = null
+        departmentName.error = null
     }
 
     private fun setCollegeIDTextView(view : View){
@@ -106,6 +123,24 @@ class DepartmentAddBottomSheet: BottomSheetDialogFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState.putString("department_add_name_text",collegeName.editText?.text.toString())
+        outState.putString("department_add_name_text",departmentName.editText?.text.toString())
+        outState.putString("department_add_name_error", departmentNameError)
+
+        departmentName.error = departmentNameError
+    }
+
+    private fun textListener(layout: TextInputLayout, errorOperation: (() -> Unit)): TextWatcher {
+        return object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
+
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                layout.error = null
+                errorOperation()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        }
     }
 }

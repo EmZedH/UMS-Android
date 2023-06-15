@@ -15,8 +15,18 @@ import com.google.android.material.textfield.TextInputLayout
 class ManageProfileActivity : AppCompatActivity() {
 
     private lateinit var confirmButton : MaterialButton
+
+    private var userNameText: String? = null
+    private var contactNumberText: String? = null
+    private var userAddressText: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        userNameText = savedInstanceState?.getString("manage_profile_user_name_text")
+        contactNumberText = savedInstanceState?.getString("manage_profile_contact_number_text")
+        userAddressText = savedInstanceState?.getString("manage_profile_user_address_text")
+
         setContentView(R.layout.manage_profile_page)
 
         val appBarLayout = findViewById<MaterialToolbar>(R.id.material_toolbar)
@@ -31,7 +41,7 @@ class ManageProfileActivity : AppCompatActivity() {
         val userNameTextLayout = findViewById<TextInputLayout>(R.id.user_password_layout)
         val userContactTextLayout = findViewById<TextInputLayout>(R.id.college_address_layout)
         val userAddressTextLayout = findViewById<TextInputLayout>(R.id.college_telephone_layout)
-        val changePasswordButton = findViewById<MaterialButton>(R.id.change_password)
+        val passwordChangeButton = findViewById<MaterialButton>(R.id.change_password)
 
         confirmButton = findViewById(R.id.confirm_button)
 
@@ -39,19 +49,28 @@ class ManageProfileActivity : AppCompatActivity() {
         userIDTextView.append(" SA/$userID")
         userEmailIDTextView.text = user.emailID
 
-        userNameTextLayout.editText!!.setText(user.name)
-        userContactTextLayout.editText!!.setText(user.contactNumber)
-        userAddressTextLayout.editText!!.setText(user.address)
+        userNameTextLayout.editText?.setText(userNameText ?: user.name)
+        userContactTextLayout.editText?.setText(contactNumberText ?: user.contactNumber)
+        userAddressTextLayout.editText?.setText(userAddressText ?: user.address)
 
         appBarLayout.setNavigationOnClickListener {
             finish()
         }
 
-        confirmButton.isEnabled = false
+        confirmButton.isEnabled =
+            (userNameTextLayout.editText?.text.toString() != user.name) ||
+                    (userContactTextLayout.editText?.text.toString() != user.contactNumber) ||
+                    (userAddressTextLayout.editText?.text.toString() != user.address)
 
-        userNameTextLayout.editText!!.addTextChangedListener(textListener(user.name))
-        userContactTextLayout.editText!!.addTextChangedListener(textListener(user.contactNumber))
-        userAddressTextLayout.editText!!.addTextChangedListener(textListener(user.address))
+        userNameTextLayout.editText?.addTextChangedListener(textListener(user.name, userNameTextLayout) {
+            userNameText = userNameTextLayout.editText?.text.toString()
+        })
+        userContactTextLayout.editText?.addTextChangedListener(textListener(user.contactNumber, userContactTextLayout) {
+            contactNumberText = userContactTextLayout.editText?.text.toString()
+        })
+        userAddressTextLayout.editText?.addTextChangedListener(textListener(user.address, userAddressTextLayout) {
+            userAddressText = userAddressTextLayout.editText?.text.toString()
+        })
 
         confirmButton.setOnClickListener {
             var flag = true
@@ -80,27 +99,33 @@ class ManageProfileActivity : AppCompatActivity() {
                 userDAO.update(userID, user)
 
                 Toast.makeText(this, "Details Updated!", Toast.LENGTH_SHORT).show()
-                userContactTextLayout.error = null
-                userAddressTextLayout.error = null
-                userNameTextLayout.error = null
                 confirmButton.isEnabled = false
+                finish()
             }
         }
 
-        changePasswordButton.setOnClickListener {
+        passwordChangeButton.setOnClickListener {
             val changePasswordBottomSheet = ChangePasswordBottomSheet()
             changePasswordBottomSheet.arguments = bundle
             changePasswordBottomSheet.show(supportFragmentManager, "bottomSheetDialog")
         }
     }
 
-    private fun textListener(userDetails: String): TextWatcher{
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("manage_profile_user_name_text", userNameText)
+        outState.putString("manage_profile_contact_number_text", contactNumberText)
+        outState.putString("manage_profile_user_address_text", userAddressText)
+    }
+    private fun textListener(userDetails: String, textInputLayout: TextInputLayout, action: (()->Unit)): TextWatcher{
         return object: TextWatcher{
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 confirmButton.isEnabled = p0?.toString() != userDetails
+                textInputLayout.error = null
+                action()
             }
 
             override fun afterTextChanged(p0: Editable?) {

@@ -32,6 +32,10 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
 
     private lateinit var addCollegeButton: MaterialButton
 
+    private var collegeNameError: String? = null
+    private var collegeAddressError: String? = null
+    private var collegeTelephoneError: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -39,6 +43,9 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
         collegeAddressText = savedInstanceState?.getString("college_add_address_text") ?: ""
         collegeTelephoneText = savedInstanceState?.getString("college_add_telephone_text") ?: ""
 
+        collegeNameError = savedInstanceState?.getString("college_add_name_error")
+        collegeAddressError = savedInstanceState?.getString("college_add_address_error")
+        collegeTelephoneError = savedInstanceState?.getString("college_add_telephone_error")
 
         collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
     }
@@ -50,7 +57,7 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
         val bottomSheetCloseButton =
             view.findViewById<ImageButton>(R.id.close_button)
 
-        bottomSheetCloseButton!!.setOnClickListener {
+        bottomSheetCloseButton?.setOnClickListener {
             dismiss()
         }
 
@@ -60,6 +67,8 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
             view.findViewById(R.id.college_address_layout)
         collegeTelephone =
             view.findViewById(R.id.college_telephone_layout)
+
+
 
         if(collegeNameText.isNotEmpty()){
             collegeName.editText?.setText(collegeNameText)
@@ -76,13 +85,15 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
 
         setCollegeIDTextView(view)
 
-        collegeName.editText?.addTextChangedListener(textListener(collegeName))
-        collegeAddress.editText?.addTextChangedListener(textListener(collegeAddress))
-        collegeTelephone.editText?.addTextChangedListener(textListener(collegeTelephone))
-
-        collegeName.error = null
-        collegeAddress.error = null
-        collegeTelephone.error = null
+        collegeName.editText?.addTextChangedListener(textListener(collegeName) {
+            collegeNameError = null
+        })
+        collegeAddress.editText?.addTextChangedListener(textListener(collegeAddress) {
+            collegeAddressError = null
+        })
+        collegeTelephone.editText?.addTextChangedListener(textListener(collegeTelephone) {
+            collegeTelephoneError = null
+        })
 
         addCollegeButton.setOnClickListener {
             var flag = true
@@ -94,18 +105,22 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
             if (collegeNameText.isEmpty()) {
                 flag = false
                 collegeName.error = "Don't leave name field blank"
+                collegeNameError = "Don't leave name field blank"
             }
             if (collegeAddressText.isEmpty()) {
                 flag = false
                 collegeAddress.error = "Don't leave address field blank"
+                collegeAddressError = "Don't leave address field blank"
             }
             if (collegeTelephoneText.isEmpty()) {
                 flag = false
                 collegeTelephone.error = "Don't leave telephone field blank"
+                collegeTelephoneError = "Don't leave telephone field blank"
             }
             else if(!Utility.isValidContactNumber(collegeTelephoneText)){
                 flag = false
                 collegeTelephone.error = "Enter 10 digit contact number"
+                collegeTelephoneError = "Enter 10 digit contact number"
             }
             if (flag) {
 
@@ -128,8 +143,8 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
         return view
     }
 
-    override fun dismiss() {
-        super.dismiss()
+    override fun onStop() {
+        super.onStop()
         clearErrors()
     }
 
@@ -148,18 +163,28 @@ class CollegeAddBottomSheet : BottomSheetDialogFragment() {
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+
+        outState.putString("college_add_name_error", collegeNameError)
+        outState.putString("college_add_address_error", collegeAddressError)
+        outState.putString("college_add_telephone_error", collegeTelephoneError)
+
         outState.putString("college_add_name_text", collegeName.editText?.text.toString())
         outState.putString("college_add_address_text", collegeAddress.editText?.text.toString())
         outState.putString("college_add_telephone_text", collegeTelephone.editText?.text.toString())
+
+        collegeName.error = collegeNameError
+        collegeAddress.error = collegeAddressError
+        collegeTelephone.error = collegeTelephoneError
     }
 
-    private fun textListener(layout: TextInputLayout): TextWatcher {
+    private fun textListener(layout: TextInputLayout, errorOperation: (() -> Unit)): TextWatcher {
         return object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
 
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 layout.error = null
+                errorOperation()
             }
 
             override fun afterTextChanged(p0: Editable?) {

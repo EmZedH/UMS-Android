@@ -32,10 +32,6 @@ class CollegeUpdateBottomSheet : BottomSheetDialogFragment() {
     private lateinit var collegeTelephoneText: String
     private var isRotate: Boolean = true
 
-//    fun setRotate(isRotate: Boolean){
-//        this.isRotate = isRotate
-//    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val bundle = arguments

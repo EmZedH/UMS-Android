@@ -2,6 +2,9 @@ package com.example.ums.bottomsheetdialogs
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.example.ums.DatabaseHelper
+import com.example.ums.Gender
 import com.example.ums.R
 import com.example.ums.UserRole
 import com.example.ums.Utility
@@ -33,6 +37,7 @@ class CollegeAdminAddBottomSheet : BottomSheetDialogFragment() {
     private lateinit var userAddress: TextInputLayout
     private lateinit var emailAddress: TextInputLayout
     private lateinit var userPassword: TextInputLayout
+    private lateinit var genderTextView: TextView
 
     private var collegeID: Int? = null
     private lateinit var collegeAdminDAO: CollegeAdminDAO
@@ -40,11 +45,24 @@ class CollegeAdminAddBottomSheet : BottomSheetDialogFragment() {
     private lateinit var userNameText: String
     private lateinit var contactNumberText: String
     private lateinit var dateOfBirthText: String
-    private var genderOptionId: Int? = null
+    private var genderOptionId: Int = -1
     private lateinit var userAddressText: String
     private lateinit var emailAddressText: String
     private lateinit var userPasswordText: String
-    private var isGenderErrorOn: Boolean? = null
+//    private var isGenderErrorOn: Boolean? = null
+
+    private var userNameError: String? = null
+    private var contactNumberError: String? = null
+    private var dateOfBirthError: String? = null
+    private var userAddressError: String? = null
+    private var emailAddressError: String? = null
+    private var userPasswordError: String? = null
+
+    private var savedDate: Int? = null
+    private var savedMonth: Int? = null
+    private var savedYear: Int? = null
+
+    private var isGenderErrorOn = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,20 +74,33 @@ class CollegeAdminAddBottomSheet : BottomSheetDialogFragment() {
         userAddressText = savedInstanceState?.getString("college_admin_add_user_address_text") ?: ""
         emailAddressText = savedInstanceState?.getString("college_admin_add_email_address_text") ?: ""
         userPasswordText = savedInstanceState?.getString("college_admin_add_password_text") ?: ""
-        genderOptionId = savedInstanceState?.getInt("college_admin_add_gender_option")
-        isGenderErrorOn = savedInstanceState?.getBoolean("college_admin_add_is_gender_error_on")
+        savedYear = savedInstanceState?.getInt("college_admin_add_birth_year")
+        savedMonth = savedInstanceState?.getInt("college_admin_add_birth_month")
+        savedDate = savedInstanceState?.getInt("college_admin_add_birth_date")
+
+        userNameError = savedInstanceState?.getString("college_admin_add_user_name_error")
+        contactNumberError = savedInstanceState?.getString("college_admin_add_contact_number_error")
+        dateOfBirthError = savedInstanceState?.getString("college_admin_add_date_of_birth_error")
+        userAddressError = savedInstanceState?.getString("college_admin_add_user_address_error")
+        emailAddressError = savedInstanceState?.getString("college_admin_add_email_address_error")
+        userPasswordError = savedInstanceState?.getString("college_admin_add_user_password_error")
+
+        genderOptionId = savedInstanceState?.getInt("college_admin_add_gender_option_id") ?: -1
+
+        isGenderErrorOn = savedInstanceState?.getBoolean("college_admin_add_is_gender_error_on") ?: false
+
         collegeAdminDAO = CollegeAdminDAO(DatabaseHelper(requireActivity()))
 
     }
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_add_college_admin, container, false)
 
         val addCollegeAdminButton = view.findViewById<MaterialButton>(R.id.add_user_button)
         val bottomSheetCloseButton = view.findViewById<ImageButton>(R.id.close_button)
-
 
         userName = view.findViewById(R.id.user_name_layout)
         contactNumber = view.findViewById(R.id.user_contact_layout)
@@ -78,14 +109,8 @@ class CollegeAdminAddBottomSheet : BottomSheetDialogFragment() {
         emailAddress = view.findViewById(R.id.user_email_layout)
         userPassword = view.findViewById(R.id.user_password_layout)
         genderRadio = view.findViewById(R.id.gender_radio_group)
+        genderTextView = view.findViewById(R.id.gender_text_view)
 
-        genderRadio.setOnCheckedChangeListener { _, checkedId ->
-
-            if(genderOptionId==null){
-                genderOptionId = checkedId
-            }
-
-        }
         dateOfBirth.setStartIconOnClickListener {
             showDatePicker()
         }
@@ -112,14 +137,45 @@ class CollegeAdminAddBottomSheet : BottomSheetDialogFragment() {
         if(userPasswordText.isNotEmpty()){
             userPassword.editText?.setText(userPasswordText)
         }
-        if(genderOptionId!=null){
-            genderRadio.check(genderOptionId!!)
-        }
-        if(isGenderErrorOn==true){
-            view.findViewById<TextView>(R.id.gender_text_view).setTextColor(ContextCompat.getColor(requireContext(), R.color.light_error))
+
+        if(isGenderErrorOn){
+            genderTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_error))
+            isGenderErrorOn = true
         }
 
         setCollegeIDTextView(view)
+
+        userName.editText?.addTextChangedListener(textListener(userName) {
+            userNameError = null
+        })
+        contactNumber.editText?.addTextChangedListener(textListener(contactNumber) {
+            contactNumberError = null
+        })
+        dateOfBirth.editText?.addTextChangedListener(textListener(dateOfBirth) {
+            dateOfBirthError = null
+        })
+        userAddress.editText?.addTextChangedListener(textListener(userAddress) {
+            userAddressError = null
+        })
+        emailAddress.editText?.addTextChangedListener(textListener(emailAddress) {
+            emailAddressError = null
+        })
+        userPassword.editText?.addTextChangedListener(textListener(userPassword) {
+            userPasswordError = null
+        })
+        var gender: String? = null
+        genderRadio.setOnCheckedChangeListener { _, _ ->
+            if(genderRadio.checkedRadioButtonId!=-1){
+                isGenderErrorOn = false
+                Log.i("CollegeAdminAddBottomSheetClass","genderRadio.checkedRadioButtonId: ${genderRadio.checkedRadioButtonId}")
+                when(view.findViewById<RadioButton>(genderRadio.checkedRadioButtonId).text.toString()){
+                    "Male" -> gender = Gender.MALE.type
+                    "Female" -> gender = Gender.FEMALE.type
+                    "Other" -> gender = Gender.OTHER.type
+                }
+            }
+            genderTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_onSurface))
+        }
 
         addCollegeAdminButton.setOnClickListener {
 
@@ -131,63 +187,57 @@ class CollegeAdminAddBottomSheet : BottomSheetDialogFragment() {
             userAddressText = userAddress.editText?.text.toString()
             emailAddressText = emailAddress.editText?.text.toString()
             userPasswordText = userPassword.editText?.text.toString()
-
+            genderOptionId = genderRadio.checkedRadioButtonId
             if (userNameText.isEmpty()) {
                 flag = false
-                userName.error = "Don't leave name field blank"
+                userNameError = "Don't leave name field blank"
+                userName.error = userNameError
             }
             if (contactNumberText.isEmpty()) {
                 flag = false
-                contactNumber.error = "Don't leave contact number field blank"
+                contactNumberError = "Don't leave contact number field blank"
+                contactNumber.error = contactNumberError
             }
             else if(!Utility.isValidContactNumber(contactNumber.editText?.text.toString())){
                 flag = false
-                contactNumber.error = "Enter 10 digit contact number"
+                contactNumberError = "Enter 10 digit contact number"
+                contactNumber.error = contactNumberError
             }
             if (dateOfBirthText.isEmpty()) {
                 flag = false
-                dateOfBirth.error = "Don't leave date of birth field blank"
+                dateOfBirthError = "Don't leave date of birth field blank"
+                dateOfBirth.error = dateOfBirthError
             }
             if (userAddressText.isEmpty()) {
                 flag = false
-                userAddress.error = "Don't leave address field blank"
+                userAddressError = "Don't leave address field blank"
+                userAddress.error = userAddressError
             }
             if (emailAddressText.isEmpty()) {
                 flag = false
-                emailAddress.error = "Don't leave email address field blank"
+                emailAddressError = "Don't leave email address field blank"
+                emailAddress.error = emailAddressError
             }
-            else if(Utility.isEmailAddressFree(emailAddressText, requireActivity())){
+            else if(!Utility.isEmailAddressFree(emailAddressText, requireActivity())){
                 flag = false
-                emailAddress.error = "Email Address already exists"
+                emailAddressError = "Email Address already exists"
+                emailAddress.error = emailAddressError
             }
             if(userPasswordText.isEmpty()){
                 flag = false
-                userPassword.error = "Don't leave password field blank"
+                userPasswordError = "Don't leave password field blank"
+                userPassword.error = userAddressError
             }
-            var gender: String? = null
-            if(genderOptionId==null){
+            if(genderOptionId==-1){
                 flag = false
-                view.findViewById<TextView>(R.id.gender_text_view).setTextColor(ContextCompat.getColor(requireContext(), R.color.light_error))
+                genderTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_error))
                 isGenderErrorOn = true
-            }
-            else{
-                when (genderRadio.findViewById<RadioButton>(genderOptionId!!).text) {
-                    "Male" -> {
-                        gender = "M"
-                    }
-                    "Female" -> {
-                        gender = "F"
-                    }
-                    "Other" -> {
-                        gender = "O"
-                    }
-                }
             }
 
             if (flag) {
                 val newID = collegeAdminDAO.getNewID()
 
-                if(collegeID!=null){
+                if(collegeID!=null && gender!=null){
                     collegeAdminDAO.insert(
                         CollegeAdmin(
                             User(
@@ -210,15 +260,15 @@ class CollegeAdminAddBottomSheet : BottomSheetDialogFragment() {
                 setFragmentResult("collegeAdminAddFragmentPosition", bundleOf("id" to newID))
                 dismiss()
             }
-
         }
         return view
     }
 
-    override fun dismiss() {
-        super.dismiss()
+    override fun onStop() {
+        super.onStop()
         clearErrors()
     }
+
 
     private fun clearErrors(){
         userName.error = null
@@ -227,15 +277,38 @@ class CollegeAdminAddBottomSheet : BottomSheetDialogFragment() {
         userAddress.error = null
         emailAddress.error = null
         userPassword.error = null
+        genderOptionId = genderRadio.checkedRadioButtonId
+        genderRadio.clearCheck()
+        genderTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_onSurface))
     }
 
     private fun setCollegeIDTextView(view : View){
-        view.findViewById<TextView>(R.id.college_id_text_view)!!.setText(R.string.user_id_string)
-        view.findViewById<TextView>(R.id.college_id_text_view)!!.append(" C/$collegeID-D/${collegeAdminDAO.getNewID()}")
+        view.findViewById<TextView>(R.id.college_id_text_view)?.setText(R.string.user_id_string)
+        view.findViewById<TextView>(R.id.college_id_text_view)?.append(" C/$collegeID-U/${collegeAdminDAO.getNewID()}")
+    }
+
+    private fun showDatePicker() {
+        val calendar = Calendar.getInstance()
+        val calendarYear = calendar.get(Calendar.YEAR)
+        val calendarMonth = calendar.get(Calendar.MONTH)
+        val calendarDay = calendar.get(Calendar.DAY_OF_MONTH)
+        val datePickerDialog = DatePickerDialog(requireContext(), { _, year, month, date->
+                val selectedDate = "${year}-${date}-${month + 1}"
+                dateOfBirth.editText?.setText(selectedDate)
+                if(year!=0 && month!=0 && date!=0){
+                    savedDate = date
+                    savedMonth = month
+                    savedYear = year
+                }
+            }, savedYear ?: calendarYear, savedMonth ?: calendarMonth, savedDate ?: calendarDay)
+        datePickerDialog.datePicker.minDate = calendar.timeInMillis - 788400000000
+        datePickerDialog.datePicker.maxDate = calendar.timeInMillis - 488400000000
+        datePickerDialog.show()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
+
         outState.putString("college_admin_add_name_text",userName.editText?.text.toString())
         outState.putString("college_admin_add_contact_number_text", contactNumber.editText?.text.toString())
         outState.putString("college_admin_add_dob_text", dateOfBirth.editText?.text.toString())
@@ -243,25 +316,49 @@ class CollegeAdminAddBottomSheet : BottomSheetDialogFragment() {
         outState.putString("college_admin_add_email_address_text", emailAddress.editText?.text.toString())
         outState.putString("college_admin_add_password_text", userPassword.editText?.text.toString())
 
-        if(genderOptionId!=null){
-            outState.putInt("college_admin_add_gender_option", genderOptionId!!)
+        outState.putString("college_admin_add_user_name_error", userNameError)
+        outState.putString("college_admin_add_contact_number_error", contactNumberError)
+        outState.putString("college_admin_add_date_of_birth_error", dateOfBirthError)
+        outState.putString("college_admin_add_user_address_error", userAddressError)
+        outState.putString("college_admin_add_email_address_error", emailAddressError)
+        outState.putString("college_admin_add_user_password_error", userPasswordError)
+        outState.putBoolean("college_admin_add_is_gender_error_on", isGenderErrorOn)
+        if(genderOptionId!=0 && genderOptionId!=-1){
+            genderRadio.check(genderOptionId)
         }
-        if(isGenderErrorOn!=null){
-            outState.putBoolean("college_admin_add_is_gender_error_on", isGenderErrorOn!!)
+        outState.putInt("college_admin_add_gender_option_id", genderOptionId)
+
+        userName.error = userNameError
+        contactNumber.error = contactNumberError
+        dateOfBirth.error = dateOfBirthError
+        userAddress.error = userAddressError
+        emailAddress.error = emailAddressError
+        userPassword.error = userAddressError
+
+        if(savedDate!=null){
+            outState.putInt("college_admin_add_birth_date", savedDate!!)
+        }
+        if(savedMonth!=null){
+            outState.putInt("college_admin_add_birth_month", savedMonth!!)
+        }
+        if(savedYear!=null){
+            outState.putInt("college_admin_add_birth_year", savedYear!!)
         }
     }
 
-    private fun showDatePicker() {
-        val calendar = Calendar.getInstance()
-        val year = calendar.get(Calendar.YEAR)
-        val month = calendar.get(Calendar.MONTH)
-        val day = calendar.get(Calendar.DAY_OF_MONTH)
 
-        val datePickerDialog = DatePickerDialog(requireContext(), { _, selectedYear, selectedMonth, selectedDay ->
-            val selectedDate = "${selectedYear}-${selectedDay}-${selectedMonth + 1}"
-            dateOfBirth.editText?.setText(selectedDate)
-        }, year, month, day)
+    private fun textListener(layout: TextInputLayout, errorOperation: (() -> Unit)): TextWatcher {
+        return object: TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+            }
 
-        datePickerDialog.show()
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                layout.error = null
+                errorOperation()
+            }
+
+            override fun afterTextChanged(p0: Editable?) {
+            }
+        }
     }
 }
