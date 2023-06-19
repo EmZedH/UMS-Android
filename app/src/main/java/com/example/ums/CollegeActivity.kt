@@ -18,19 +18,18 @@ class CollegeActivity: AppCompatActivity() {
     private var searchView: SearchView? = null
     private var searchQuery: String? = null
     private var isSearchViewOpen: Boolean = true
-    private var selectedFragment: AddableSearchableFragment? = null
     private var isConfigurationChanged: Boolean? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.tabbed_page_layout)
 
         if(savedInstanceState!=null){
             isConfigurationChanged = savedInstanceState.getBoolean("college_page_is_configuration_changed")
             searchQuery = savedInstanceState.getString("college_page_activity_search_query")
             isSearchViewOpen = savedInstanceState.getBoolean("college_page_activity_is_search_query_open")
         }
-        setContentView(R.layout.page_layout)
-        val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.add_floating_action_button)
+        val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.edit_floating_action_button)
         val collegeDAO = CollegeDAO(DatabaseHelper(this))
         val bundle = intent.extras
         val collegeID = bundle?.getInt("collegeID")
@@ -63,20 +62,26 @@ class CollegeActivity: AppCompatActivity() {
             }.attach()
             searchView = findViewById(R.id.search)
 
-            viewPager.registerOnPageChangeCallback(onPageChangeCallback(addFloatingActionButton))
+            viewPager.currentItem
+            viewPager.registerOnPageChangeCallback(onPageChangeCallback(addFloatingActionButton, viewPager, tabAdapter))
+
         }
     }
 
-    private fun onPageChangeCallback(addFloatingActionButton: FloatingActionButton): ViewPager2.OnPageChangeCallback{
+    private fun onPageChangeCallback(addFloatingActionButton: FloatingActionButton, viewPager: ViewPager2, adapter: CollegePageAdapter): ViewPager2.OnPageChangeCallback{
         return object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 try {
                     searchView?.setQuery(null, true)
-                    selectedFragment = supportFragmentManager.findFragmentByTag("f$position") as AddableSearchableFragment
+                    var addableSearchableFragment = supportFragmentManager.findFragmentByTag("f$position")
+                    if(addableSearchableFragment == null){
+                        addableSearchableFragment = adapter.createFragment(viewPager.currentItem)
+                    }
+                    val selectedFragment = addableSearchableFragment
                     if (selectedFragment is AddableSearchableFragment) {
                         addFloatingActionButton.setOnClickListener {
-                            selectedFragment?.onAdd()
+                            selectedFragment.onAdd()
                         }
                         searchView?.queryHint = getString(R.string.search)
                         if(isConfigurationChanged==true){
@@ -85,13 +90,13 @@ class CollegeActivity: AppCompatActivity() {
                         }
                         searchView?.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
                             override fun onQueryTextSubmit(p0: String?): Boolean {
-                                selectedFragment?.onSearch(p0)
+                                selectedFragment.onSearch(p0)
                                 return false
                             }
 
                             override fun onQueryTextChange(p0: String?): Boolean {
                                 searchQuery = p0
-                                selectedFragment?.onSearch(p0)
+                                selectedFragment.onSearch(p0)
                                 return false
                             }
                         })
@@ -102,6 +107,9 @@ class CollegeActivity: AppCompatActivity() {
                     }
                 }
                 catch (e: IndexOutOfBoundsException){
+                    e.printStackTrace()
+                }
+                catch (e: NullPointerException){
                     e.printStackTrace()
                 }
             }

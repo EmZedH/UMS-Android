@@ -43,7 +43,7 @@ class MainPageActivity: AppCompatActivity(){
         val userDAO = UserDAO(DatabaseHelper(this))
         val bundle = intent.extras
         val userID = bundle!!.getInt("userID")
-        val floatingActionButton = findViewById<FloatingActionButton>(R.id.add_floating_action_button)
+        val floatingActionButton = findViewById<FloatingActionButton>(R.id.edit_floating_action_button)
         floatingActionButton.setOnClickListener {
             userFragment?.onAdd()
         }

@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import androidx.viewpager2.adapter.FragmentViewHolder
 import com.example.ums.AddableSearchableFragment
 
 class CollegePageAdapter(fragmentActivity: FragmentActivity, private val collegeID: Int, private val fragments: List<AddableSearchableFragment>): FragmentStateAdapter(fragmentActivity) {
@@ -25,13 +24,4 @@ class CollegePageAdapter(fragmentActivity: FragmentActivity, private val college
         return fragments[position]
     }
 
-    override fun onBindViewHolder(
-        holder: FragmentViewHolder,
-        position: Int,
-        payloads: MutableList<Any>
-    ) {
-
-        super.onBindViewHolder(holder, position, payloads)
-
-    }
 }

@@ -246,9 +246,9 @@ class CollegeAdminAddBottomSheet : FullScreenBottomSheetDialogFragment() {
                                 dateOfBirthText,
                                 gender!!,
                                 userAddressText,
-                                emailAddressText,
+                                userPasswordText,
                                 UserRole.COLLEGE_ADMIN.role,
-                                userPasswordText
+                                emailAddressText
                             ),
                             collegeID!!
                         )
@@ -282,8 +282,8 @@ class CollegeAdminAddBottomSheet : FullScreenBottomSheetDialogFragment() {
     }
 
     private fun setCollegeIDTextView(view : View){
-        view.findViewById<TextView>(R.id.college_id_text_view)?.setText(R.string.user_id_string)
-        view.findViewById<TextView>(R.id.college_id_text_view)?.append(" C/$collegeID-U/${collegeAdminDAO.getNewID()}")
+        view.findViewById<TextView>(R.id.user_id_text_view)?.setText(R.string.user_id_string)
+        view.findViewById<TextView>(R.id.user_id_text_view)?.append(" C/$collegeID-U/${collegeAdminDAO.getNewID()}")
     }
 
     private fun showDatePicker() {
@@ -300,6 +300,7 @@ class CollegeAdminAddBottomSheet : FullScreenBottomSheetDialogFragment() {
                     savedYear = year
                 }
             }, savedYear ?: calendarYear, savedMonth ?: calendarMonth, savedDate ?: calendarDay)
+
         datePickerDialog.datePicker.minDate = calendar.timeInMillis - 788400000000
         datePickerDialog.datePicker.maxDate = calendar.timeInMillis - 488400000000
         datePickerDialog.show()

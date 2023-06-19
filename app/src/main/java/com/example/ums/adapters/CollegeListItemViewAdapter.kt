@@ -27,7 +27,7 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
 
     override fun onBindViewHolder(holder: ListItemViewHolder, position: Int) {
         val college = originalList[position]
-        holder.itemIDTextView.setText(R.string.college_id_string)
+        holder.itemIDTextView.setText(R.string.college_id)
         holder.itemIDTextView.append(college.id.toString())
         holder.itemNameTextView.text = college.name
 

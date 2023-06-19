@@ -28,6 +28,15 @@ class DepartmentAddBottomSheet: FullScreenBottomSheetDialogFragment() {
 
     private var departmentNameError: String? = null
 
+    companion object{
+        fun newInstance(collegeID: Int): DepartmentAddBottomSheet{
+            return DepartmentAddBottomSheet().apply {
+                arguments = Bundle().apply {
+                    putInt("college_activity_college_id", collegeID)
+                }
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -90,9 +99,7 @@ class DepartmentAddBottomSheet: FullScreenBottomSheetDialogFragment() {
                 }
 
                 setCollegeIDTextView(view)
-//                superAdminMainPageViewModel.getAddListener().observe(viewLifecycleOwner){ listener->
-//                    listener.onAdd(newID-1)
-//                }
+
                 setFragmentResult("departmentAddFragmentPosition", bundleOf("position" to newID-1))
                 dismiss()
             }
@@ -116,8 +123,8 @@ class DepartmentAddBottomSheet: FullScreenBottomSheetDialogFragment() {
     }
 
     private fun setCollegeIDTextView(view : View){
-        view.findViewById<TextView>(R.id.college_id_text_view)!!.setText(R.string.id_string)
-        view.findViewById<TextView>(R.id.college_id_text_view)!!.append(" C/$collegeID-D/${departmentDAO.getNewID(collegeID!!)}")
+        view.findViewById<TextView>(R.id.user_id_text_view)!!.setText(R.string.id_string)
+        view.findViewById<TextView>(R.id.user_id_text_view)!!.append(" C/$collegeID-D/${departmentDAO.getNewID(collegeID!!)}")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

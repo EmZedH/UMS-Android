@@ -52,7 +52,7 @@ class ChangePasswordBottomSheet : FullScreenBottomSheetDialogFragment() {
         val userDAO = UserDAO(DatabaseHelper(requireActivity()))
         val view = inflater.inflate(R.layout.fragment_change_password, container, false)
         val closeButton = view.findViewById<ImageButton>(R.id.close_button)
-        val emailTextView = view.findViewById<TextView>(R.id.college_id_text_view)
+        val emailTextView = view.findViewById<TextView>(R.id.user_id_text_view)
         val updateButton = view.findViewById<MaterialButton>(R.id.update_button)
         val userID = userID
         if(userID!=null){

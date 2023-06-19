@@ -20,7 +20,6 @@ import com.example.ums.listener.ItemListener
 import com.example.ums.model.databaseAccessObject.DepartmentDAO
 
 class DepartmentFragment: AddableSearchableFragment(), ItemListener {
-    private lateinit var departmentAddFragment: DepartmentAddBottomSheet
     private lateinit var departmentDAO: DepartmentDAO
     private lateinit var departmentListItemViewAdapter: DepartmentListItemViewAdapter
     private lateinit var firstTextView: TextView
@@ -44,10 +43,6 @@ class DepartmentFragment: AddableSearchableFragment(), ItemListener {
 
         val view = inflater.inflate(R.layout.fragment_department_page, container, false)
         val recyclerView: RecyclerView = view.findViewById(R.id.college_list_view)
-        departmentAddFragment = DepartmentAddBottomSheet()
-        departmentAddFragment.arguments = Bundle().apply {
-            putInt("college_activity_college_id", collegeID!!)
-        }
 
         firstTextView = view.findViewById(R.id.no_departments_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
@@ -61,7 +56,6 @@ class DepartmentFragment: AddableSearchableFragment(), ItemListener {
         super.onViewCreated(view, savedInstanceState)
 
         setFragmentResultListener("departmentAddFragmentPosition"){_, result->
-
             val position = result.getInt("position")
             addAt(position)
         }
@@ -78,6 +72,7 @@ class DepartmentFragment: AddableSearchableFragment(), ItemListener {
     }
 
     override fun onAdd() {
+        val departmentAddFragment = DepartmentAddBottomSheet.newInstance(collegeID!!)
         departmentAddFragment.show(requireActivity().supportFragmentManager, "bottomSheetDialog")
     }
 

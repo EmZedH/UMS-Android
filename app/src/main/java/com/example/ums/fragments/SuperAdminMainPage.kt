@@ -29,7 +29,6 @@ class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))

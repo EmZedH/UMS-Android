@@ -69,8 +69,6 @@ class CollegeAddBottomSheet : FullScreenBottomSheetDialogFragment() {
         collegeTelephone =
             view.findViewById(R.id.college_telephone_layout)
 
-
-
         if(collegeNameText.isNotEmpty()){
             collegeName.editText?.setText(collegeNameText)
         }
@@ -157,8 +155,8 @@ class CollegeAddBottomSheet : FullScreenBottomSheetDialogFragment() {
 
     private fun setCollegeIDTextView(view : View){
 
-        view.findViewById<TextView>(R.id.college_id_text_view)!!.setText(R.string.college_id_string)
-        view.findViewById<TextView>(R.id.college_id_text_view)!!.append(collegeDAO.getNewID().toString())
+        view.findViewById<TextView>(R.id.user_id_text_view)!!.setText(R.string.college_id)
+        view.findViewById<TextView>(R.id.user_id_text_view)!!.append(collegeDAO.getNewID().toString())
 
     }
 

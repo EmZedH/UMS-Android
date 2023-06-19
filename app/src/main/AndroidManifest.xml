@@ -27,6 +27,7 @@
         <activity android:name=".MainPageActivity"/>
         <activity android:name=".ManageProfileActivity"/>
         <activity android:name=".CollegeActivity"/>
+        <activity android:name=".CollegeAdminProfileActivity"/>
     </application>
 
 </manifest>
