@@ -35,19 +35,19 @@ class CollegeAdminProfileActivity: AppCompatActivity() {
 
             val floatingActionButton = findViewById<FloatingActionButton>(R.id.edit_floating_action_button)
             val toolBar = findViewById<MaterialToolbar>(R.id.top_app_bar)
+            val databaseHelper = DatabaseHelper(this)
+            val collegeAdminDAO = CollegeAdminDAO(databaseHelper)
+            val collegeDAO = CollegeDAO(databaseHelper)
+            val collegeAdmin = collegeAdminDAO.get(collegeAdminId)
+            val college = collegeDAO.get(collegeId)
+            val user = collegeAdmin?.user
 
             toolBar.setNavigationOnClickListener {
                 finish()
             }
 
             userIdTextView.append(" C/$collegeId-U/$collegeAdminId")
-            val databaseHelper = DatabaseHelper(this)
-            val collegeAdminDAO = CollegeAdminDAO(databaseHelper)
-            val collegeDAO = CollegeDAO(databaseHelper)
-            val collegeAdmin = collegeAdminDAO.get(collegeAdminId)
-            val college = collegeDAO.get(collegeId)
             userEmailIdTextView.append(" ${collegeAdmin?.user?.emailID}")
-            val user = collegeAdmin?.user
             userNameTextView.text = user?.name
             contactNumberTextView.text = user?.contactNumber
             dateOfBirthTextView.text = user?.dateOfBirth
@@ -63,6 +63,14 @@ class CollegeAdminProfileActivity: AppCompatActivity() {
                     putInt("college_activity_college_admin_id", collegeAdminId)
                 }
                 collegeAdminUpdateBottomSheet.show(supportFragmentManager, "collegeAdminUpdateDialog")
+            }
+
+            supportFragmentManager.setFragmentResultListener("collegeAdminUpdateFragmentPosition", this){_, _->
+                val newCollegeAdmin = collegeAdminDAO.get(collegeAdminId)
+                val newUser = newCollegeAdmin?.user
+                userNameTextView.text = newUser?.name
+                contactNumberTextView.text = newUser?.contactNumber
+                userAddressTextView.text = newUser?.address
             }
         }
     }

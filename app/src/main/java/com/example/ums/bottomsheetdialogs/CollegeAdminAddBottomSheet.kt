@@ -301,7 +301,7 @@ class CollegeAdminAddBottomSheet : FullScreenBottomSheetDialogFragment() {
                 }
             }, savedYear ?: calendarYear, savedMonth ?: calendarMonth, savedDate ?: calendarDay)
 
-        datePickerDialog.datePicker.minDate = calendar.timeInMillis - 788400000000
+//        datePickerDialog.datePicker.minDate = calendar.timeInMillis - 788400000000
         datePickerDialog.datePicker.maxDate = calendar.timeInMillis - 488400000000
         datePickerDialog.show()
     }

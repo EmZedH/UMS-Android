@@ -100,7 +100,7 @@ class DepartmentAddBottomSheet: FullScreenBottomSheetDialogFragment() {
 
                 setCollegeIDTextView(view)
 
-                setFragmentResult("departmentAddFragmentPosition", bundleOf("position" to newID-1))
+                setFragmentResult("departmentAddFragmentPosition", bundleOf("id" to newID))
                 dismiss()
             }
 

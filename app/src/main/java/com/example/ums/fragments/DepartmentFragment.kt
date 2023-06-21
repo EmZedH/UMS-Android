@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -48,7 +47,7 @@ class DepartmentFragment: AddableSearchableFragment(), ItemListener {
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
         onRefresh()
         recyclerView.adapter = departmentListItemViewAdapter
-        recyclerView.layoutManager = LinearLayoutManager(this.context)
+        recyclerView.layoutManager = LinearLayoutManager(context)
         return view
     }
 
@@ -56,8 +55,8 @@ class DepartmentFragment: AddableSearchableFragment(), ItemListener {
         super.onViewCreated(view, savedInstanceState)
 
         setFragmentResultListener("departmentAddFragmentPosition"){_, result->
-            val position = result.getInt("position")
-            addAt(position)
+            val id = result.getInt("id")
+            addAt(id)
         }
 
         setFragmentResultListener("departmentDeleteDialog"){_, result->
@@ -67,7 +66,7 @@ class DepartmentFragment: AddableSearchableFragment(), ItemListener {
         }
         setFragmentResultListener("DepartmentUpdateBottomSheet"){_, result->
             val id = result.getInt("departmentID")
-            departmentListItemViewAdapter.updateItemInAdapter(departmentDAO.getList(collegeID!!).indexOf(departmentDAO.get(id, collegeID!!)))
+            departmentListItemViewAdapter.updateItemInAdapter(id)
         }
     }
 
@@ -80,9 +79,8 @@ class DepartmentFragment: AddableSearchableFragment(), ItemListener {
         departmentListItemViewAdapter.filter(query)
     }
 
-    private fun addAt(position: Int){
-        departmentListItemViewAdapter.addItem(position)
-        departmentListItemViewAdapter.notifyItemInserted(position)
+    private fun addAt(id: Int){
+        departmentListItemViewAdapter.addItem(id)
         onRefresh()
     }
 
@@ -94,12 +92,12 @@ class DepartmentFragment: AddableSearchableFragment(), ItemListener {
             putInt("department_update_department_id", id)
         }
 
-        updateBottomSheet.show((context as AppCompatActivity).supportFragmentManager, "updateDialog")
+        updateBottomSheet.show(requireActivity().supportFragmentManager, "updateDialog")
     }
 
     override fun onDelete(id: Int) {
         val deleteFragment = DepartmentDeleteDialog.getInstance(id)
-        deleteFragment.show((context as AppCompatActivity).supportFragmentManager, "deleteDialog")
+        deleteFragment.show(requireActivity().supportFragmentManager, "deleteDialog")
     }
 
     override fun onClick(bundle: Bundle?) {

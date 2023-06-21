@@ -1,7 +1,6 @@
 package com.example.ums.adapters
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
@@ -14,7 +13,8 @@ import com.example.ums.model.databaseAccessObject.CollegeDAO
 
 class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val itemListener: ItemListener) : RecyclerView.Adapter<ListItemViewHolder>() {
 
-    private var originalList : MutableList<College> = collegeDAO.getList().toMutableList()
+    private var originalList : MutableList<College> = collegeDAO.getList().sortedBy { it.id }.toMutableList()
+    private var filterQuery: String? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItemViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_layout, parent, false)
@@ -41,11 +41,6 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
         }
     }
 
-    fun updateItemInAdapter(position: Int) {
-        originalList[position] = collegeDAO.get(position+1)!!
-        notifyItemChanged(position)
-    }
-
     private fun showOptionsPopupMenu(college : College, holder: ListItemViewHolder){
         val context = holder.itemView.context
         val popupMenu = PopupMenu(context, holder.optionsButton)
@@ -60,7 +55,6 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
                 }
                 R.id.delete_college -> {
                     itemListener.onDelete(college.id)
-//                    showConfirmationDialog(context, college)
                     true
                 }
 
@@ -74,20 +68,75 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
     fun filter(query: String?){
         val filteredList =
             if(query.isNullOrEmpty())
-                collegeDAO.getList()
+                collegeDAO.getList().sortedBy {college -> college.id }
             else
-                collegeDAO.getList().filter { item -> item.name.contains(query, ignoreCase = true) }
+                collegeDAO.getList().filter { college -> college.name.contains(query, true) }
 
+        filterQuery = if(query.isNullOrEmpty()){
+            null
+        } else{
+            query
+        }
         originalList.clear()
         originalList.addAll(filteredList)
         notifyDataSetChanged()
     }
-    fun addItem(position: Int){
-        originalList.add(position, collegeDAO.get(position+1)!!)
+
+    fun updateItemInAdapter(id: Int) {
+        val query = filterQuery
+        val college = collegeDAO.get(id) ?: return
+        for (listCollege in originalList){
+            if(query!=null && query!=""){
+                val flag = college.name.lowercase().contains(query.lowercase())
+                if(flag){
+                    originalList.apply {
+                        set(originalList.indexOf(listCollege), college)
+                        sortBy { it.id }
+                        notifyItemChanged(originalList.indexOf(college))
+                    }
+                    return
+                }
+                else{
+                    originalList.apply {
+                        notifyItemRemoved(originalList.indexOf(listCollege))
+                        remove(listCollege)
+                        sortBy { it.id }
+                    }
+                    return
+                }
+            }
+            else{
+                if(listCollege.id == id){
+                    originalList.apply {
+                        set(originalList.indexOf(listCollege), college)
+                        sortBy { it.id }
+                        notifyItemChanged(originalList.indexOf(college))
+                    }
+                    return
+                }
+            }
+        }
+    }
+
+    fun addItem(id: Int){
+        val query= filterQuery
+        val college = collegeDAO.get(id)
+        if(college!=null){
+            if(query!=null && college.name.lowercase().contains(query.lowercase())){
+                originalList.apply {
+                    add(college)
+                    sortBy { it.id }
+                    notifyItemInserted(indexOf(college))
+                }
+            }
+            else if(query==null){
+                originalList.add(id-1, college)
+                notifyItemInserted(id-1)
+            }
+        }
     }
 
     fun deleteItem(id: Int){
-        Log.i("CollegeDeleteDialogClass","collegeID: $id")
         val college = collegeDAO.get(id)
         val updatedPosition = originalList.indexOf(college)
         collegeDAO.delete(id)

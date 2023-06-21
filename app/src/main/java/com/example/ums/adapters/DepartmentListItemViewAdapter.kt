@@ -12,7 +12,8 @@ import com.example.ums.model.databaseAccessObject.DepartmentDAO
 
 class DepartmentListItemViewAdapter(private val collegeID: Int, private val departmentDAO: DepartmentDAO, private val itemListener: ItemListener): RecyclerView.Adapter<ListItemViewHolder>() {
 
-    private var originalList : MutableList<Department> = departmentDAO.getList(collegeID).toMutableList()
+    private var originalList : MutableList<Department> = departmentDAO.getList(collegeID).sortedBy { it.id }.toMutableList()
+    private var filterQuery: String? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItemViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_layout, parent, false)
@@ -31,11 +32,6 @@ class DepartmentListItemViewAdapter(private val collegeID: Int, private val depa
         holder.optionsButton.setOnClickListener {
             showOptionsPopupMenu(department, holder)
         }
-    }
-
-    fun updateItemInAdapter(position: Int) {
-        originalList[position] = departmentDAO.get(position+1, collegeID)!!
-        notifyItemChanged(position)
     }
 
     private fun showOptionsPopupMenu(department : Department, holder: ListItemViewHolder){
@@ -65,16 +61,72 @@ class DepartmentListItemViewAdapter(private val collegeID: Int, private val depa
     fun filter(query: String?){
         val filteredList =
             if(query.isNullOrEmpty())
-                departmentDAO.getList(collegeID)
+                departmentDAO.getList(collegeID).sortedBy { department ->  department.id }
             else
-                departmentDAO.getList(collegeID).filter { item -> item.name.contains(query, ignoreCase = true) }
+                departmentDAO.getList(collegeID).filter { department -> department.name.contains(query, true) }
 
+        filterQuery = if(query.isNullOrEmpty()){
+                null
+            } else{
+                query
+            }
         originalList.clear()
         originalList.addAll(filteredList)
         notifyDataSetChanged()
     }
-    fun addItem(position: Int){
-        originalList.add(position, departmentDAO.get(position+1, collegeID)!!)
+
+    fun updateItemInAdapter(id: Int) {
+        val query = filterQuery
+        val department = departmentDAO.get(id, collegeID) ?: return
+        for (listDepartment in originalList){
+            if(query!=null && query!=""){
+                val flag = department.name.lowercase().contains(query.lowercase())
+                if(flag){
+                    originalList.apply {
+                        set(originalList.indexOf(listDepartment), department)
+                        sortBy { it.id }
+                        notifyItemChanged(originalList.indexOf(department))
+                    }
+                    return
+                }
+                else{
+                    originalList.apply {
+                        notifyItemRemoved(originalList.indexOf(listDepartment))
+                        remove(listDepartment)
+                        sortBy { it.id }
+                    }
+                    return
+                }
+            }
+            else{
+                if(listDepartment.id == id){
+                    originalList.apply {
+                        set(originalList.indexOf(listDepartment), department)
+                        sortBy { it.id }
+                        notifyItemChanged(originalList.indexOf(department))
+                    }
+                    return
+                }
+            }
+        }
+    }
+
+    fun addItem(id: Int){
+        val query = filterQuery
+        val department = departmentDAO.get(id, collegeID)
+        if(department!=null){
+            if(query!=null && department.name.lowercase().contains(query.lowercase())){
+                originalList.apply {
+                    add(department)
+                    sortBy {department -> department.id }
+                    notifyItemInserted(indexOf(department))
+                }
+            }
+            else if(query==null){
+                originalList.add(id-1, department)
+                notifyItemInserted(id-1)
+            }
+        }
     }
 
     fun deleteItem(id: Int){

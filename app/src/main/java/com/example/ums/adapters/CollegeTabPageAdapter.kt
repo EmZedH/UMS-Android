@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.ums.AddableSearchableFragment
 
-class CollegePageAdapter(fragmentActivity: FragmentActivity, private val collegeID: Int, private val fragments: List<AddableSearchableFragment>): FragmentStateAdapter(fragmentActivity) {
+class CollegeTabPageAdapter(fragmentActivity: FragmentActivity, private val collegeID: Int, private val fragments: List<AddableSearchableFragment>): FragmentStateAdapter(fragmentActivity) {
 
     init {
         for (fragment in fragments){

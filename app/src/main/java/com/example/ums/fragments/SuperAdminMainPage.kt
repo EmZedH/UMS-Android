@@ -67,8 +67,8 @@ class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
 
         super.onViewCreated(view, savedInstanceState)
         setFragmentResultListener("collegeAddBottomSheet"){_, result->
-            val position = result.getInt("collegeAddResultKey")
-            addAt(position)
+            val id = result.getInt("id")
+            addAt(id)
         }
         setFragmentResultListener("collegeDeleteDialog"){_, result->
             val id = result.getInt("collegeID")
@@ -77,7 +77,7 @@ class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
         }
         setFragmentResultListener("CollegeUpdateBottomSheet"){_, result->
             val id = result.getInt("collegeID")
-            collegeListItemViewAdapter.updateItemInAdapter(collegeDAO.getList().indexOf(collegeDAO.get(id)))
+            collegeListItemViewAdapter.updateItemInAdapter(id)
         }
     }
 
@@ -85,9 +85,8 @@ class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
         addCollegeBottomSheet.show(requireActivity().supportFragmentManager, "bottomSheetDialog")
     }
 
-    private fun addAt(position: Int) {
-        collegeListItemViewAdapter.addItem(position)
-        collegeListItemViewAdapter.notifyItemInserted(position)
+    private fun addAt(id: Int) {
+        collegeListItemViewAdapter.addItem(id)
         onRefresh()
     }
 

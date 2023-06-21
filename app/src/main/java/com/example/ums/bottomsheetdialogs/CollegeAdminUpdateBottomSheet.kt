@@ -99,9 +99,9 @@ class CollegeAdminUpdateBottomSheet: FullScreenBottomSheetDialogFragment() {
             updateButton.isEnabled = true
         }
 
-        userName.editText?.addTextChangedListener(textListener(userName, collegeAdmin.user.name))
-        contactNumber.editText?.addTextChangedListener(textListener(contactNumber, collegeAdmin.user.contactNumber))
-        userAddress.editText?.addTextChangedListener(textListener(userAddress, collegeAdmin.user.address))
+        userName.editText?.addTextChangedListener(textListener(userName, {userNameError = null} ,collegeAdmin.user.name))
+        contactNumber.editText?.addTextChangedListener(textListener(contactNumber,{contactNumberError = null}, collegeAdmin.user.contactNumber))
+        userAddress.editText?.addTextChangedListener(textListener(userAddress,{userAddressError = null}, collegeAdmin.user.address))
 
         updateButton.setOnClickListener {
 
@@ -165,7 +165,7 @@ class CollegeAdminUpdateBottomSheet: FullScreenBottomSheetDialogFragment() {
 
     private fun setCollegeIDTextView(view : View){
         view.findViewById<TextView>(R.id.user_id_text_view)?.setText(R.string.user_id_string)
-        view.findViewById<TextView>(R.id.user_id_text_view)?.append(" C/$collegeAdminId-U/${collegeAdminDAO.getNewID()}")
+        view.findViewById<TextView>(R.id.user_id_text_view)?.append(" C/${collegeAdmin.collegeID}-U/${collegeAdmin.user.id}")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -194,21 +194,6 @@ class CollegeAdminUpdateBottomSheet: FullScreenBottomSheetDialogFragment() {
                 layout.error = null
                 updateButton.isEnabled = p0?.toString() != userDetail
                 errorOperation()
-            }
-
-            override fun afterTextChanged(p0: Editable?) {
-            }
-        }
-    }
-
-    private fun textListener(layout: TextInputLayout, userDetail: String): TextWatcher {
-        return object: TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-            }
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                layout.error = null
-                updateButton.isEnabled = p0?.toString() != userDetail
             }
 
             override fun afterTextChanged(p0: Editable?) {

@@ -1,13 +1,11 @@
 package com.example.ums.fragments
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,31 +18,26 @@ import com.example.ums.bottomsheetdialogs.CollegeAdminAddBottomSheet
 import com.example.ums.bottomsheetdialogs.CollegeAdminUpdateBottomSheet
 import com.example.ums.dialogFragments.CollegeAdminDeleteDialog
 import com.example.ums.listener.ItemListener
+import com.example.ums.model.CollegeAdmin
 import com.example.ums.model.databaseAccessObject.CollegeAdminDAO
 
 class CollegeAdminFragment: AddableSearchableFragment(), ItemListener {
 
-    private lateinit var departmentDAO: CollegeAdminDAO
+    private lateinit var collegeAdminDAO: CollegeAdminDAO
     private lateinit var collegeAdminListItemViewAdapter: CollegeAdminListItemViewAdapter
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
     private var collegeID: Int? = null
     private var editedCollegeAdminId: Int? = null
 
+    private var editedCollegeAdmin: CollegeAdmin? = null
 
-    private val myActivityResultLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
-
-        }
-    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         collegeID = arguments?.getInt("college_activity_college_id")
-        departmentDAO = CollegeAdminDAO(DatabaseHelper(requireActivity()))
+        collegeAdminDAO = CollegeAdminDAO(DatabaseHelper(requireActivity()))
         if(collegeID!=null){
-            collegeAdminListItemViewAdapter = CollegeAdminListItemViewAdapter(collegeID!!, departmentDAO, this )
+            collegeAdminListItemViewAdapter = CollegeAdminListItemViewAdapter(collegeID!!, collegeAdminDAO, this )
         }
     }
     override fun onCreateView(
@@ -98,6 +91,7 @@ class CollegeAdminFragment: AddableSearchableFragment(), ItemListener {
         val intent = Intent(requireContext(), CollegeAdminProfileActivity::class.java)
         if(bundle!=null){
             editedCollegeAdminId = bundle.getInt("college_admin_profile_college_admin_id")
+            editedCollegeAdmin = collegeAdminDAO.get(bundle.getInt("college_admin_profile_college_admin_id"))
             intent.putExtras(bundle)
             startActivity(intent)
         }
@@ -121,7 +115,7 @@ class CollegeAdminFragment: AddableSearchableFragment(), ItemListener {
     }
 
     private fun onRefresh(){
-        if(departmentDAO.getList(collegeID!!).isNotEmpty()){
+        if(collegeAdminDAO.getList(collegeID!!).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }
@@ -133,9 +127,10 @@ class CollegeAdminFragment: AddableSearchableFragment(), ItemListener {
 
     override fun onResume() {
         super.onResume()
-        if(editedCollegeAdminId!=null){
-            collegeAdminListItemViewAdapter.updateItemInAdapter(editedCollegeAdminId!!)
-            editedCollegeAdminId = null
+        if(editedCollegeAdminId!=null && editedCollegeAdmin!=null){
+            if(editedCollegeAdmin!! != collegeAdminDAO.get(editedCollegeAdminId!!)){
+                collegeAdminListItemViewAdapter.updateItemInAdapter(editedCollegeAdminId!!)
+            }
         }
     }
 }

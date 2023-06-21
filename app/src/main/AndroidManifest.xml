@@ -23,9 +23,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".LoginActivity"/>
+        <activity android:name=".LoginActivity" android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".MainPageActivity"/>
-        <activity android:name=".ManageProfileActivity"/>
+        <activity android:name=".ManageProfileActivity" android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".CollegeActivity"/>
         <activity android:name=".CollegeAdminProfileActivity"/>
     </application>

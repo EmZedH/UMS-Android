@@ -135,7 +135,7 @@ class CollegeAddBottomSheet : FullScreenBottomSheetDialogFragment() {
 
                 setCollegeIDTextView(view)
 
-                setFragmentResult("collegeAddBottomSheet", bundleOf("collegeAddResultKey" to (newID-1)))
+                setFragmentResult("collegeAddBottomSheet", bundleOf("id" to newID))
                 dismiss()
             }
         }

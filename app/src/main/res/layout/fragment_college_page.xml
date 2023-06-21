@@ -33,11 +33,11 @@
         app:layout_constraintTop_toBottomOf="@id/no_departments_text_view"
 
         />
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/college_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="35dp"
-            >
-        </androidx.recyclerview.widget.RecyclerView>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/college_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="35dp"
+        >
+    </androidx.recyclerview.widget.RecyclerView>
 </androidx.constraintlayout.widget.ConstraintLayout>

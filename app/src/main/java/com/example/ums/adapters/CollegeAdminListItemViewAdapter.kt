@@ -13,7 +13,8 @@ import com.example.ums.model.databaseAccessObject.CollegeAdminDAO
 
 class CollegeAdminListItemViewAdapter (private val collegeID: Int, private val collegeAdminDAO: CollegeAdminDAO, private val itemListener: ItemListener): RecyclerView.Adapter<ListItemViewHolder>() {
 
-    private var originalList : MutableList<CollegeAdmin> = collegeAdminDAO.getList(collegeID).toMutableList()
+    private var originalList : MutableList<CollegeAdmin> = collegeAdminDAO.getList(collegeID).sortedBy { it.user.id }.toMutableList()
+    private var filterQuery: String? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItemViewHolder {
         val itemView = LayoutInflater.from(parent.context).inflate(R.layout.list_item_layout, parent, false)
@@ -67,10 +68,15 @@ class CollegeAdminListItemViewAdapter (private val collegeID: Int, private val c
     fun filter(query: String?){
         val filteredList =
             if(query.isNullOrEmpty())
-                collegeAdminDAO.getList(collegeID)
+                collegeAdminDAO.getList(collegeID).sortedBy { it.user.id }
             else
                 collegeAdminDAO.getList(collegeID).filter { collegeAdmin -> collegeAdmin.user.name.contains(query, ignoreCase = true) }
 
+        filterQuery = if(query.isNullOrEmpty()){
+            null
+        } else{
+            query
+        }
 
         originalList.clear()
         originalList.addAll(filteredList)
@@ -78,17 +84,56 @@ class CollegeAdminListItemViewAdapter (private val collegeID: Int, private val c
     }
 
     fun addItem(id: Int){
-        originalList.add(originalList.size, collegeAdminDAO.get(id)!!)
-        notifyItemInserted(originalList.size)
+        val query = filterQuery
+        val collegeAdmin = collegeAdminDAO.get(id)
+        if(collegeAdmin!=null){
+            if(query!=null && collegeAdmin.user.name.lowercase().contains(query.lowercase())){
+                originalList.apply {
+                    add(collegeAdmin)
+                    sortBy {department -> department.user.id }
+                    notifyItemInserted(indexOf(collegeAdmin))
+                }
+            }
+            else if(query==null){
+                originalList.add(collegeAdmin)
+                notifyItemInserted(originalList.size)
+            }
+        }
     }
 
     fun updateItemInAdapter(id: Int){
-        originalList = collegeAdminDAO.getList(collegeID).toMutableList()
-        val collegeAdmin = collegeAdminDAO.get(id)
-        if(collegeAdmin!=null){
-            val position = originalList.indexOf(collegeAdmin)
-            originalList[position] = collegeAdmin
-            notifyItemChanged(position)
+        val query = filterQuery
+        val department = collegeAdminDAO.get(id) ?: return
+        for (listDepartment in originalList){
+            if(query!=null && query!=""){
+                val flag = department.user.name.lowercase().contains(query.lowercase())
+                if(flag){
+                    originalList.apply {
+                        set(originalList.indexOf(listDepartment), department)
+                        sortBy { it.user.id }
+                        notifyItemChanged(originalList.indexOf(department))
+                    }
+                    return
+                }
+                else{
+                    originalList.apply {
+                        notifyItemRemoved(originalList.indexOf(listDepartment))
+                        remove(listDepartment)
+                        sortBy { it.user.id }
+                    }
+                    return
+                }
+            }
+            else{
+                if(listDepartment.user.id == id){
+                    originalList.apply {
+                        set(originalList.indexOf(listDepartment), department)
+                        sortBy { it.user.id }
+                        notifyItemChanged(originalList.indexOf(department))
+                    }
+                    return
+                }
+            }
         }
     }
 

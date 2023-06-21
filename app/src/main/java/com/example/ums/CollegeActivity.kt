@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
-import com.example.ums.adapters.CollegePageAdapter
+import com.example.ums.adapters.CollegeTabPageAdapter
 import com.example.ums.fragments.CollegeAdminFragment
 import com.example.ums.fragments.DepartmentFragment
 import com.example.ums.model.databaseAccessObject.CollegeDAO
@@ -47,7 +47,7 @@ class CollegeActivity: AppCompatActivity() {
                 finish()
             }
             val fragments: List<AddableSearchableFragment> = listOf(DepartmentFragment(), CollegeAdminFragment() )
-            val tabAdapter = CollegePageAdapter(this, collegeID, fragments)
+            val tabAdapter = CollegeTabPageAdapter(this, collegeID, fragments)
             val viewPager = findViewById<ViewPager2>(R.id.view_pager)
             val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
 
@@ -68,7 +68,7 @@ class CollegeActivity: AppCompatActivity() {
         }
     }
 
-    private fun onPageChangeCallback(addFloatingActionButton: FloatingActionButton, viewPager: ViewPager2, adapter: CollegePageAdapter): ViewPager2.OnPageChangeCallback{
+    private fun onPageChangeCallback(addFloatingActionButton: FloatingActionButton, viewPager: ViewPager2, adapter: CollegeTabPageAdapter): ViewPager2.OnPageChangeCallback{
         return object : ViewPager2.OnPageChangeCallback(){
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)

@@ -37,18 +37,6 @@
         android:id="@+id/college_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="15dp"/>
-
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        style="@style/FloatingActionButtonStyle"-->
-<!--        android:id="@+id/add_floating_action_button"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_margin="16dp"-->
-<!--        android:backgroundTint="@color/light_primary"-->
-<!--        android:contentDescription="@string/fab_content_description"-->
-<!--        android:src="@drawable/ic_plus_24"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        />-->
+        android:layout_marginBottom="35dp"
+        />
 </androidx.constraintlayout.widget.ConstraintLayout>

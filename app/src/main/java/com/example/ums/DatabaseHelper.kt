@@ -20,11 +20,11 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
             ")"
 
     private val createTableCourse = "CREATE TABLE IF NOT EXISTS \"COURSE\" (\n" +
-            "\t\"COURSE_ID\"\tTEXT,\n" +
+            "\t\"COURSE_ID\"\tINTEGER,\n" +
             "\t\"COURSE_NAME\"\tTEXT,\n" +
             "\t\"COURSE_SEM\"\tINTEGER,\n" +
-            "\t\"DEPT_ID\"\tTEXT,\n" +
-            "\t\"COLLEGE_ID\"\tTEXT,\n" +
+            "\t\"DEPT_ID\"\tINTEGER,\n" +
+            "\t\"COLLEGE_ID\"\tINTEGER,\n" +
             "\t\"DEGREE\"\tTEXT,\n" +
             "\t\"ELECTIVE\"\tTEXT,\n" +
             "\tPRIMARY KEY(\"COURSE_ID\",\"DEPT_ID\",\"COLLEGE_ID\")\n" +
@@ -79,9 +79,9 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
             "\t\"STUDENT_ID\"\tINTEGER,\n" +
             "\t\"S_SEM\"\tINTEGER,\n" +
             "\t\"S_DEGREE\"\tTEXT,\n" +
-            "\t\"SEC_ID\"\tTEXT,\n" +
-            "\t\"DEPT_ID\"\tTEXT,\n" +
-            "\t\"COLLEGE_ID\"\tTEXT,\n" +
+            "\t\"SEC_ID\"\tINTEGER,\n" +
+            "\t\"DEPT_ID\"\tINTEGER,\n" +
+            "\t\"COLLEGE_ID\"\tINTEGER,\n" +
             "\tPRIMARY KEY(\"STUDENT_ID\")\n" +
             ")"
 
@@ -92,10 +92,10 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
 
     private val createTableTests = "CREATE TABLE IF NOT EXISTS \"TEST\" (\n" +
             "\t\"TEST_ID\"\tINTEGER,\n" +
-            "\t\"STUDENT_ID\"\tTEXT,\n" +
-            "\t\"COURSE_ID\"\tTEXT,\n" +
-            "\t\"DEPT_ID\"\tTEXT,\n" +
-            "\t\"COLLEGE_ID\"\tTEXT,\n" +
+            "\t\"STUDENT_ID\"\tINTEGER,\n" +
+            "\t\"COURSE_ID\"\tINTEGER,\n" +
+            "\t\"DEPT_ID\"\tINTEGER,\n" +
+            "\t\"COLLEGE_ID\"\tINTEGER,\n" +
             "\t\"TEST_MARKS\"\tINTEGER,\n" +
             "\tPRIMARY KEY(\"TEST_ID\",\"STUDENT_ID\",\"COURSE_ID\",\"DEPT_ID\",\"COLLEGE_ID\")\n" +
             ")"
@@ -104,7 +104,7 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
             "\t\"T_ID\"\tINTEGER,\n" +
             "\t\"STUDENT_ID\"\tINTEGER,\n" +
             "\t\"T_DATE\"\tDATE,\n" +
-            "\t\"T_AMOUNT\"\tINT,\n" +
+            "\t\"T_AMOUNT\"\tINTEGER,\n" +
             "\tPRIMARY KEY(\"T_ID\")\n" +
             ")"
 
