@@ -24,10 +24,12 @@ import com.example.ums.model.databaseAccessObject.CollegeDAO
 class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
 
     private lateinit var addCollegeBottomSheet : CollegeAddBottomSheet
-    private lateinit var collegeListItemViewAdapter : CollegeListItemViewAdapter
+    private var collegeListItemViewAdapter : CollegeListItemViewAdapter? = null
     private lateinit var collegeDAO: CollegeDAO
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
+
+    private var editCollegeId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,10 +43,10 @@ class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.fragment_college_page, container, false)
+        val view = inflater.inflate(R.layout.fragment_list_page, container, false)
         val recyclerView: RecyclerView = view.findViewById(R.id.college_list_view)
 
-        firstTextView = view.findViewById(R.id.no_departments_text_view)
+        firstTextView = view.findViewById(R.id.no_items_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
 
         addCollegeBottomSheet = CollegeAddBottomSheet()
@@ -72,12 +74,12 @@ class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
         }
         setFragmentResultListener("collegeDeleteDialog"){_, result->
             val id = result.getInt("collegeID")
-            collegeListItemViewAdapter.deleteItem(id)
+            collegeListItemViewAdapter?.deleteItem(id)
             onRefresh()
         }
         setFragmentResultListener("CollegeUpdateBottomSheet"){_, result->
             val id = result.getInt("collegeID")
-            collegeListItemViewAdapter.updateItemInAdapter(id)
+            collegeListItemViewAdapter?.updateItemInAdapter(id)
         }
     }
 
@@ -86,12 +88,12 @@ class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
     }
 
     private fun addAt(id: Int) {
-        collegeListItemViewAdapter.addItem(id)
+        collegeListItemViewAdapter?.addItem(id)
         onRefresh()
     }
 
     override fun onSearch(query: String?) {
-        collegeListItemViewAdapter.filter(query)
+        collegeListItemViewAdapter?.filter(query)
     }
 
     override fun onUpdate(id: Int) {
@@ -111,6 +113,7 @@ class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
     override fun onClick(bundle: Bundle?) {
         val intent = Intent(requireContext(), CollegeActivity::class.java)
         if(bundle!=null){
+            editCollegeId = bundle.getInt("collegeID")
             intent.putExtras(bundle)
             startActivity(intent)
         }
@@ -122,8 +125,17 @@ class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
             secondTextView.visibility = View.INVISIBLE
         }
         else{
+            firstTextView.setText(R.string.no_colleges_string)
             firstTextView.visibility = View.VISIBLE
             secondTextView.visibility = View.VISIBLE
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(editCollegeId!=null){
+            collegeListItemViewAdapter?.updateItemInAdapter(editCollegeId!!)
+            editCollegeId=null
         }
     }
 }

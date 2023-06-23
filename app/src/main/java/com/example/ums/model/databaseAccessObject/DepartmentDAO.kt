@@ -10,6 +10,13 @@ class DepartmentDAO(private val databaseHelper: DatabaseHelper) {
     private val primaryKey = "DEPT_ID"
     private val departmentName = "DEPT_NAME"
     private val collegeIDKey = "COLLEGE_ID"
+    private val courseTable = "COURSE"
+
+    private val courseProfessorTable = "COURSE_PROFESSOR_TABLE"
+    private val professorTable = "PROFESSOR"
+    private val recordTable = "RECORDS"
+    private val studentTable = "STUDENT"
+    private val testTable = "TEST"
 
     fun get(departmentID : Int, collegeID: Int) : Department?{
         var department : Department? = null
@@ -53,10 +60,24 @@ class DepartmentDAO(private val databaseHelper: DatabaseHelper) {
     }
 
     fun delete(id : Int, collegeID: Int){
-        val deleteQuery = "DELETE FROM $tableName WHERE $primaryKey = $id AND $collegeIDKey = $collegeID"
+        val db = databaseHelper.writableDatabase
+        db.beginTransaction()
+        try {
+            db.execSQL("DELETE FROM $tableName WHERE $primaryKey = $id AND $collegeIDKey = $collegeID")
+            db.execSQL("DELETE FROM $courseTable WHERE $primaryKey = $id AND $collegeIDKey = $collegeID")
 
-        databaseHelper.writableDatabase.execSQL(deleteQuery)
-
+            db.execSQL("DELETE FROM $courseProfessorTable WHERE $primaryKey = $id AND $collegeIDKey = $collegeID")
+            db.execSQL("DELETE FROM $professorTable WHERE $primaryKey = $id AND $collegeIDKey = $collegeID")
+            db.execSQL("DELETE FROM $recordTable WHERE $primaryKey = $id AND $collegeIDKey = $collegeID")
+            db.execSQL("DELETE FROM $studentTable WHERE $primaryKey = $id AND $collegeIDKey = $collegeID")
+            db.execSQL("DELETE FROM $testTable WHERE $primaryKey = $id AND $collegeIDKey = $collegeID")
+            db.setTransactionSuccessful()
+        }catch (e: Exception){
+            e.printStackTrace()
+        }finally {
+            db.endTransaction()
+        }
+        db.close()
     }
 
     fun getNewID(collegeID: Int) : Int {

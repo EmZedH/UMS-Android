@@ -1,5 +1,6 @@
 package com.example.ums.adapters
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
@@ -28,7 +29,12 @@ class DepartmentListItemViewAdapter(private val collegeID: Int, private val depa
         val department = originalList[position]
         holder.itemIDTextView.text = "ID: C/$collegeID-D/${department.id}"
         holder.itemNameTextView.text = department.name
-
+        holder.itemView.setOnClickListener {
+            val bundle = Bundle()
+            bundle.putInt("departmentID",department.id)
+            bundle.putInt("collegeID", collegeID)
+            itemListener.onClick(bundle)
+        }
         holder.optionsButton.setOnClickListener {
             showOptionsPopupMenu(department, holder)
         }
@@ -63,7 +69,7 @@ class DepartmentListItemViewAdapter(private val collegeID: Int, private val depa
             if(query.isNullOrEmpty())
                 departmentDAO.getList(collegeID).sortedBy { department ->  department.id }
             else
-                departmentDAO.getList(collegeID).filter { department -> department.name.contains(query, true) }
+                departmentDAO.getList(collegeID).filter { department -> department.name.contains(query, true) }.sortedBy { department ->  department.id }
 
         filterQuery = if(query.isNullOrEmpty()){
                 null
@@ -79,27 +85,27 @@ class DepartmentListItemViewAdapter(private val collegeID: Int, private val depa
         val query = filterQuery
         val department = departmentDAO.get(id, collegeID) ?: return
         for (listDepartment in originalList){
-            if(query!=null && query!=""){
-                val flag = department.name.lowercase().contains(query.lowercase())
-                if(flag){
-                    originalList.apply {
-                        set(originalList.indexOf(listDepartment), department)
-                        sortBy { it.id }
-                        notifyItemChanged(originalList.indexOf(department))
+            if(listDepartment.id == id){
+                if(query!=null && query!=""){
+                    val flag = department.name.lowercase().contains(query.lowercase())
+                    if(flag){
+                        originalList.apply {
+                            set(originalList.indexOf(listDepartment), department)
+                            sortBy { it.id }
+                            notifyItemChanged(originalList.indexOf(department))
+                        }
+                        return
                     }
-                    return
+                    else{
+                        originalList.apply {
+                            notifyItemRemoved(originalList.indexOf(listDepartment))
+                            remove(listDepartment)
+                            sortBy { it.id }
+                        }
+                        return
+                    }
                 }
                 else{
-                    originalList.apply {
-                        notifyItemRemoved(originalList.indexOf(listDepartment))
-                        remove(listDepartment)
-                        sortBy { it.id }
-                    }
-                    return
-                }
-            }
-            else{
-                if(listDepartment.id == id){
                     originalList.apply {
                         set(originalList.indexOf(listDepartment), department)
                         sortBy { it.id }

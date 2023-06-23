@@ -70,7 +70,7 @@ class CollegeAdminListItemViewAdapter (private val collegeID: Int, private val c
             if(query.isNullOrEmpty())
                 collegeAdminDAO.getList(collegeID).sortedBy { it.user.id }
             else
-                collegeAdminDAO.getList(collegeID).filter { collegeAdmin -> collegeAdmin.user.name.contains(query, ignoreCase = true) }
+                collegeAdminDAO.getList(collegeID).filter { collegeAdmin -> collegeAdmin.user.name.contains(query, ignoreCase = true) }.sortedBy { it.user.id }
 
         filterQuery = if(query.isNullOrEmpty()){
             null
@@ -90,7 +90,7 @@ class CollegeAdminListItemViewAdapter (private val collegeID: Int, private val c
             if(query!=null && collegeAdmin.user.name.lowercase().contains(query.lowercase())){
                 originalList.apply {
                     add(collegeAdmin)
-                    sortBy {department -> department.user.id }
+                    sortBy {collegeAdmin -> collegeAdmin.user.id }
                     notifyItemInserted(indexOf(collegeAdmin))
                 }
             }
@@ -103,33 +103,33 @@ class CollegeAdminListItemViewAdapter (private val collegeID: Int, private val c
 
     fun updateItemInAdapter(id: Int){
         val query = filterQuery
-        val department = collegeAdminDAO.get(id) ?: return
-        for (listDepartment in originalList){
-            if(query!=null && query!=""){
-                val flag = department.user.name.lowercase().contains(query.lowercase())
-                if(flag){
-                    originalList.apply {
-                        set(originalList.indexOf(listDepartment), department)
-                        sortBy { it.user.id }
-                        notifyItemChanged(originalList.indexOf(department))
+        val collegeAdmin = collegeAdminDAO.get(id) ?: return
+        for (listCollegeAdmin in originalList){
+            if(listCollegeAdmin.user.id == collegeAdmin.user.id){
+                if(query!=null && query!=""){
+                    val flag = collegeAdmin.user.name.lowercase().contains(query.lowercase())
+                    if(flag){
+                        originalList.apply {
+                            set(originalList.indexOf(listCollegeAdmin), collegeAdmin)
+                            sortBy { it.user.id }
+                            notifyItemChanged(originalList.indexOf(collegeAdmin))
+                        }
+                        return
                     }
-                    return
+                    else{
+                        originalList.apply {
+                            notifyItemRemoved(originalList.indexOf(listCollegeAdmin))
+                            remove(listCollegeAdmin)
+                            sortBy { it.user.id }
+                        }
+                        return
+                    }
                 }
                 else{
                     originalList.apply {
-                        notifyItemRemoved(originalList.indexOf(listDepartment))
-                        remove(listDepartment)
+                        set(originalList.indexOf(listCollegeAdmin), collegeAdmin)
                         sortBy { it.user.id }
-                    }
-                    return
-                }
-            }
-            else{
-                if(listDepartment.user.id == id){
-                    originalList.apply {
-                        set(originalList.indexOf(listDepartment), department)
-                        sortBy { it.user.id }
-                        notifyItemChanged(originalList.indexOf(department))
+                        notifyItemChanged(originalList.indexOf(collegeAdmin))
                     }
                     return
                 }
@@ -138,8 +138,8 @@ class CollegeAdminListItemViewAdapter (private val collegeID: Int, private val c
     }
 
     fun deleteItem(id: Int){
-        val department = collegeAdminDAO.get(id)
-        val updatedPosition = originalList.indexOf(department)
+        val collegeAdmin = collegeAdminDAO.get(id)
+        val updatedPosition = originalList.indexOf(collegeAdmin)
         collegeAdminDAO.delete(id)
         originalList.removeAt(updatedPosition)
         notifyItemRemoved(updatedPosition)

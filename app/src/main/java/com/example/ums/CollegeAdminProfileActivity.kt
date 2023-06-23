@@ -15,14 +15,14 @@ class CollegeAdminProfileActivity: AppCompatActivity() {
     private var collegeAdminId: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.college_admin_details_layout)
+        setContentView(R.layout.college_admin_profile_page)
         val arguments = intent.extras
         collegeAdminId = arguments?.getInt("college_admin_profile_college_admin_id")
         collegeId = arguments?.getInt("college_admin_profile_college_id")
         val collegeId = collegeId
         val collegeAdminId = collegeAdminId
         if(collegeId != null && collegeAdminId!=null){
-            val userIdTextView = findViewById<TextView>(R.id.user_id_text_view)
+            val userIdTextView = findViewById<TextView>(R.id.course_id_text_view)
             val userEmailIdTextView = findViewById<TextView>(R.id.user_email)
             val userNameTextView = findViewById<TextView>(R.id.user_name)
             val contactNumberTextView = findViewById<TextView>(R.id.contact_number)

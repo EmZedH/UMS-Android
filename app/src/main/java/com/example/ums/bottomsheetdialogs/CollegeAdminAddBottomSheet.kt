@@ -4,7 +4,6 @@ import android.app.DatePickerDialog
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +26,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import java.util.Calendar
 
-class CollegeAdminAddBottomSheet : FullScreenBottomSheetDialogFragment() {
+class CollegeAdminAddBottomSheet : FullScreenBottomSheetDialog() {
 
     private lateinit var userName : TextInputLayout
     private lateinit var contactNumber: TextInputLayout
@@ -48,7 +47,6 @@ class CollegeAdminAddBottomSheet : FullScreenBottomSheetDialogFragment() {
     private lateinit var userAddressText: String
     private lateinit var emailAddressText: String
     private lateinit var userPasswordText: String
-//    private var isGenderErrorOn: Boolean? = null
 
     private var userNameError: String? = null
     private var contactNumberError: String? = null
@@ -73,6 +71,7 @@ class CollegeAdminAddBottomSheet : FullScreenBottomSheetDialogFragment() {
         userAddressText = savedInstanceState?.getString("college_admin_add_user_address_text") ?: ""
         emailAddressText = savedInstanceState?.getString("college_admin_add_email_address_text") ?: ""
         userPasswordText = savedInstanceState?.getString("college_admin_add_password_text") ?: ""
+
         savedYear = savedInstanceState?.getInt("college_admin_add_birth_year")
         savedMonth = savedInstanceState?.getInt("college_admin_add_birth_month")
         savedDate = savedInstanceState?.getInt("college_admin_add_birth_date")
@@ -96,19 +95,19 @@ class CollegeAdminAddBottomSheet : FullScreenBottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_add_college_admin, container, false)
+        val view = inflater.inflate(R.layout.fragment_add_user, container, false)
 
-        val addCollegeAdminButton = view.findViewById<MaterialButton>(R.id.add_user_button)
+        val addCollegeAdminButton = view.findViewById<MaterialButton>(R.id.add_button)
         val bottomSheetCloseButton = view.findViewById<ImageButton>(R.id.close_button)
 
-        userName = view.findViewById(R.id.user_name_layout)
+        userName = view.findViewById(R.id.course_name_layout)
         contactNumber = view.findViewById(R.id.user_contact_layout)
         dateOfBirth = view.findViewById(R.id.user_dob_layout)
         userAddress = view.findViewById(R.id.user_address_layout)
         emailAddress = view.findViewById(R.id.user_email_layout)
         userPassword = view.findViewById(R.id.user_password_layout)
-        genderRadio = view.findViewById(R.id.gender_radio_group)
-        genderTextView = view.findViewById(R.id.gender_text_view)
+        genderRadio = view.findViewById(R.id.elective_radio_group)
+        genderTextView = view.findViewById(R.id.elective_text_view)
 
         dateOfBirth.setStartIconOnClickListener {
             showDatePicker()
@@ -166,7 +165,6 @@ class CollegeAdminAddBottomSheet : FullScreenBottomSheetDialogFragment() {
         genderRadio.setOnCheckedChangeListener { _, _ ->
             if(genderRadio.checkedRadioButtonId!=-1){
                 isGenderErrorOn = false
-                Log.i("CollegeAdminAddBottomSheetClass","genderRadio.checkedRadioButtonId: ${genderRadio.checkedRadioButtonId}")
                 when(view.findViewById<RadioButton>(genderRadio.checkedRadioButtonId).text.toString()){
                     "Male" -> gender = Gender.MALE.type
                     "Female" -> gender = Gender.FEMALE.type
@@ -220,6 +218,11 @@ class CollegeAdminAddBottomSheet : FullScreenBottomSheetDialogFragment() {
             else if(!Utility.isEmailAddressFree(emailAddressText, requireActivity())){
                 flag = false
                 emailAddressError = "Email Address already exists"
+                emailAddress.error = emailAddressError
+            }
+            else if(!Utility.isEmailDotCom(emailAddressText)){
+                flag = false
+                emailAddressError = "Please type proper email address"
                 emailAddress.error = emailAddressError
             }
             if(userPasswordText.isEmpty()){
@@ -282,8 +285,8 @@ class CollegeAdminAddBottomSheet : FullScreenBottomSheetDialogFragment() {
     }
 
     private fun setCollegeIDTextView(view : View){
-        view.findViewById<TextView>(R.id.user_id_text_view)?.setText(R.string.user_id_string)
-        view.findViewById<TextView>(R.id.user_id_text_view)?.append(" C/$collegeID-U/${collegeAdminDAO.getNewID()}")
+        view.findViewById<TextView>(R.id.course_id_text_view)?.setText(R.string.user_id_string)
+        view.findViewById<TextView>(R.id.course_id_text_view)?.append(" C/$collegeID-U/${collegeAdminDAO.getNewID()}")
     }
 
     private fun showDatePicker() {
@@ -301,7 +304,7 @@ class CollegeAdminAddBottomSheet : FullScreenBottomSheetDialogFragment() {
                 }
             }, savedYear ?: calendarYear, savedMonth ?: calendarMonth, savedDate ?: calendarDay)
 
-//        datePickerDialog.datePicker.minDate = calendar.timeInMillis - 788400000000
+
         datePickerDialog.datePicker.maxDate = calendar.timeInMillis - 488400000000
         datePickerDialog.show()
     }

@@ -18,19 +18,16 @@ import com.example.ums.bottomsheetdialogs.CollegeAdminAddBottomSheet
 import com.example.ums.bottomsheetdialogs.CollegeAdminUpdateBottomSheet
 import com.example.ums.dialogFragments.CollegeAdminDeleteDialog
 import com.example.ums.listener.ItemListener
-import com.example.ums.model.CollegeAdmin
 import com.example.ums.model.databaseAccessObject.CollegeAdminDAO
 
 class CollegeAdminFragment: AddableSearchableFragment(), ItemListener {
 
     private lateinit var collegeAdminDAO: CollegeAdminDAO
-    private lateinit var collegeAdminListItemViewAdapter: CollegeAdminListItemViewAdapter
+    private var collegeAdminListItemViewAdapter: CollegeAdminListItemViewAdapter? = null
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
     private var collegeID: Int? = null
     private var editedCollegeAdminId: Int? = null
-
-    private var editedCollegeAdmin: CollegeAdmin? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,10 +42,10 @@ class CollegeAdminFragment: AddableSearchableFragment(), ItemListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_college_admin_page, container, false)
+        val view = inflater.inflate(R.layout.fragment_list_page, container, false)
         val recyclerView: RecyclerView = view.findViewById(R.id.college_list_view)
 
-        firstTextView = view.findViewById(R.id.no_departments_text_view)
+        firstTextView = view.findViewById(R.id.no_items_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
         onRefresh()
         recyclerView.adapter = collegeAdminListItemViewAdapter
@@ -66,12 +63,12 @@ class CollegeAdminFragment: AddableSearchableFragment(), ItemListener {
 
         setFragmentResultListener("collegeAdminDeleteDialog"){_, result->
             val id = result.getInt("id")
-            collegeAdminListItemViewAdapter.deleteItem(id)
+            collegeAdminListItemViewAdapter?.deleteItem(id)
             onRefresh()
         }
         setFragmentResultListener("collegeAdminUpdateFragmentPosition"){_, result->
             val id = result.getInt("id")
-            collegeAdminListItemViewAdapter.updateItemInAdapter(id)
+            collegeAdminListItemViewAdapter?.updateItemInAdapter(id)
         }
     }
     override fun onUpdate(id: Int) {
@@ -91,7 +88,6 @@ class CollegeAdminFragment: AddableSearchableFragment(), ItemListener {
         val intent = Intent(requireContext(), CollegeAdminProfileActivity::class.java)
         if(bundle!=null){
             editedCollegeAdminId = bundle.getInt("college_admin_profile_college_admin_id")
-            editedCollegeAdmin = collegeAdminDAO.get(bundle.getInt("college_admin_profile_college_admin_id"))
             intent.putExtras(bundle)
             startActivity(intent)
         }
@@ -106,11 +102,11 @@ class CollegeAdminFragment: AddableSearchableFragment(), ItemListener {
     }
 
     override fun onSearch(query: String?) {
-        collegeAdminListItemViewAdapter.filter(query)
+        collegeAdminListItemViewAdapter?.filter(query)
     }
 
     private fun addAt(id: Int){
-        collegeAdminListItemViewAdapter.addItem(id)
+        collegeAdminListItemViewAdapter?.addItem(id)
         onRefresh()
     }
 
@@ -120,6 +116,7 @@ class CollegeAdminFragment: AddableSearchableFragment(), ItemListener {
             secondTextView.visibility = View.INVISIBLE
         }
         else{
+            firstTextView.text = getString(R.string.no_college_admin_string)
             firstTextView.visibility = View.VISIBLE
             secondTextView.visibility = View.VISIBLE
         }
@@ -127,10 +124,9 @@ class CollegeAdminFragment: AddableSearchableFragment(), ItemListener {
 
     override fun onResume() {
         super.onResume()
-        if(editedCollegeAdminId!=null && editedCollegeAdmin!=null){
-            if(editedCollegeAdmin!! != collegeAdminDAO.get(editedCollegeAdminId!!)){
-                collegeAdminListItemViewAdapter.updateItemInAdapter(editedCollegeAdminId!!)
-            }
+        if(editedCollegeAdminId!=null){
+            collegeAdminListItemViewAdapter?.updateItemInAdapter(editedCollegeAdminId!!)
+            editedCollegeAdminId=null
         }
     }
 }

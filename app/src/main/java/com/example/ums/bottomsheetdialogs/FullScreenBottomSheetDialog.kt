@@ -3,11 +3,10 @@ package com.example.ums.bottomsheetdialogs
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-open class FullScreenBottomSheetDialogFragment: BottomSheetDialogFragment() {
+open class FullScreenBottomSheetDialog: BottomSheetDialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): BottomSheetDialog {
         return object : BottomSheetDialog(requireContext(), theme) {
@@ -18,10 +17,10 @@ open class FullScreenBottomSheetDialogFragment: BottomSheetDialogFragment() {
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
+//    }
 
 
     private fun setFullScreen() {

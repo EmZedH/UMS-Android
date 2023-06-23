@@ -1,8 +1,11 @@
 package com.example.ums
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.SearchView
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ums.adapters.CollegeTabPageAdapter
 import com.example.ums.fragments.CollegeAdminFragment
@@ -19,6 +22,9 @@ class CollegeActivity: AppCompatActivity() {
     private var searchQuery: String? = null
     private var isSearchViewOpen: Boolean = true
     private var isConfigurationChanged: Boolean? = null
+    private var toolBar: MaterialToolbar? = null
+    private var collegeID: Int? = null
+    private var button: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,16 +34,18 @@ class CollegeActivity: AppCompatActivity() {
             isConfigurationChanged = savedInstanceState.getBoolean("college_page_is_configuration_changed")
             searchQuery = savedInstanceState.getString("college_page_activity_search_query")
             isSearchViewOpen = savedInstanceState.getBoolean("college_page_activity_is_search_query_open")
+            collegeID = savedInstanceState.getInt("college_page_activity_college_id")
         }
         val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.edit_floating_action_button)
         val collegeDAO = CollegeDAO(DatabaseHelper(this))
         val bundle = intent.extras
-        val collegeID = bundle?.getInt("collegeID")
+        collegeID = bundle?.getInt("collegeID")
+        val collegeID = collegeID
         if(collegeID!=null){
             val college = collegeDAO.get(collegeID)
-             val toolBar = findViewById<MaterialToolbar>(R.id.top_app_bar)
-            toolBar.title = college?.name
-            toolBar.setNavigationOnClickListener {
+            toolBar = findViewById(R.id.top_app_bar)
+            toolBar?.title = college?.name
+            toolBar?.setNavigationOnClickListener {
                 if(searchView!=null){
                     if(!searchView!!.isIconified){
                         searchView?.isIconified = true
@@ -61,15 +69,35 @@ class CollegeActivity: AppCompatActivity() {
                 viewPager.adapter
             }.attach()
             searchView = findViewById(R.id.search)
+            val infoButton = findViewById<ActionMenuItemView>(R.id.info)
+
+            infoButton.setOnClickListener {
+                val intent = Intent(this, CollegeDetailsActivity::class.java)
+                val collegeDetailsBundle = Bundle().apply {
+                    putInt("college_details_college_id", collegeID)
+                }
+                intent.putExtras(collegeDetailsBundle)
+                startActivity(intent)
+            }
 
             viewPager.currentItem
             viewPager.registerOnPageChangeCallback(onPageChangeCallback(addFloatingActionButton, viewPager, tabAdapter))
 
+            onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true){
+                override fun handleOnBackPressed() {
+                    onBack()
+                }
+            })
         }
     }
 
     private fun onPageChangeCallback(addFloatingActionButton: FloatingActionButton, viewPager: ViewPager2, adapter: CollegeTabPageAdapter): ViewPager2.OnPageChangeCallback{
         return object : ViewPager2.OnPageChangeCallback(){
+
+            override fun onPageScrollStateChanged(state: Int) {
+                super.onPageScrollStateChanged(state)
+                button = button xor false
+            }
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 try {
@@ -116,7 +144,7 @@ class CollegeActivity: AppCompatActivity() {
         }
     }
 
-    override fun onBackPressed() {
+    private fun onBack(){
         if(searchView!=null){
             if(!searchView!!.isIconified){
                 searchView?.isIconified = true
@@ -132,6 +160,17 @@ class CollegeActivity: AppCompatActivity() {
         outState.putString("college_page_activity_search_query",searchQuery)
         if(searchView!=null){
             outState.putBoolean("college_page_activity_is_search_query_open",searchView!!.isIconified)
+        }
+        if(collegeID!=null){
+            outState.putInt("college_page_activity_college_id", collegeID!!)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        if(collegeID!=null){
+            toolBar?.title = CollegeDAO(DatabaseHelper(this)).get(collegeID!!)?.name
         }
     }
 }

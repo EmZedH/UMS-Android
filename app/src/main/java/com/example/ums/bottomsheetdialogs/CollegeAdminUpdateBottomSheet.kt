@@ -18,7 +18,7 @@ import com.example.ums.model.databaseAccessObject.CollegeAdminDAO
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class CollegeAdminUpdateBottomSheet: FullScreenBottomSheetDialogFragment() {
+class CollegeAdminUpdateBottomSheet: FullScreenBottomSheetDialog() {
 
 
     private lateinit var userName : TextInputLayout
@@ -56,9 +56,9 @@ class CollegeAdminUpdateBottomSheet: FullScreenBottomSheetDialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_update_college_admin, container, false)
+        val view = inflater.inflate(R.layout.fragment_update_user, container, false)
 
-        updateButton = view.findViewById(R.id.add_user_button)
+        updateButton = view.findViewById(R.id.add_button)
         val bottomSheetCloseButton = view.findViewById<ImageButton>(R.id.close_button)
 
         if(collegeAdminId!=null){
@@ -68,7 +68,7 @@ class CollegeAdminUpdateBottomSheet: FullScreenBottomSheetDialogFragment() {
             contactNumberText = savedInstanceState?.getString("college_admin_update_contact_number_text") ?: collegeAdmin.user.contactNumber
         }
 
-        userName = view.findViewById(R.id.user_name_layout)
+        userName = view.findViewById(R.id.course_name_layout)
         contactNumber = view.findViewById(R.id.user_contact_layout)
         userAddress = view.findViewById(R.id.user_address_layout)
 
@@ -164,8 +164,8 @@ class CollegeAdminUpdateBottomSheet: FullScreenBottomSheetDialogFragment() {
     }
 
     private fun setCollegeIDTextView(view : View){
-        view.findViewById<TextView>(R.id.user_id_text_view)?.setText(R.string.user_id_string)
-        view.findViewById<TextView>(R.id.user_id_text_view)?.append(" C/${collegeAdmin.collegeID}-U/${collegeAdmin.user.id}")
+        view.findViewById<TextView>(R.id.course_id_text_view)?.setText(R.string.user_id_string)
+        view.findViewById<TextView>(R.id.course_id_text_view)?.append(" C/${collegeAdmin.collegeID}-U/${collegeAdmin.user.id}")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -67,19 +67,10 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
             "\tPRIMARY KEY(\"TRANSACT_ID\",\"STUDENT_ID\",\"COURSE_ID\",\"DEPT_ID\",\"COLLEGE_ID\")\n" +
             ")"
 
-    private val createTableSection = "CREATE TABLE IF NOT EXISTS \"SECTION\" (\n" +
-            "\t\"SEC_ID\"\tINTEGER,\n" +
-            "\t\"SEC_NAME\"\tTEXT,\n" +
-            "\t\"DEPT_ID\"\tTEXT,\n" +
-            "\t\"COLLEGE_ID\"\tTEXT,\n" +
-            "\tPRIMARY KEY(\"SEC_ID\",\"DEPT_ID\",\"COLLEGE_ID\")\n" +
-            ")"
-
     private val createTableStudent = "CREATE TABLE IF NOT EXISTS \"STUDENT\" (\n" +
             "\t\"STUDENT_ID\"\tINTEGER,\n" +
             "\t\"S_SEM\"\tINTEGER,\n" +
             "\t\"S_DEGREE\"\tTEXT,\n" +
-            "\t\"SEC_ID\"\tINTEGER,\n" +
             "\t\"DEPT_ID\"\tINTEGER,\n" +
             "\t\"COLLEGE_ID\"\tINTEGER,\n" +
             "\tPRIMARY KEY(\"STUDENT_ID\")\n" +
@@ -133,7 +124,6 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
         database.execSQL(createTableDepartment)
         database.execSQL(createTableProfessor)
         database.execSQL(createTableRecords)
-        database.execSQL(createTableSection)
         database.execSQL(createTableStudent)
         database.execSQL(createTableSuperAdmin)
         database.execSQL(createTableTests)

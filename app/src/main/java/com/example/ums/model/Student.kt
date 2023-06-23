@@ -4,5 +4,6 @@ data class Student (
     var user : User,
     var semester : Int,
     var degree : String,
-    var section : Section
+    var departmentID: Int,
+    var collegeID: Int
     )

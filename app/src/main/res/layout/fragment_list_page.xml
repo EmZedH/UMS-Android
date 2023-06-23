@@ -8,10 +8,9 @@
     >
 
     <TextView
-        android:id="@+id/no_departments_text_view"
+        android:id="@+id/no_items_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_departments_string"
         android:textSize="30sp"
 
         app:layout_constraintBottom_toBottomOf="parent"
@@ -30,7 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="15dp"
-        app:layout_constraintTop_toBottomOf="@id/no_departments_text_view"
+        app:layout_constraintTop_toBottomOf="@id/no_items_text_view"
 
         />
     <androidx.recyclerview.widget.RecyclerView

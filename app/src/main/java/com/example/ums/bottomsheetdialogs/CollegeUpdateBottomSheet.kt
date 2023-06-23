@@ -19,7 +19,7 @@ import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class CollegeUpdateBottomSheet : FullScreenBottomSheetDialogFragment() {
+class CollegeUpdateBottomSheet : FullScreenBottomSheetDialog() {
     private var collegeID: Int? = null
     private lateinit var college: College
     private lateinit var collegeNameTextLayout: TextInputLayout
@@ -49,7 +49,7 @@ class CollegeUpdateBottomSheet : FullScreenBottomSheetDialogFragment() {
         if(collegeID!=null){
             college = collegeDAO.get(collegeID)!!
             val closeButton = view.findViewById<ImageButton>(R.id.close_button)
-            val collegeIDTextView = view.findViewById<TextView>(R.id.user_id_text_view)
+            val collegeIDTextView = view.findViewById<TextView>(R.id.course_id_text_view)
             collegeNameTextLayout = view.findViewById(R.id.user_password_layout)
             collegeTelephoneTextLayout = view.findViewById(R.id.college_telephone_layout)
             collegeAddressTextLayout = view.findViewById(R.id.college_address_layout)

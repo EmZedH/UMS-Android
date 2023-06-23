@@ -36,9 +36,9 @@ class ManageProfileActivity : AppCompatActivity() {
         val userID = bundle!!.getInt("userID")
         val user = userDAO.get(userID)!!
 
-        val userIDTextView = findViewById<TextView>(R.id.user_id_text_view)
+        val userIDTextView = findViewById<TextView>(R.id.course_id_text_view)
         val userEmailIDTextView = findViewById<TextView>(R.id.user_email)
-        val userNameTextLayout = findViewById<TextInputLayout>(R.id.user_password_layout)
+        val userNameTextLayout = findViewById<TextInputLayout>(R.id.course_name_layout)
         val userContactTextLayout = findViewById<TextInputLayout>(R.id.college_address_layout)
         val userAddressTextLayout = findViewById<TextInputLayout>(R.id.college_telephone_layout)
         val passwordChangeButton = findViewById<MaterialButton>(R.id.change_password)

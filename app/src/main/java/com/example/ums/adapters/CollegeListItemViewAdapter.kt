@@ -70,7 +70,7 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
             if(query.isNullOrEmpty())
                 collegeDAO.getList().sortedBy {college -> college.id }
             else
-                collegeDAO.getList().filter { college -> college.name.contains(query, true) }
+                collegeDAO.getList().filter { college -> college.name.contains(query, true) }.sortedBy {college -> college.id }
 
         filterQuery = if(query.isNullOrEmpty()){
             null
@@ -86,27 +86,27 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
         val query = filterQuery
         val college = collegeDAO.get(id) ?: return
         for (listCollege in originalList){
-            if(query!=null && query!=""){
-                val flag = college.name.lowercase().contains(query.lowercase())
-                if(flag){
-                    originalList.apply {
-                        set(originalList.indexOf(listCollege), college)
-                        sortBy { it.id }
-                        notifyItemChanged(originalList.indexOf(college))
+            if(listCollege.id == college.id){
+                if(query!=null && query!=""){
+                    val flag = college.name.lowercase().contains(query.lowercase())
+                    if(flag){
+                        originalList.apply {
+                            set(originalList.indexOf(listCollege), college)
+                            sortBy { it.id }
+                            notifyItemChanged(originalList.indexOf(college))
+                        }
+                        return
                     }
-                    return
+                    else{
+                        originalList.apply {
+                            notifyItemRemoved(originalList.indexOf(listCollege))
+                            remove(listCollege)
+                            sortBy { it.id }
+                        }
+                        return
+                    }
                 }
                 else{
-                    originalList.apply {
-                        notifyItemRemoved(originalList.indexOf(listCollege))
-                        remove(listCollege)
-                        sortBy { it.id }
-                    }
-                    return
-                }
-            }
-            else{
-                if(listCollege.id == id){
                     originalList.apply {
                         set(originalList.indexOf(listCollege), college)
                         sortBy { it.id }

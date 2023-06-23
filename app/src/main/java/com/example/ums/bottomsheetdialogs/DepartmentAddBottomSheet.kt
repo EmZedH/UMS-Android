@@ -17,7 +17,7 @@ import com.example.ums.model.databaseAccessObject.DepartmentDAO
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class DepartmentAddBottomSheet: FullScreenBottomSheetDialogFragment() {
+class DepartmentAddBottomSheet: FullScreenBottomSheetDialog() {
 
 
     private lateinit var departmentName : TextInputLayout
@@ -123,8 +123,8 @@ class DepartmentAddBottomSheet: FullScreenBottomSheetDialogFragment() {
     }
 
     private fun setCollegeIDTextView(view : View){
-        view.findViewById<TextView>(R.id.user_id_text_view)!!.setText(R.string.id_string)
-        view.findViewById<TextView>(R.id.user_id_text_view)!!.append(" C/$collegeID-D/${departmentDAO.getNewID(collegeID!!)}")
+        view.findViewById<TextView>(R.id.course_id_text_view)!!.setText(R.string.id_string)
+        view.findViewById<TextView>(R.id.course_id_text_view)!!.append(" C/$collegeID-D/${departmentDAO.getNewID(collegeID!!)}")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -28,6 +28,9 @@
         <activity android:name=".ManageProfileActivity" android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".CollegeActivity"/>
         <activity android:name=".CollegeAdminProfileActivity"/>
+        <activity android:name=".CollegeDetailsActivity"/>
+        <activity android:name=".DepartmentActivity"/>
+        <activity android:name=".DepartmentDetailsActivity"/>
     </application>
 
 </manifest>

@@ -79,4 +79,19 @@
     <string name="college_details_string">College Details</string>
     <string name="college_id_string">College ID</string>
     <string name="college_admin_profile_string">College Admin Profile</string>
+    <string name="information_string">Information</string>
+    <string name="no_courses_string">No Courses</string>
+    <string name="co_id_string">CO ID:</string>
+    <string name="course_name_string">Course Name</string>
+    <string name="select_the_elective_string">Select the Elective</string>
+    <string name="open_string">Open</string>
+    <string name="professional_string">Professional</string>
+    <string name="select_the_degree_string">Select the Degree</string>
+    <string name="m_tech_string">M. Tech</string>
+    <string name="b_tech_string">B. Tech</string>
+    <string name="semester_string">Semester</string>
+    <string name="add_course_string">Add Course</string>
+    <string name="department_details_string">Department Details</string>
+    <string name="no_professor_string">No Professor</string>
+    <string name="no_students_string">No Students</string>
 </resources>

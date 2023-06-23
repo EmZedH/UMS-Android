@@ -18,7 +18,7 @@ import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class CollegeAddBottomSheet : FullScreenBottomSheetDialogFragment() {
+class CollegeAddBottomSheet : FullScreenBottomSheetDialog() {
 
     private lateinit var collegeName : TextInputLayout
     private lateinit var collegeAddress : TextInputLayout
@@ -37,7 +37,6 @@ class CollegeAddBottomSheet : FullScreenBottomSheetDialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         collegeNameText = savedInstanceState?.getString("college_add_name_text") ?: ""
         collegeAddressText = savedInstanceState?.getString("college_add_address_text") ?: ""
         collegeTelephoneText = savedInstanceState?.getString("college_add_telephone_text") ?: ""
@@ -155,8 +154,8 @@ class CollegeAddBottomSheet : FullScreenBottomSheetDialogFragment() {
 
     private fun setCollegeIDTextView(view : View){
 
-        view.findViewById<TextView>(R.id.user_id_text_view)!!.setText(R.string.college_id)
-        view.findViewById<TextView>(R.id.user_id_text_view)!!.append(collegeDAO.getNewID().toString())
+        view.findViewById<TextView>(R.id.course_id_text_view)!!.setText(R.string.college_id)
+        view.findViewById<TextView>(R.id.course_id_text_view)!!.append(collegeDAO.getNewID().toString())
 
     }
 

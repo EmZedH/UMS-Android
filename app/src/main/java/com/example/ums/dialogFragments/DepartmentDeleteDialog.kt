@@ -28,7 +28,7 @@ class DepartmentDeleteDialog: DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialogBuilder = AlertDialog.Builder(requireContext())
-        dialogBuilder.setTitle("Confirmation").setMessage("Are you sure you want to delete this department?")
+        dialogBuilder.setTitle("Confirmation").setMessage("Are you sure you want to delete this Department?")
         dialogBuilder.setPositiveButton("Delete") { dialog, _ ->
             setFragmentResult("departmentDeleteDialog", bundleOf("departmentID" to departmentID))
             dialog.dismiss()

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.widget.SearchView
 import android.widget.TextView
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
@@ -43,10 +44,26 @@ class MainPageActivity: AppCompatActivity(){
         val userDAO = UserDAO(DatabaseHelper(this))
         val bundle = intent.extras
         val userID = bundle!!.getInt("userID")
+
         val floatingActionButton = findViewById<FloatingActionButton>(R.id.edit_floating_action_button)
         floatingActionButton.setOnClickListener {
             userFragment?.onAdd()
         }
+
+        setView(userID, userDAO, bundle)
+
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                onBack()
+            }
+        })
+
+        if(userRole == UserRole.SUPER_ADMIN.role){
+            superAdminProcesses()
+        }
+    }
+
+    private fun setView(userID: Int, userDAO: UserDAO, bundle: Bundle){
         toolBar = findViewById(R.id.top_app_bar)
         setSupportActionBar(toolBar)
         user = userDAO.get(userID)!!
@@ -76,10 +93,6 @@ class MainPageActivity: AppCompatActivity(){
 
             drawerLayout.closeDrawer(GravityCompat.START)
             true
-        }
-
-        if(userRole == UserRole.SUPER_ADMIN.role){
-            superAdminProcesses()
         }
     }
 
@@ -118,7 +131,7 @@ class MainPageActivity: AppCompatActivity(){
         return true
     }
 
-    override fun onBackPressed() {
+    private fun onBack(){
         if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START)
             return
