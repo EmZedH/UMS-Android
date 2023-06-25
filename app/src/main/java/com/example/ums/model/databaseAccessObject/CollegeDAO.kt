@@ -3,7 +3,6 @@ package com.example.ums.model.databaseAccessObject
 import android.content.ContentValues
 import com.example.ums.DatabaseHelper
 import com.example.ums.model.College
-import java.lang.Exception
 
 class CollegeDAO(private val databaseHelper: DatabaseHelper) {
 
@@ -22,7 +21,8 @@ class CollegeDAO(private val databaseHelper: DatabaseHelper) {
     private val recordTable = "RECORDS"
     private val studentTable = "STUDENT"
     private val testTable = "TEST"
-    fun get(collegeID : Int) : College?{
+    fun get(collegeID : Int?) : College?{
+        val collegeID = collegeID ?: return null
         var college : College? = null
         val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName WHERE $primaryKey = $collegeID", null)
         if(cursor.moveToFirst()){

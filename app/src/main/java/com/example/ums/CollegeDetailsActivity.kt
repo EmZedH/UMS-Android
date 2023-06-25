@@ -23,7 +23,7 @@ class CollegeDetailsActivity: AppCompatActivity() {
             val contactNumberTextView = findViewById<TextView>(R.id.contact_number)
             val userAddressTextView = findViewById<TextView>(R.id.address)
 
-            val floatingActionButton = findViewById<FloatingActionButton>(R.id.edit_floating_action_button)
+            val floatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
             val toolBar = findViewById<MaterialToolbar>(R.id.top_app_bar)
             val databaseHelper = DatabaseHelper(this)
             val collegeDAO = CollegeDAO(databaseHelper)

@@ -38,7 +38,7 @@ class DepartmentActivity: AppCompatActivity() {
             isSearchViewOpen = savedInstanceState.getBoolean("department_page_activity_is_search_query_open")
             departmentID = savedInstanceState.getInt("department_page_activity_college_id")
         }
-        val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.edit_floating_action_button)
+        val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
         val departmentDAO = DepartmentDAO(DatabaseHelper(this))
         val bundle = intent.extras
         departmentID = bundle?.getInt("departmentID")

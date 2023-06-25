@@ -3,27 +3,34 @@ package com.example.ums
 import android.os.Bundle
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.example.ums.bottomsheetdialogs.DepartmentUpdateBottomSheet
+import com.example.ums.bottomsheetdialogs.CourseUpdateBottomSheet
 import com.example.ums.model.databaseAccessObject.CollegeDAO
+import com.example.ums.model.databaseAccessObject.CourseDAO
 import com.example.ums.model.databaseAccessObject.DepartmentDAO
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class DepartmentDetailsActivity: AppCompatActivity() {
+class CourseDetailsActivity: AppCompatActivity() {
 
+    private var courseId: Int? = null
     private var collegeId: Int? = null
     private var departmentId: Int? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.department_profile_page)
-        collegeId = intent.extras?.getInt("department_details_college_id")
-        departmentId = intent.extras?.getInt("department_details_department_id")
+        setContentView(R.layout.course_profile_page)
+        val extras = intent.extras
+        courseId = extras?.getInt("course_details_course_id")
+        collegeId = extras?.getInt("course_details_college_id")
+        departmentId = extras?.getInt("course_details_department_id")
         val departmentId = departmentId
         val collegeId = collegeId
-        if(collegeId != null && departmentId!=null){
-            val departmentIDTextView = findViewById<TextView>(R.id.department_id_text_view)
-            val departmentNameTextView = findViewById<TextView>(R.id.name)
+        val courseID = courseId
+        if(courseID!=null && collegeId != null && departmentId!=null){
+            val courseIDTextView = findViewById<TextView>(R.id.id_text_view)
+            val courseNameTextView = findViewById<TextView>(R.id.name)
+            val departmentIDTextView = findViewById<TextView>(R.id.department_id)
+            val departmentNameTextView = findViewById<TextView>(R.id.department_name)
             val collegeIDTextView = findViewById<TextView>(R.id.college_id)
             val collegeNameTextView = findViewById<TextView>(R.id.college_name)
 
@@ -32,33 +39,38 @@ class DepartmentDetailsActivity: AppCompatActivity() {
             val databaseHelper = DatabaseHelper(this)
             val departmentDAO = DepartmentDAO(databaseHelper)
             val collegeDAO = CollegeDAO(databaseHelper)
+            val courseDAO = CourseDAO(databaseHelper)
 
             val college = collegeDAO.get(collegeId)
             val department = departmentDAO.get(departmentId, collegeId)
+            val course = courseDAO.get(courseID, departmentId, collegeId)
 
             toolBar.setNavigationOnClickListener {
                 finish()
             }
 
-            departmentIDTextView.text = getString(R.string.id_string)
-            departmentIDTextView.append(" C/$collegeId-D/$departmentId")
+            courseIDTextView.text = getString(R.string.id_string)
+            courseIDTextView.append(" C/$collegeId-D/$departmentId-CO/$courseID")
 
+            courseNameTextView.text = course?.name
+            departmentIDTextView.text = departmentId.toString()
             departmentNameTextView.text = department?.name
             collegeIDTextView.text = collegeId.toString()
             collegeNameTextView.text = college?.name
 
             floatingActionButton.setOnClickListener{
-                val departmentUpdateBottomSheet = DepartmentUpdateBottomSheet()
+                val departmentUpdateBottomSheet = CourseUpdateBottomSheet()
                 departmentUpdateBottomSheet.arguments = Bundle().apply {
-                    putInt("department_update_college_id", collegeId)
-                    putInt("department_update_department_id", departmentId)
+                    putInt("course_update_course_id", courseID)
+                    putInt("course_update_college_id", collegeId)
+                    putInt("course_update_department_id", departmentId)
                 }
                 departmentUpdateBottomSheet.show(supportFragmentManager, "DepartmentUpdateDialog")
             }
 
-            supportFragmentManager.setFragmentResultListener("DepartmentUpdateBottomSheet", this){_, _->
-                val newDepartment = departmentDAO.get(departmentId, collegeId)
-                departmentNameTextView.text = newDepartment?.name
+            supportFragmentManager.setFragmentResultListener("CourseUpdateBottomSheet", this){_, _->
+                val newCourse = courseDAO.get(courseID, departmentId, collegeId)
+                courseNameTextView.text = newCourse?.name
             }
         }
     }

@@ -21,7 +21,7 @@ import com.example.ums.dialogFragments.CollegeDeleteDialog
 import com.example.ums.listener.ItemListener
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 
-class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
+class SuperAdminMainPageFragment : AddableSearchableFragment(), ItemListener {
 
     private lateinit var addCollegeBottomSheet : CollegeAddBottomSheet
     private var collegeListItemViewAdapter : CollegeListItemViewAdapter? = null
@@ -44,7 +44,7 @@ class SuperAdminMainPage : AddableSearchableFragment(), ItemListener {
     ): View? {
 
         val view = inflater.inflate(R.layout.fragment_list_page, container, false)
-        val recyclerView: RecyclerView = view.findViewById(R.id.college_list_view)
+        val recyclerView: RecyclerView = view.findViewById(R.id.list_view)
 
         firstTextView = view.findViewById(R.id.no_items_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)

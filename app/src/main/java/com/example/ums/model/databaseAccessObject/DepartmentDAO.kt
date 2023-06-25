@@ -18,7 +18,9 @@ class DepartmentDAO(private val databaseHelper: DatabaseHelper) {
     private val studentTable = "STUDENT"
     private val testTable = "TEST"
 
-    fun get(departmentID : Int, collegeID: Int) : Department?{
+    fun get(departmentID : Int?, collegeID: Int?) : Department?{
+        val departmentID = departmentID ?: return null
+        val collegeID = collegeID ?: return null
         var department : Department? = null
         val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName WHERE $primaryKey = $departmentID AND ${this.collegeIDKey} = $collegeID", null)
         if(cursor.moveToFirst()){

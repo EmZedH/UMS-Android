@@ -9,7 +9,7 @@ import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class CollegeAdminProfileActivity: AppCompatActivity() {
+class CollegeAdminDetailsActivity: AppCompatActivity() {
 
     private var collegeId: Int? = null
     private var collegeAdminId: Int? = null
@@ -33,7 +33,7 @@ class CollegeAdminProfileActivity: AppCompatActivity() {
             val collegeIdTextView = findViewById<TextView>(R.id.college_id)
             val collegeNameTextView = findViewById<TextView>(R.id.college_name)
 
-            val floatingActionButton = findViewById<FloatingActionButton>(R.id.edit_floating_action_button)
+            val floatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
             val toolBar = findViewById<MaterialToolbar>(R.id.top_app_bar)
             val databaseHelper = DatabaseHelper(this)
             val collegeAdminDAO = CollegeAdminDAO(databaseHelper)

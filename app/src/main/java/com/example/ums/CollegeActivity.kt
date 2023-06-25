@@ -36,7 +36,7 @@ class CollegeActivity: AppCompatActivity() {
             isSearchViewOpen = savedInstanceState.getBoolean("college_page_activity_is_search_query_open")
             collegeID = savedInstanceState.getInt("college_page_activity_college_id")
         }
-        val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.edit_floating_action_button)
+        val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
         val collegeDAO = CollegeDAO(DatabaseHelper(this))
         val bundle = intent.extras
         collegeID = bundle?.getInt("collegeID")
@@ -80,7 +80,6 @@ class CollegeActivity: AppCompatActivity() {
                 startActivity(intent)
             }
 
-            viewPager.currentItem
             viewPager.registerOnPageChangeCallback(onPageChangeCallback(addFloatingActionButton, viewPager, tabAdapter))
 
             onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true){

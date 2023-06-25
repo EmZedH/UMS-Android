@@ -10,7 +10,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.AddableSearchableFragment
-import com.example.ums.CollegeAdminProfileActivity
+import com.example.ums.CollegeAdminDetailsActivity
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.adapters.CollegeAdminListItemViewAdapter
@@ -43,7 +43,7 @@ class CollegeAdminFragment: AddableSearchableFragment(), ItemListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_list_page, container, false)
-        val recyclerView: RecyclerView = view.findViewById(R.id.college_list_view)
+        val recyclerView: RecyclerView = view.findViewById(R.id.list_view)
 
         firstTextView = view.findViewById(R.id.no_items_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
@@ -85,7 +85,7 @@ class CollegeAdminFragment: AddableSearchableFragment(), ItemListener {
     }
 
     override fun onClick(bundle: Bundle?) {
-        val intent = Intent(requireContext(), CollegeAdminProfileActivity::class.java)
+        val intent = Intent(requireContext(), CollegeAdminDetailsActivity::class.java)
         if(bundle!=null){
             editedCollegeAdminId = bundle.getInt("college_admin_profile_college_admin_id")
             intent.putExtras(bundle)

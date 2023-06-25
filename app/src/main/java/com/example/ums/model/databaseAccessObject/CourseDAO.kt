@@ -1,7 +1,6 @@
 package com.example.ums.model.databaseAccessObject
 
 import android.content.ContentValues
-import android.util.Log
 import com.example.ums.DatabaseHelper
 import com.example.ums.model.Course
 
@@ -18,16 +17,16 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
     private val testTable = "TEST"
     private val recordTable = "RECORDS"
     private val courseProfessorTable = "COURSE_PROFESSOR_TABLE"
+    private val professorKey = "PROF_ID"
 
     fun get(courseID: Int?, departmentID : Int?, collegeID: Int?): Course?{
         val courseID = courseID ?: return null
         val departmentID = departmentID ?: return null
         val collegeID = collegeID ?: return null
-        Log.i("CourseDAOClass","courseID: $courseID departmentID: $departmentID collegeID: $collegeID")
         val cursor = databaseHelper.readableDatabase
             .query(
                 tableName,
-                arrayOf(courseKey, courseNameColumn, courseSemColumn, departmentKey, collegeKey, degreeColumn, electiveColumn),
+                arrayOf("*"),
                 "$courseKey = ? AND $departmentKey = ? AND $collegeKey = ?",
                 arrayOf(courseID.toString(), departmentID.toString(), collegeID.toString()),
                 null,
@@ -51,8 +50,6 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
     }
 
     fun getList(departmentID : Int, collegeID: Int) : List<Course>{
-        val departmentID = departmentID
-        val collegeID = collegeID
         val courses = mutableListOf<Course>()
         val cursor = databaseHelper.readableDatabase
             .query(
@@ -81,6 +78,31 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
             }
             cursor.close()
         }
+        return courses
+    }
+
+    fun getNewCourses(professorID: Int): List<Course>{
+        val courses = mutableListOf<Course>()
+        val cursor = databaseHelper.readableDatabase
+            .rawQuery("SELECT * FROM $tableName WHERE ($courseKey, $departmentKey, $collegeKey) NOT IN (SELECT $courseKey, $departmentKey, $collegeKey FROM $courseProfessorTable WHERE $professorKey = $professorID)", null)
+
+        if(cursor!=null && cursor.moveToFirst()){
+            while (!cursor.isAfterLast){
+                courses.add(
+                    Course(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getInt(2),
+                        cursor.getInt(3),
+                        cursor.getInt(4),
+                        cursor.getString(5),
+                        cursor.getString(6)
+                    )
+                )
+                cursor.moveToNext()
+            }
+        }
+        cursor.close()
         return courses
     }
 
@@ -145,4 +167,5 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
         db.update(tableName, contentValues, "$courseKey = ? AND $departmentKey = ? AND $collegeKey = ?", arrayOf(course.id.toString(), course.departmentID.toString(), course.collegeID.toString()))
         db.close()
     }
+
 }

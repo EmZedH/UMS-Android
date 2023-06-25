@@ -15,7 +15,7 @@ class ProfessorDAO (private val databaseHelper: DatabaseHelper) {
     private val collegeKey = "COLLEGE_ID"
 
     private val courseProfessorTable = "COURSE_PROFESSOR_TABLE"
-
+    private val courseKey  = "COURSE_ID"
     private val userNameColumn = "U_NAME"
     private val userContactColumn = "U_CONTACT"
     private val userAddressColumn = "U_ADDRESS"
@@ -25,7 +25,8 @@ class ProfessorDAO (private val databaseHelper: DatabaseHelper) {
     private val userRoleColumn = "U_ROLE"
     private val userEmailColumn = "U_EMAIL_ID"
 
-    fun get(id : Int) : Professor?{
+    fun get(id : Int?) : Professor?{
+        val id = id ?: return null
         var professor : Professor? = null
         val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName INNER JOIN $userTable ON ($userTable.$userPrimaryKey = $tableName.$primaryKey) WHERE $primaryKey = $id", null)
         if(cursor.moveToFirst()){
@@ -106,6 +107,45 @@ class ProfessorDAO (private val databaseHelper: DatabaseHelper) {
             db.endTransaction()
         }
         db.close()
+    }
+
+    fun getNewProfessors(courseID: Int, departmentID: Int, collegeID: Int): List<Professor>{
+        val professors = mutableListOf<Professor>()
+        val cursor = databaseHelper.readableDatabase
+            .rawQuery("SELECT * FROM $tableName INNER JOIN $userTable ON " +
+                    "($userTable.$userPrimaryKey = $tableName.$primaryKey) WHERE " +
+                    "$primaryKey NOT IN " +
+                    "(SELECT $primaryKey FROM $courseProfessorTable WHERE " +
+                    "$courseKey = $courseID AND " +
+                    "$departmentKey = $departmentID AND " +
+                    "$collegeKey = $collegeID) " +
+                    "AND $tableName.$departmentKey = $departmentID AND $tableName.$collegeKey = $collegeID",
+                null)
+
+        if(cursor!=null && cursor.moveToFirst()){
+            while (!cursor.isAfterLast){
+                professors.add(
+                    Professor(
+                        User(
+                            cursor.getInt(3),
+                            cursor.getString(4),
+                            cursor.getString(5),
+                            cursor.getString(6),
+                            cursor.getString(7),
+                            cursor.getString(8),
+                            cursor.getString(9),
+                            cursor.getString(10),
+                            cursor.getString(11)
+                        ),
+                        cursor.getInt(1),
+                        cursor.getInt(2)
+                    )
+                )
+            cursor.moveToNext()
+            }
+        }
+        cursor.close()
+        return professors
     }
 
     fun delete(userID: Int){

@@ -11,7 +11,7 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.ums.dialogFragments.ExitDialog
 import com.example.ums.dialogFragments.LogOutDialog
-import com.example.ums.fragments.SuperAdminMainPage
+import com.example.ums.fragments.SuperAdminMainPageFragment
 import com.example.ums.model.User
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.example.ums.model.databaseAccessObject.UserDAO
@@ -45,7 +45,7 @@ class MainPageActivity: AppCompatActivity(){
         val bundle = intent.extras
         val userID = bundle!!.getInt("userID")
 
-        val floatingActionButton = findViewById<FloatingActionButton>(R.id.edit_floating_action_button)
+        val floatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
         floatingActionButton.setOnClickListener {
             userFragment?.onAdd()
         }
@@ -100,7 +100,7 @@ class MainPageActivity: AppCompatActivity(){
         navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_welcome_text_view).append(" ${user.name}")
         navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_user_id).append(" SA/${user.id}")
 
-        userFragment = SuperAdminMainPage()
+        userFragment = SuperAdminMainPageFragment()
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.super_admin_fragment_container, userFragment!!)
             commit()
@@ -108,7 +108,7 @@ class MainPageActivity: AppCompatActivity(){
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         if(userRole==UserRole.SUPER_ADMIN.role) {
-            menuInflater.inflate(R.menu.top_app_bar, menu)
+            menuInflater.inflate(R.menu.search_menu, menu)
             val menuItem = menu.findItem(R.id.search)
             searchView = menuItem.actionView as SearchView
             searchView?.queryHint = getString(R.string.search)

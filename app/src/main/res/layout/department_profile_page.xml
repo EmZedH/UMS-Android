@@ -98,6 +98,20 @@
                 />
 
             <TextView
+                android:id="@+id/college_details_string"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/college_details_string"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="60dp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/name"
+                android:textSize="25sp"
+                android:textColor="@color/light_onSurface"
+                />
+
+            <TextView
                 android:id="@+id/college_id_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -105,7 +119,7 @@
                 android:layout_marginStart="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="20dp"
-                app:layout_constraintTop_toBottomOf="@id/name"
+                app:layout_constraintTop_toBottomOf="@id/college_details_string"
                 android:textSize="20sp"
                 android:textColor="@color/light_onSurface"
                 />
@@ -152,7 +166,7 @@
     </androidx.core.widget.NestedScrollView>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/edit_floating_action_button"
+        android:id="@+id/floating_action_button"
         style="@style/FloatingActionButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

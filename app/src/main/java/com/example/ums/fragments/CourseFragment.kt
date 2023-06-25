@@ -1,5 +1,6 @@
 package com.example.ums.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,7 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.AddableSearchableFragment
+import com.example.ums.CourseProfessorsListActivity
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.adapters.CourseListItemViewAdapter
@@ -44,7 +46,7 @@ class CourseFragment: AddableSearchableFragment(), ItemListener {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_list_page, container, false)
-        val recyclerView: RecyclerView = view.findViewById(R.id.college_list_view)
+        val recyclerView: RecyclerView = view.findViewById(R.id.list_view)
 
         firstTextView = view.findViewById(R.id.no_items_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
@@ -101,6 +103,12 @@ class CourseFragment: AddableSearchableFragment(), ItemListener {
     }
 
     override fun onClick(bundle: Bundle?) {
+        val intent = Intent(requireContext(), CourseProfessorsListActivity::class.java)
+        if(bundle!=null){
+            editCourseId = bundle.getInt("courseID")
+            intent.putExtras(bundle)
+            startActivity(intent)
+        }
     }
 
     private fun addAt(id: Int){
@@ -125,5 +133,6 @@ class CourseFragment: AddableSearchableFragment(), ItemListener {
             courseListItemViewAdapter?.updateItemInAdapter(editCourseId!!)
             editCourseId=null
         }
+//        courseListItemViewAdapter?.notifyDataSetChanged()
     }
 }

@@ -290,7 +290,7 @@ class ProfessorAddBottomSheet : FullScreenBottomSheetDialog() {
 
     private fun setCollegeIDTextView(view : View){
         view.findViewById<TextView>(R.id.course_id_text_view)?.setText(R.string.user_id_string)
-        view.findViewById<TextView>(R.id.course_id_text_view)?.append(" C/$collegeID-U/${professorDAO.getNewID()}")
+        view.findViewById<TextView>(R.id.course_id_text_view)?.append(" C/$collegeID-D/${departmentID}-U/${professorDAO.getNewID()}")
     }
 
     private fun showDatePicker() {

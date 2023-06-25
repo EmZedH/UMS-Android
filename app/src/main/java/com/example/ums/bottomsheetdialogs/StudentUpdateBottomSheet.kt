@@ -165,7 +165,7 @@ class StudentUpdateBottomSheet: FullScreenBottomSheetDialog() {
 
     private fun setCollegeIDTextView(view : View){
         view.findViewById<TextView>(R.id.course_id_text_view)?.setText(R.string.user_id_string)
-        view.findViewById<TextView>(R.id.course_id_text_view)?.append(" C/${student.collegeID}-U/${student.user.id}")
+        view.findViewById<TextView>(R.id.course_id_text_view)?.append(" C/${student.collegeID}-D/${student.departmentID}-U/${student.user.id}")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

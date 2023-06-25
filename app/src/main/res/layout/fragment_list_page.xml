@@ -33,7 +33,7 @@
 
         />
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/college_list_view"
+        android:id="@+id/list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginBottom="35dp"

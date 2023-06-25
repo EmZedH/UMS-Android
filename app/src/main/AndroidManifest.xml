@@ -27,10 +27,16 @@
         <activity android:name=".MainPageActivity"/>
         <activity android:name=".ManageProfileActivity" android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".CollegeActivity"/>
-        <activity android:name=".CollegeAdminProfileActivity"/>
+        <activity android:name=".CollegeAdminDetailsActivity"/>
         <activity android:name=".CollegeDetailsActivity"/>
         <activity android:name=".DepartmentActivity"/>
         <activity android:name=".DepartmentDetailsActivity"/>
+        <activity android:name=".CourseProfessorsListActivity"/>
+        <activity android:name=".ProfessorSelectForCourseActivity"/>
+        <activity android:name=".CourseDetailsActivity"/>
+        <activity android:name=".ProfessorCoursesListActivity"/>
+        <activity android:name=".CourseSelectForProfessorActivity"/>
+        <activity android:name=".ProfessorDetailsActivity"/>
     </application>
 
 </manifest>

@@ -27,7 +27,7 @@ class StudentListItemViewAdapter (private val departmentID: Int, private val col
 
     override fun onBindViewHolder(holder: ListItemViewHolder, position: Int) {
         val student = originalList[position]
-        holder.itemIDTextView.text = "ID: C/$collegeID-U/${student.user.id}"
+        holder.itemIDTextView.text = "ID: C/$collegeID-D/$departmentID-U/${student.user.id}"
         holder.itemNameTextView.text = student.user.name
         holder.itemView.setOnClickListener {
             val bundle = Bundle().apply {

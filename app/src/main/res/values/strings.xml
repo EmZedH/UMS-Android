@@ -94,4 +94,16 @@
     <string name="department_details_string">Department Details</string>
     <string name="no_professor_string">No Professor</string>
     <string name="no_students_string">No Students</string>
+    <string name="course_professor_list_string">Course Professor List</string>
+    <string name="delete_item_string">Delete Item</string>
+    <string name="professor_select_string">Professor Select</string>
+    <string name="course_professors_string">Course Professors</string>
+    <string name="course_details_string">Course Details</string>
+    <string name="department_id_string">Department ID</string>
+    <string name="tap_add_button_to_add_professor_string">Tap Add Button to add professor</string>
+    <string name="tap_add_button_to_select_professors_string">Tap Add Button to select Professors</string>
+    <string name="professor_courses_string">Professor Courses</string>
+    <string name="tap_add_button_to_select_courses_string">Tap Add Button to select Courses</string>
+    <string name="select_string">Select</string>
+    <string name="professor_details_string">Professor Details</string>
 </resources>

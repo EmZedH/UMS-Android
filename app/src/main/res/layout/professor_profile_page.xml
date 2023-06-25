@@ -18,7 +18,7 @@
         <com.google.android.material.appbar.MaterialToolbar
 
             android:id="@+id/top_app_bar"
-            app:title="@string/college_admin_profile_string"
+            app:title="@string/professor_details_string"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/light_surface"
@@ -60,7 +60,7 @@
                 />
 
             <TextView
-                android:id="@+id/course_id_text_view"
+                android:id="@+id/id_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintStart_toStartOf="parent"
@@ -80,13 +80,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="5dp"
-                app:layout_constraintTop_toBottomOf="@id/course_id_text_view"
+                app:layout_constraintTop_toBottomOf="@id/id_text_view"
                 android:textSize="20sp"
                 android:textColor="@color/light_onSurface"
                 />
 
             <TextView
-                android:id="@+id/user_name_text_view"
+                android:id="@+id/name_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/name_heading_string"
@@ -98,14 +98,14 @@
                 android:textColor="@color/light_onSurface"
                 />
             <TextView
-                android:id="@+id/user_name"
+                android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="5dp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/user_name_text_view"
+                app:layout_constraintTop_toBottomOf="@id/name_text_view"
                 android:textSize="20sp"
                 android:textColor="@color/light_onSurface"
                 />
@@ -118,7 +118,7 @@
                 android:layout_marginStart="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="20dp"
-                app:layout_constraintTop_toBottomOf="@id/user_name"
+                app:layout_constraintTop_toBottomOf="@id/name"
                 android:textSize="20sp"
                 android:textColor="@color/light_onSurface"
                 />
@@ -214,6 +214,71 @@
                 />
 
             <TextView
+                android:id="@+id/department_details_string"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:text="@string/department_details_string"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="60dp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/address"
+                android:textSize="25sp"
+                android:textColor="@color/light_onSurface"
+                />
+
+            <TextView
+                android:id="@+id/department_id_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/department_id_string"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/department_details_string"
+                android:textSize="20sp"
+                android:textColor="@color/light_onSurface"
+                />
+            <TextView
+                android:id="@+id/department_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:textStyle="bold"
+                android:layout_marginTop="5dp"
+                app:layout_constraintTop_toBottomOf="@id/department_id_text_view"
+                android:textSize="20sp"
+                android:textColor="@color/light_onSurface"
+                />
+
+            <TextView
+                android:id="@+id/department_name_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/department_name_string"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/department_id"
+                android:textSize="20sp"
+                android:textColor="@color/light_onSurface"
+                />
+
+            <TextView
+                android:id="@+id/department_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="5dp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/department_name_text_view"
+                android:textSize="20sp"
+                android:textColor="@color/light_onSurface"
+                />
+
+            <TextView
                 android:id="@+id/college_details_string"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -222,7 +287,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="60dp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/address_text_view"
+                app:layout_constraintTop_toBottomOf="@id/department_name"
                 android:textSize="25sp"
                 android:textColor="@color/light_onSurface"
                 />
@@ -234,20 +299,19 @@
                 android:text="@string/college_id_string"
                 android:layout_marginStart="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 app:layout_constraintTop_toBottomOf="@id/college_details_string"
                 android:textSize="20sp"
                 android:textColor="@color/light_onSurface"
                 />
-
             <TextView
                 android:id="@+id/college_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="20dp"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="5dp"
                 android:textStyle="bold"
+                android:layout_marginTop="5dp"
                 app:layout_constraintTop_toBottomOf="@id/college_id_text_view"
                 android:textSize="20sp"
                 android:textColor="@color/light_onSurface"
