@@ -37,7 +37,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-            android:text="@string/no_professor_string"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="?attr/actionBarSize"
             app:layout_constraintEnd_toEndOf="parent"
@@ -48,7 +47,6 @@
             android:id="@+id/add_to_get_started_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tap_add_button_to_add_professor_string"
             android:textSize="20sp"
 
             app:layout_constraintEnd_toEndOf="parent"

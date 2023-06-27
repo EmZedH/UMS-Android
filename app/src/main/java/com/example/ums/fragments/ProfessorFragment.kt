@@ -132,6 +132,9 @@ class ProfessorFragment: AddableSearchableFragment(), ItemListener {
             professorListItemViewAdapter?.updateItemInAdapter(editProfessorId!!)
             editProfessorId=null
         }
-        professorListItemViewAdapter?.notifyDataSetChanged()
+        else{
+            onRefresh()
+            professorListItemViewAdapter?.updateList()
+        }
     }
 }

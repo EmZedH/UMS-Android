@@ -14,6 +14,7 @@ class ProfessorDAO (private val databaseHelper: DatabaseHelper) {
     private val departmentKey = "DEPT_ID"
     private val collegeKey = "COLLEGE_ID"
 
+    private val recordsTable = "RECORDS"
     private val courseProfessorTable = "COURSE_PROFESSOR_TABLE"
     private val courseKey  = "COURSE_ID"
     private val userNameColumn = "U_NAME"
@@ -26,7 +27,7 @@ class ProfessorDAO (private val databaseHelper: DatabaseHelper) {
     private val userEmailColumn = "U_EMAIL_ID"
 
     fun get(id : Int?) : Professor?{
-        val id = id ?: return null
+        id ?: return null
         var professor : Professor? = null
         val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName INNER JOIN $userTable ON ($userTable.$userPrimaryKey = $tableName.$primaryKey) WHERE $primaryKey = $id", null)
         if(cursor.moveToFirst()){
@@ -155,6 +156,7 @@ class ProfessorDAO (private val databaseHelper: DatabaseHelper) {
             db.delete(tableName, "$primaryKey=?", arrayOf(userID.toString()))
             db.delete(userTable, "$userPrimaryKey=?", arrayOf(userID.toString()))
             db.delete(courseProfessorTable, "$primaryKey=?", arrayOf(userID.toString()))
+            db.delete(recordsTable, "$primaryKey=?", arrayOf(userID.toString()))
             db.setTransactionSuccessful()
         }
         catch (e: Exception){

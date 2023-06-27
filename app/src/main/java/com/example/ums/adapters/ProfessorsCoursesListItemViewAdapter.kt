@@ -1,16 +1,17 @@
 package com.example.ums.adapters
 
+import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DeletableListItemViewHolder
 import com.example.ums.R
-import com.example.ums.listener.DeleteListener
+import com.example.ums.listener.DeleteClickListener
 import com.example.ums.model.CourseProfessor
 import com.example.ums.model.databaseAccessObject.CourseProfessorDAO
 import com.example.ums.model.databaseAccessObject.ProfessorDAO
 
-class ProfessorsCoursesListItemViewAdapter(private val professorID: Int, private val courseProfessorDAO: CourseProfessorDAO, private val professorDAO: ProfessorDAO, private val deleteListener: DeleteListener): RecyclerView.Adapter<DeletableListItemViewHolder>() {
+class ProfessorsCoursesListItemViewAdapter(private val professorID: Int, private val courseProfessorDAO: CourseProfessorDAO, private val professorDAO: ProfessorDAO, private val listener: DeleteClickListener): RecyclerView.Adapter<DeletableListItemViewHolder>() {
 
     private var originalList : MutableList<CourseProfessor> = courseProfessorDAO.getList(professorID).sortedBy { it.professor.user.id }.toMutableList()
     private var filterQuery: String? = null
@@ -25,7 +26,14 @@ class ProfessorsCoursesListItemViewAdapter(private val professorID: Int, private
         holder.firstTextView.text = "ID: C/${courseProfessor.professor.collegeID}-D/${courseProfessor.course.departmentID}-CO/${courseProfessor.course.id}"
         holder.secondTextView.text = courseProfessor.course.name
         holder.deleteButton.setOnClickListener {
-            deleteListener.onDelete(courseProfessor.course.id)
+            listener.onDelete(courseProfessor.course.id)
+        }
+        holder.itemView.setOnClickListener {
+            val bundle = Bundle().apply {
+                putInt("professorID", professorID)
+                putInt("courseID", courseProfessor.course.id)
+            }
+            listener.onClick(bundle)
         }
     }
 

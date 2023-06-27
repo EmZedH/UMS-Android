@@ -141,4 +141,9 @@ class CourseListItemViewAdapter(private val departmentID: Int, private val colle
         originalList.removeAt(updatedPosition)
         notifyItemRemoved(updatedPosition)
     }
+
+    fun updateList(){
+        originalList = courseDAO.getList(departmentID, collegeID).sortedBy { it.id }.toMutableList()
+        notifyDataSetChanged()
+    }
 }

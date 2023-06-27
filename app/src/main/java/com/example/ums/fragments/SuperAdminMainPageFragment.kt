@@ -57,6 +57,7 @@ class SuperAdminMainPageFragment : AddableSearchableFragment(), ItemListener {
             secondTextView.visibility = View.INVISIBLE
         }
         else{
+            firstTextView.setText(R.string.no_colleges_string)
             firstTextView.visibility = View.VISIBLE
             secondTextView.visibility = View.VISIBLE
         }

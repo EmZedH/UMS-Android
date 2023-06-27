@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.adapters.CoursesProfessorListItemViewAdapter
 import com.example.ums.dialogFragments.ProfessorDeleteDialog
-import com.example.ums.listener.DeleteListener
+import com.example.ums.listener.DeleteClickListener
 import com.example.ums.model.databaseAccessObject.CourseDAO
 import com.example.ums.model.databaseAccessObject.CourseProfessorDAO
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class CourseProfessorsListActivity: AppCompatActivity(), DeleteListener {
+class CourseProfessorsListActivity: AppCompatActivity(), DeleteClickListener {
 
     private var searchView: SearchView? = null
     private var searchQuery: String? = null
@@ -28,6 +28,7 @@ class CourseProfessorsListActivity: AppCompatActivity(), DeleteListener {
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
     private var courseProfessorListItemViewAdapter: CoursesProfessorListItemViewAdapter? = null
+    private var onClickActivity: String? = null
     private var courseID: Int? = null
     private var departmentID: Int? = null
     private var collegeID: Int? = null
@@ -37,6 +38,7 @@ class CourseProfessorsListActivity: AppCompatActivity(), DeleteListener {
         setContentView(R.layout.professor_list_page)
 
         if(savedInstanceState!=null){
+            onClickActivity = savedInstanceState.getString("on_click_activity")
             isConfigurationChanged = savedInstanceState.getBoolean("course_professor_is_configuration_changed")
             searchQuery = savedInstanceState.getString("course_professor_activity_search_query")
             isSearchViewOpen = savedInstanceState.getBoolean("course_professor_activity_is_search_query_open")
@@ -140,6 +142,12 @@ class CourseProfessorsListActivity: AppCompatActivity(), DeleteListener {
     override fun onDelete(id: Int) {
         val professorDeleteDialog = ProfessorDeleteDialog.getInstance(id)
         professorDeleteDialog.show(supportFragmentManager, "ProfessorDeleteDialog")
+    }
+
+    override fun onClick(bundle: Bundle?) {
+//        val intent = Intent(this, StudentClassActivity::class.java)
+//        intent.putExtras(bundle ?: return)
+//        startActivity(intent)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

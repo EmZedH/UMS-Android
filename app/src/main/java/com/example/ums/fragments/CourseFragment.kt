@@ -35,9 +35,7 @@ class CourseFragment: AddableSearchableFragment(), ItemListener {
         departmentID = arguments?.getInt("department_activity_department_id")
         collegeID = arguments?.getInt("department_activity_college_id")
         courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
-        if(collegeID!=null && departmentID!=null){
-            courseListItemViewAdapter = CourseListItemViewAdapter(departmentID!!, collegeID!!, courseDAO, this)
-        }
+        courseListItemViewAdapter = CourseListItemViewAdapter(departmentID ?: return, collegeID ?: return, courseDAO, this)
     }
 
     override fun onCreateView(
@@ -133,6 +131,9 @@ class CourseFragment: AddableSearchableFragment(), ItemListener {
             courseListItemViewAdapter?.updateItemInAdapter(editCourseId!!)
             editCourseId=null
         }
-//        courseListItemViewAdapter?.notifyDataSetChanged()
+        else{
+            onRefresh()
+            courseListItemViewAdapter?.updateList()
+        }
     }
 }

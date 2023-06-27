@@ -106,4 +106,19 @@
     <string name="tap_add_button_to_select_courses_string">Tap Add Button to select Courses</string>
     <string name="select_string">Select</string>
     <string name="professor_details_string">Professor Details</string>
+    <string name="no_student_string">No Student</string>
+    <string name="tap_add_button_to_add_students_string">Tap Add Button to add students</string>
+    <string name="no_transactions_string">No Transactions</string>
+    <string name="add_transaction">Add Transaction</string>
+    <string name="date_of_transaction_string">Date of Transaction (yyyy-dd-mm)</string>
+    <string name="transaction_amount_string">Transaction Amount</string>
+    <string name="tap_add_button_to_continue_string">Tap Add Button to continue</string>
+    <string name="elective_string">Elective</string>
+    <string name="course_semester_string">Course Semester</string>
+    <string name="tap_add_button_to_add_department_string">Tap Add button to add department</string>
+    <string name="course_degree_string">Course Degree</string>
+    <string name="tap_add_button_to_add_tests_string">Tap Add Button to add tests</string>
+    <string name="no_test_records_string">No Test Records</string>
+    <string name="add_test_string">Add Test</string>
+    <string name="test_mark_string">Test Mark</string>
 </resources>

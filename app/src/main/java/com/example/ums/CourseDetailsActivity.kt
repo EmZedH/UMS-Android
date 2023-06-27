@@ -33,6 +33,9 @@ class CourseDetailsActivity: AppCompatActivity() {
             val departmentNameTextView = findViewById<TextView>(R.id.department_name)
             val collegeIDTextView = findViewById<TextView>(R.id.college_id)
             val collegeNameTextView = findViewById<TextView>(R.id.college_name)
+            val electiveTextView = findViewById<TextView>(R.id.elective)
+            val courseSemesterTextView = findViewById<TextView>(R.id.course_sem)
+            val courseDegreeTextView = findViewById<TextView>(R.id.course_degree)
 
             val floatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
             val toolBar = findViewById<MaterialToolbar>(R.id.top_app_bar)
@@ -57,6 +60,9 @@ class CourseDetailsActivity: AppCompatActivity() {
             departmentNameTextView.text = department?.name
             collegeIDTextView.text = collegeId.toString()
             collegeNameTextView.text = college?.name
+            electiveTextView.text = course?.elective
+            courseSemesterTextView.text = course?.semester.toString()
+            courseDegreeTextView.text = course?.degree
 
             floatingActionButton.setOnClickListener{
                 val departmentUpdateBottomSheet = CourseUpdateBottomSheet()

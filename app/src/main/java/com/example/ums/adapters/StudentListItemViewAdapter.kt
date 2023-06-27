@@ -31,9 +31,7 @@ class StudentListItemViewAdapter (private val departmentID: Int, private val col
         holder.itemNameTextView.text = student.user.name
         holder.itemView.setOnClickListener {
             val bundle = Bundle().apply {
-                putInt("student_profile_department_id", departmentID)
-                putInt("student_profile_college_id", collegeID)
-                putInt("student_profile_professor_id", student.user.id)
+                putInt("student_activity_student_id", student.user.id)
             }
             itemListener.onClick(bundle)
         }

@@ -26,7 +26,6 @@ class DepartmentUpdateBottomSheet: FullScreenBottomSheetDialog() {
     private lateinit var departmentNameTextLayout: TextInputLayout
     private lateinit var updateButton: MaterialButton
     private lateinit var departmentNameText: String
-    private var isRotate: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,12 +54,7 @@ class DepartmentUpdateBottomSheet: FullScreenBottomSheetDialog() {
 
             updateButton.isEnabled = false
 
-            if(isRotate){
-                departmentNameTextLayout.editText!!.setText(department.name)
-            }
-            else{
-                departmentNameTextLayout.editText!!.setText(departmentNameText)
-            }
+            departmentNameTextLayout.editText!!.setText(departmentNameText)
 
             if(departmentNameTextLayout.editText!!.text.toString() != department.name){
                 updateButton.isEnabled = true

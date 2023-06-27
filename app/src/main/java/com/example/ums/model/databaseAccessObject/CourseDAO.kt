@@ -20,9 +20,9 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
     private val professorKey = "PROF_ID"
 
     fun get(courseID: Int?, departmentID : Int?, collegeID: Int?): Course?{
-        val courseID = courseID ?: return null
-        val departmentID = departmentID ?: return null
-        val collegeID = collegeID ?: return null
+        courseID ?: return null
+        departmentID ?: return null
+        collegeID ?: return null
         val cursor = databaseHelper.readableDatabase
             .query(
                 tableName,
@@ -84,7 +84,132 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
     fun getNewCourses(professorID: Int): List<Course>{
         val courses = mutableListOf<Course>()
         val cursor = databaseHelper.readableDatabase
-            .rawQuery("SELECT * FROM $tableName WHERE ($courseKey, $departmentKey, $collegeKey) NOT IN (SELECT $courseKey, $departmentKey, $collegeKey FROM $courseProfessorTable WHERE $professorKey = $professorID)", null)
+            .rawQuery("SELECT * FROM $tableName WHERE ($courseKey, $departmentKey, $collegeKey) NOT IN " +
+                    "(SELECT $courseKey, $departmentKey, $collegeKey FROM $courseProfessorTable WHERE $professorKey = $professorID)", null)
+
+        if(cursor!=null && cursor.moveToFirst()){
+            while (!cursor.isAfterLast){
+                courses.add(
+                    Course(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getInt(2),
+                        cursor.getInt(3),
+                        cursor.getInt(4),
+                        cursor.getString(5),
+                        cursor.getString(6)
+                    )
+                )
+                cursor.moveToNext()
+            }
+        }
+        cursor.close()
+        return courses
+    }
+
+    fun getProfessionalCourses(studentID: Int): List<Course>{
+        val courses = mutableListOf<Course>()
+        val cursor = databaseHelper.readableDatabase
+            .rawQuery("SELECT COURSE.* FROM COURSE INNER JOIN RECORDS ON " +
+                    "(COURSE.COURSE_ID = RECORDS.COURSE_ID AND " +
+                    "COURSE.DEPT_ID = RECORDS.DEPT_ID AND " +
+                    "COURSE.COLLEGE_ID = RECORDS.COLLEGE_ID) WHERE RECORDS.STUDENT_ID = $studentID AND COURSE.ELECTIVE = \"Professional\"",
+                null)
+
+        if(cursor!=null && cursor.moveToFirst()){
+            while (!cursor.isAfterLast){
+                courses.add(
+                    Course(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getInt(2),
+                        cursor.getInt(3),
+                        cursor.getInt(4),
+                        cursor.getString(5),
+                        cursor.getString(6)
+                    )
+                )
+                cursor.moveToNext()
+            }
+        }
+        cursor.close()
+        return courses
+    }
+
+    fun getOpenCourses(studentID: Int): List<Course>{
+        val courses = mutableListOf<Course>()
+        val cursor = databaseHelper.readableDatabase
+            .rawQuery("SELECT COURSE.* FROM COURSE INNER JOIN RECORDS ON " +
+                    "(COURSE.COURSE_ID = RECORDS.COURSE_ID AND " +
+                    "COURSE.DEPT_ID = RECORDS.DEPT_ID AND " +
+                    "COURSE.COLLEGE_ID = RECORDS.COLLEGE_ID) WHERE " +
+                    "RECORDS.STUDENT_ID = $studentID AND " +
+                    "COURSE.ELECTIVE = \"Open\"",
+                null)
+
+        if(cursor!=null && cursor.moveToFirst()){
+            while (!cursor.isAfterLast){
+                courses.add(
+                    Course(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getInt(2),
+                        cursor.getInt(3),
+                        cursor.getInt(4),
+                        cursor.getString(5),
+                        cursor.getString(6)
+                    )
+                )
+                cursor.moveToNext()
+            }
+        }
+        cursor.close()
+        return courses
+    }
+
+    fun getNewProfessionalCourses(studentID: Int): List<Course>{
+        val courses = mutableListOf<Course>()
+        val cursor = databaseHelper.readableDatabase
+            .rawQuery("SELECT COURSE.* FROM COURSE WHERE (COURSE.COURSE_ID, COURSE.DEPT_ID, COURSE.COLLEGE_ID) NOT IN " +
+                    "(SELECT COURSE_ID, DEPT_ID, COLLEGE_ID FROM RECORDS WHERE RECORDS.STUDENT_ID = $studentID) AND " +
+                    "COURSE.DEPT_ID = (SELECT DEPT_ID FROM STUDENT WHERE STUDENT_ID = $studentID) AND " +
+                    "COURSE.COLLEGE_ID = (SELECT COLLEGE_ID FROM STUDENT WHERE STUDENT_ID = $studentID) AND " +
+                    "COURSE.ELECTIVE = \"Professional\" " +
+                    "AND COURSE.COURSE_SEM <= (SELECT S_SEM FROM STUDENT WHERE STUDENT_ID = $studentID) AND " +
+                    "COURSE.DEGREE = (SELECT S_DEGREE FROM STUDENT WHERE STUDENT_ID = $studentID)",
+                null)
+
+        if(cursor!=null && cursor.moveToFirst()){
+            while (!cursor.isAfterLast){
+                courses.add(
+                    Course(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getInt(2),
+                        cursor.getInt(3),
+                        cursor.getInt(4),
+                        cursor.getString(5),
+                        cursor.getString(6)
+                    )
+                )
+                cursor.moveToNext()
+            }
+        }
+        cursor.close()
+        return courses
+    }
+
+    fun getNewOpenCourses(studentID: Int): List<Course>{
+        val courses = mutableListOf<Course>()
+        val cursor = databaseHelper.readableDatabase
+            .rawQuery("SELECT COURSE.* FROM COURSE WHERE (COURSE.COURSE_ID, COURSE.DEPT_ID, COURSE.COLLEGE_ID) NOT IN " +
+                    "(SELECT COURSE_ID, DEPT_ID, COLLEGE_ID FROM RECORDS WHERE RECORDS.STUDENT_ID = $studentID) AND " +
+                    "COURSE.DEPT_ID != (SELECT DEPT_ID FROM STUDENT WHERE STUDENT_ID = $studentID) AND " +
+                    "COURSE.COLLEGE_ID = (SELECT COLLEGE_ID FROM STUDENT WHERE STUDENT_ID = $studentID) AND " +
+                    "COURSE.ELECTIVE = \"Open\" " +
+                    "AND COURSE.COURSE_SEM <= (SELECT S_SEM FROM STUDENT WHERE STUDENT_ID = $studentID) AND " +
+                    "COURSE.DEGREE = (SELECT S_DEGREE FROM STUDENT WHERE STUDENT_ID = $studentID)",
+                null)
 
         if(cursor!=null && cursor.moveToFirst()){
             while (!cursor.isAfterLast){
@@ -120,9 +245,9 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
     }
 
     fun delete(id: Int?, departmentID: Int?, collegeID: Int?){
-        val id = id ?: return
-        val departmentID = departmentID ?: return
-        val collegeID = collegeID ?: return
+        id ?: return
+        departmentID ?: return
+        collegeID ?: return
         val db = databaseHelper.writableDatabase
         db.beginTransaction()
         try {

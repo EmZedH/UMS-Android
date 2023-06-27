@@ -98,6 +98,81 @@
                 />
 
             <TextView
+                android:id="@+id/elective_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/elective_string"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/name"
+                android:textSize="20sp"
+                android:textColor="@color/light_onSurface"
+                />
+            <TextView
+                android:id="@+id/elective"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="5dp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/elective_text_view"
+                android:textSize="20sp"
+                android:textColor="@color/light_onSurface"
+                />
+
+            <TextView
+                android:id="@+id/course_sem_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/course_semester_string"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/elective"
+                android:textSize="20sp"
+                android:textColor="@color/light_onSurface"
+                />
+            <TextView
+                android:id="@+id/course_sem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="5dp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/course_sem_text_view"
+                android:textSize="20sp"
+                android:textColor="@color/light_onSurface"
+                />
+
+            <TextView
+                android:id="@+id/course_degree_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/course_degree_string"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@id/course_sem"
+                android:textSize="20sp"
+                android:textColor="@color/light_onSurface"
+                />
+            <TextView
+                android:id="@+id/course_degree"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginTop="5dp"
+                android:textStyle="bold"
+                app:layout_constraintTop_toBottomOf="@id/course_degree_text_view"
+                android:textSize="20sp"
+                android:textColor="@color/light_onSurface"
+                />
+
+            <TextView
                 android:id="@+id/department_details_string"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -106,7 +181,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginTop="60dp"
                 android:textStyle="bold"
-                app:layout_constraintTop_toBottomOf="@id/name"
+                app:layout_constraintTop_toBottomOf="@id/course_degree"
                 android:textSize="25sp"
                 android:textColor="@color/light_onSurface"
                 />

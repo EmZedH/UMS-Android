@@ -26,9 +26,13 @@ class StudentDAO(private val databaseHelper: DatabaseHelper) {
     private val userRoleColumn = "U_ROLE"
     private val userEmailColumn = "U_EMAIL_ID"
 
-    fun get(id : Int) : Student?{
+    fun get(id : Int?) : Student?{
+        id ?: return null
         var student : Student? = null
-        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName INNER JOIN $userTable ON ($userTable.$userPrimaryKey = $tableName.$primaryKey) WHERE $primaryKey = $id", null)
+        val cursor = databaseHelper.readableDatabase
+            .rawQuery("SELECT * FROM $tableName INNER JOIN $userTable ON " +
+                    "($userTable.$userPrimaryKey = $tableName.$primaryKey) " +
+                    "WHERE $primaryKey = $id", null)
         if(cursor.moveToFirst()){
             student = Student(
                 User(
@@ -54,7 +58,47 @@ class StudentDAO(private val databaseHelper: DatabaseHelper) {
     }
     fun getList(departmentID: Int, collegeID: Int) : List<Student>{
         val students = mutableListOf<Student>()
-        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName INNER JOIN $userTable ON ($userTable.$userPrimaryKey = $tableName.$primaryKey) WHERE ($collegeKey = $collegeID AND $departmentKey = $departmentID)", null)
+        val cursor = databaseHelper.readableDatabase
+            .rawQuery("SELECT * FROM $tableName INNER JOIN $userTable ON " +
+                    "($userTable.$userPrimaryKey = $tableName.$primaryKey) WHERE " +
+                    "($collegeKey = $collegeID AND $departmentKey = $departmentID)", null)
+        cursor.moveToFirst()
+        while (!cursor.isAfterLast){
+            students.add(
+                Student(
+                    User(
+                        cursor.getInt(5),
+                        cursor.getString(6),
+                        cursor.getString(7),
+                        cursor.getString(8),
+                        cursor.getString(9),
+                        cursor.getString(10),
+                        cursor.getString(11),
+                        cursor.getString(12),
+                        cursor.getString(13)
+                    ),
+                    cursor.getInt(1),
+                    cursor.getString(2),
+                    cursor.getInt(3),
+                    cursor.getInt(4)
+                )
+            )
+            cursor.moveToNext()
+        }
+        cursor.close()
+        return students
+    }
+
+    fun getNewCurrentStudentsList(professorID: Int, courseID: Int): List<Student>{
+        val students = mutableListOf<Student>()
+        val cursor = databaseHelper.readableDatabase
+            .rawQuery("SELECT STUDENT.*, USER.*, COURSE.COURSE_SEM FROM STUDENT INNER JOIN USER ON " +
+                    "(USER.U_ID = STUDENT.STUDENT_ID) INNER JOIN COURSE ON " +
+                    "(COURSE.COURSE_ID = $courseID AND " +
+                    "COURSE.DEPT_ID = STUDENT.DEPT_ID AND " +
+                    "COURSE.COLLEGE_ID = STUDENT.COLLEGE_ID) WHERE STUDENT_ID NOT IN " +
+                    "(SELECT STUDENT_ID FROM RECORDS WHERE PROF_ID = $professorID AND COURSE_ID = $courseID) AND " +
+                    "STUDENT.S_SEM = COURSE.COURSE_SEM", null)
         cursor.moveToFirst()
         while (!cursor.isAfterLast){
             students.add(
@@ -142,6 +186,15 @@ class StudentDAO(private val databaseHelper: DatabaseHelper) {
         val newID = cursor.getInt(0)
         cursor.close()
         return newID
+    }
+
+    fun getCourseCompletedStudentListFromClass(professorID: Int, courseID: Int): List<Student>{
+        val students = mutableListOf<Student>()
+        val cursor = databaseHelper.readableDatabase
+            .rawQuery("SELECT STUDENT.* FROM STUDENT INNER JOIN RECORDS ON (STUDENT.STUDENT_ID = RECORDS.STUDENT_ID) WHERE RECORDS.STATUS = \"COMPLETED\" AND RECORDS.PROF_ID = $professorID AND RECORDS.COURSE_ID = $courseID AND RECORDS.DEPT_ID = STUDENT.DEPT_ID AND RECORDS.COLLEGE_ID = STUDENT.COLLEGE_ID",
+                null)
+        cursor.close()
+        return students
     }
 
     fun update(student: Student?){

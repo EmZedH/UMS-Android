@@ -19,8 +19,8 @@ class DepartmentDAO(private val databaseHelper: DatabaseHelper) {
     private val testTable = "TEST"
 
     fun get(departmentID : Int?, collegeID: Int?) : Department?{
-        val departmentID = departmentID ?: return null
-        val collegeID = collegeID ?: return null
+        departmentID ?: return null
+        collegeID ?: return null
         var department : Department? = null
         val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName WHERE $primaryKey = $departmentID AND ${this.collegeIDKey} = $collegeID", null)
         if(cursor.moveToFirst()){
@@ -37,6 +37,24 @@ class DepartmentDAO(private val databaseHelper: DatabaseHelper) {
     fun getList(collegeID: Int) : List<Department>{
         val departments = mutableListOf<Department>()
         val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName WHERE ${this.collegeIDKey} = $collegeID", null)
+        cursor.moveToFirst()
+        while (!cursor.isAfterLast){
+            departments.add(
+                Department(
+                    cursor.getInt(0),
+                    cursor.getString(1),
+                    cursor.getInt(2)
+                )
+            )
+            cursor.moveToNext()
+        }
+        cursor.close()
+        return departments
+    }
+
+    fun getOtherDepartment(departmentID: Int, collegeID: Int): List<Department>{
+        val departments = mutableListOf<Department>()
+        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName WHERE $primaryKey != $departmentID AND $collegeIDKey = $collegeID", null)
         cursor.moveToFirst()
         while (!cursor.isAfterLast){
             departments.add(
@@ -71,6 +89,7 @@ class DepartmentDAO(private val databaseHelper: DatabaseHelper) {
             db.execSQL("DELETE FROM $courseProfessorTable WHERE $primaryKey = $id AND $collegeIDKey = $collegeID")
             db.execSQL("DELETE FROM $professorTable WHERE $primaryKey = $id AND $collegeIDKey = $collegeID")
             db.execSQL("DELETE FROM $recordTable WHERE $primaryKey = $id AND $collegeIDKey = $collegeID")
+            db.execSQL("DELETE FROM USER WHERE U_ID = (SELECT STUDENT_ID FROM STUDENT WHERE DEPT_ID = $id AND COLLEGE_ID = $collegeID)")
             db.execSQL("DELETE FROM $studentTable WHERE $primaryKey = $id AND $collegeIDKey = $collegeID")
             db.execSQL("DELETE FROM $testTable WHERE $primaryKey = $id AND $collegeIDKey = $collegeID")
             db.setTransactionSuccessful()

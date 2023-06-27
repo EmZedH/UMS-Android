@@ -58,13 +58,13 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
             "\t\"DEPT_ID\"\tINTEGER,\n" +
             "\t\"PROF_ID\"\tINTEGER,\n" +
             "\t\"COLLEGE_ID\"\tINTEGER,\n" +
-            "\t\"TRANSACT_ID\"\tTEXT,\n" +
+            "\t\"TRANSACT_ID\"\tINTEGER,\n" +
             "\t\"EXT_MARK\"\tINTEGER,\n" +
             "\t\"ATTENDANCE\"\tINTEGER,\n" +
             "\t\"ASSIGNMENT\"\tINTEGER,\n" +
             "\t\"STATUS\"\tTEXT,\n" +
             "\t\"SEM_COMPLETED\"\tINTEGER,\n" +
-            "\tPRIMARY KEY(\"TRANSACT_ID\",\"STUDENT_ID\",\"COURSE_ID\",\"DEPT_ID\",\"COLLEGE_ID\")\n" +
+            "\tPRIMARY KEY(\"STUDENT_ID\",\"COURSE_ID\",\"DEPT_ID\",\"COLLEGE_ID\")\n" +
             ")"
 
     private val createTableStudent = "CREATE TABLE IF NOT EXISTS \"STUDENT\" (\n" +
@@ -94,7 +94,8 @@ open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db
     private val createTableTransactions = "CREATE TABLE IF NOT EXISTS \"TRANSACTIONS\" (\n" +
             "\t\"T_ID\"\tINTEGER,\n" +
             "\t\"STUDENT_ID\"\tINTEGER,\n" +
-            "\t\"T_DATE\"\tDATE,\n" +
+            "\t\"T_SEM\"\tINTEGER,\n" +
+            "\t\"T_DATE\"\tTEXT,\n" +
             "\t\"T_AMOUNT\"\tINTEGER,\n" +
             "\tPRIMARY KEY(\"T_ID\")\n" +
             ")"

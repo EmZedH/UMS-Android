@@ -141,4 +141,9 @@ class ProfessorListItemViewAdapter (private val departmentID: Int, private val c
         originalList.removeAt(updatedPosition)
         notifyItemRemoved(updatedPosition)
     }
+
+    fun updateList(){
+        originalList = professorDAO.getList(departmentID, collegeID).sortedBy { it.user.id }.toMutableList()
+        notifyDataSetChanged()
+    }
 }

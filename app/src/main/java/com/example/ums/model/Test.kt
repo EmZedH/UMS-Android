@@ -1,8 +1,10 @@
 package com.example.ums.model
 
 data class Test (
-    var testID : Int,
+    var id : Int,
     var studentID : Int,
-    var course : Course,
-    var testMark : Int
+    var courseID: Int,
+    var departmentID: Int,
+    var collegeID: Int,
+    var mark : Int
     )

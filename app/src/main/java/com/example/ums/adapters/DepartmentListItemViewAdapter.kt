@@ -142,4 +142,9 @@ class DepartmentListItemViewAdapter(private val collegeID: Int, private val depa
         originalList.removeAt(updatedPosition)
         notifyItemRemoved(updatedPosition)
     }
+
+    fun updateList(){
+        originalList = departmentDAO.getList(collegeID).sortedBy { it.id }.toMutableList()
+        notifyDataSetChanged()
+    }
 }

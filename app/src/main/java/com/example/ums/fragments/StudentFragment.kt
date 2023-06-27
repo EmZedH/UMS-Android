@@ -1,5 +1,6 @@
 package com.example.ums.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.AddableSearchableFragment
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
+import com.example.ums.StudentActivity
 import com.example.ums.adapters.StudentListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.StudentAddBottomSheet
 import com.example.ums.bottomsheetdialogs.StudentUpdateBottomSheet
@@ -86,12 +88,12 @@ class StudentFragment: AddableSearchableFragment(), ItemListener {
     }
 
     override fun onClick(bundle: Bundle?) {
-//        val intent = Intent(requireContext(), CollegeAdminProfileActivity::class.java)
-//        if(bundle!=null){
-//            editProfessorId = bundle.getInt("college_admin_profile_college_admin_id")
-//            intent.putExtras(bundle)
-//            startActivity(intent)
-//        }
+        val intent = Intent(requireContext(), StudentActivity::class.java)
+        if(bundle!=null){
+            editStudentId = bundle.getInt("student_activity_student_id")
+            intent.putExtras(bundle)
+            startActivity(intent)
+        }
     }
 
     override fun onAdd() {

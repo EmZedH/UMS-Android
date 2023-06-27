@@ -37,6 +37,14 @@
         <activity android:name=".ProfessorCoursesListActivity"/>
         <activity android:name=".CourseSelectForProfessorActivity"/>
         <activity android:name=".ProfessorDetailsActivity"/>
+        <activity android:name=".StudentActivity"/>
+        <activity android:name=".StudentTransactionSelectActivity"/>
+        <activity android:name=".StudentProfessionalCourseSelectActivity"/>
+        <activity android:name=".StudentOpenCourseSelectActivity"/>
+        <activity android:name=".OtherDepartmentSelectActivity"/>
+        <activity android:name=".StudentProfessorsListActivity"/>
+        <activity android:name=".TestRecordsActivity"/>
+
     </application>
 
 </manifest>

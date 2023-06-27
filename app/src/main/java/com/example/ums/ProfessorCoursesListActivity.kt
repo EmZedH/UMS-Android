@@ -12,13 +12,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.adapters.ProfessorsCoursesListItemViewAdapter
 import com.example.ums.dialogFragments.CourseDeleteDialog
-import com.example.ums.listener.DeleteListener
+import com.example.ums.listener.DeleteClickListener
 import com.example.ums.model.databaseAccessObject.CourseProfessorDAO
 import com.example.ums.model.databaseAccessObject.ProfessorDAO
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class ProfessorCoursesListActivity: AppCompatActivity(), DeleteListener {
+class ProfessorCoursesListActivity: AppCompatActivity(), DeleteClickListener {
 
     private var searchView: SearchView? = null
     private var searchQuery: String? = null
@@ -136,6 +136,12 @@ class ProfessorCoursesListActivity: AppCompatActivity(), DeleteListener {
     override fun onDelete(id: Int) {
         val professorDeleteDialog = CourseDeleteDialog.getInstance(id)
         professorDeleteDialog.show(supportFragmentManager, "CourseDeleteDialog")
+    }
+
+    override fun onClick(bundle: Bundle?) {
+//        val intent = Intent(this, StudentClassActivity::class.java)
+//        intent.putExtras(bundle ?: return)
+//        startActivity(intent)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

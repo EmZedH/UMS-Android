@@ -62,7 +62,7 @@ class ProfessorSelectForCourseActivity: AppCompatActivity(), ClickListener, Sear
             val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
 
             toolBar = findViewById(R.id.top_app_bar)
-            toolBar?.title = "Select Professors"
+            toolBar?.title = "Add Professor to Course"
             toolBar?.setNavigationOnClickListener {
                 if(searchView!=null){
                     if(!searchView!!.isIconified){
@@ -128,11 +128,17 @@ class ProfessorSelectForCourseActivity: AppCompatActivity(), ClickListener, Sear
     }
 
     private fun onRefresh(){
-        if(professorDAO.getNewProfessors(courseID ?: return, departmentID ?: return, collegeID ?: return).isNotEmpty()){
+        val courseID = courseID
+        val departmentID = departmentID
+        val collegeID = collegeID
+
+        if(courseID!=null && departmentID!=null && collegeID!=null && professorDAO.getNewProfessors(courseID, departmentID, collegeID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }
         else{
+            firstTextView.text = getString(R.string.no_professor_string)
+            secondTextView.text = getString(R.string.tap_add_button_to_continue_string)
             firstTextView.visibility = View.VISIBLE
             secondTextView.visibility = View.VISIBLE
         }

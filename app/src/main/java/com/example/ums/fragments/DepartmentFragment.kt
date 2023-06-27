@@ -128,9 +128,6 @@ class DepartmentFragment: AddableSearchableFragment(), ItemListener {
     }
     override fun onResume() {
         super.onResume()
-        if(editCollegeId!=null && editDepartmentId!=null){
-            departmentListItemViewAdapter?.updateItemInAdapter(editCollegeId!!)
-            editCollegeId=null
-        }
+        departmentListItemViewAdapter?.updateList()
     }
 }

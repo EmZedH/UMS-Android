@@ -59,6 +59,8 @@ class CourseSelectForProfessorActivity: AppCompatActivity(), ClickListener, Sear
             secondTextView = findViewById(R.id.add_to_get_started_text_view)
 
             val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
+            firstTextView.text = getString(R.string.no_courses_string)
+            secondTextView.text = getString(R.string.tap_add_button_to_select_courses_string)
             toolBar = findViewById(R.id.top_app_bar)
             toolBar?.title = "Select Courses"
             toolBar?.setNavigationOnClickListener {
