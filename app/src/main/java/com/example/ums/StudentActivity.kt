@@ -1,5 +1,6 @@
 package com.example.ums
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.SearchView
 import androidx.activity.OnBackPressedCallback
@@ -7,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ums.adapters.StudentTabPageAdapter
+import com.example.ums.fragments.AddableSearchableFragment
 import com.example.ums.fragments.StudentOpenElectiveFragment
 import com.example.ums.fragments.StudentProfessionalElectiveFragment
 import com.example.ums.fragments.TransactionFragment
@@ -28,7 +30,7 @@ class StudentActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.tabbed_page_layout)
+        setContentView(R.layout.tabbed_page_with_info_button_layout)
 
         if(savedInstanceState!=null){
             isConfigurationChanged = savedInstanceState.getBoolean("student_activity_is_configuration_changed")
@@ -74,12 +76,12 @@ class StudentActivity: AppCompatActivity() {
             val infoButton = findViewById<ActionMenuItemView>(R.id.info)
 
             infoButton.setOnClickListener {
-//                val intent = Intent(this, DepartmentDetailsActivity::class.java)
-//                val departmentDetailsBundle = Bundle().apply {
-//                    putInt("department_details_department_id", studentID)
-//                }
-//                intent.putExtras(departmentDetailsBundle)
-//                startActivity(intent)
+                val intent = Intent(this, StudentDetailsActivity::class.java)
+                val departmentDetailsBundle = Bundle().apply {
+                    putInt("student_details_student_id", studentID)
+                }
+                intent.putExtras(departmentDetailsBundle)
+                startActivity(intent)
             }
 
             viewPager.currentItem

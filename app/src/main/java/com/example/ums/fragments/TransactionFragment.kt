@@ -8,18 +8,17 @@ import android.widget.TextView
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.AddableSearchableFragment
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.adapters.TransactionsListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.TransactionAddBottomSheet
 import com.example.ums.dialogFragments.TransactionAddConfirmationDialog
 import com.example.ums.dialogFragments.TransactionDeleteDialog
-import com.example.ums.listener.ItemListener
+import com.example.ums.listener.DeleteListener
 import com.example.ums.model.databaseAccessObject.StudentDAO
 import com.example.ums.model.databaseAccessObject.TransactionDAO
 
-class TransactionFragment: AddableSearchableFragment(), ItemListener {
+class TransactionFragment: AddableSearchableFragment(), DeleteListener {
 
     private var professorListItemViewAdapter: TransactionsListItemViewAdapter? = null
     private lateinit var firstTextView: TextView
@@ -68,13 +67,6 @@ class TransactionFragment: AddableSearchableFragment(), ItemListener {
             addTestDialog()
         }
     }
-    override fun onUpdate(id: Int) {
-//        val collegeAdminUpdateBottomSheet = ProfessorUpdateBottomSheet()
-//        collegeAdminUpdateBottomSheet.arguments = Bundle().apply {
-//            putInt("college_activity_professor_id", id)
-//        }
-//        collegeAdminUpdateBottomSheet.show(requireActivity().supportFragmentManager, "collegeAdminUpdateDialog")
-    }
 
     private fun addTestDialog(){
         val transactionAddBottomSheet = TransactionAddBottomSheet()
@@ -87,15 +79,6 @@ class TransactionFragment: AddableSearchableFragment(), ItemListener {
     override fun onDelete(id: Int) {
         val deleteFragment = TransactionDeleteDialog.getInstance(id)
         deleteFragment.show(requireActivity().supportFragmentManager, "TransactionDeleteDialog")
-    }
-
-    override fun onClick(bundle: Bundle?) {
-//        val intent = Intent(requireContext(), ProfessorCoursesListActivity::class.java)
-//        if(bundle!=null){
-//            editProfessorId = bundle.getInt("professor_profile_professor_id")
-//            intent.putExtras(bundle)
-//            startActivity(intent)
-//        }
     }
 
     override fun onAdd() {

@@ -1,10 +1,11 @@
 package com.example.ums.adapters
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.DeletableListItemViewHolder
+import com.example.ums.listItemViewHolder.DeletableListItemViewHolder
 import com.example.ums.R
 import com.example.ums.listener.DeleteClickListener
 import com.example.ums.model.Course
@@ -38,6 +39,7 @@ class StudentOpenCourseListItemViewAdapter (private val studentID: Int, private 
             listener.onClick(bundle)
         }
         holder.deleteButton.setOnClickListener {
+            Log.i("StudentOpenCourseListItemViewAdapterClass", "position $position")
             listener.onDelete(position)
         }
     }
@@ -54,25 +56,6 @@ class StudentOpenCourseListItemViewAdapter (private val studentID: Int, private 
         originalList.clear()
         originalList.addAll(filteredList)
         notifyDataSetChanged()
-    }
-
-    fun addItem(id: Int){
-        val query = filterQuery
-        val record = recordsDAO.get(studentID, id)
-        val course = courseDAO.get(id, record?.courseProfessor?.course?.departmentID, record?.courseProfessor?.course?.collegeID)
-        if(course!=null){
-            if(query!=null && course.semester.toString().lowercase().contains(query.lowercase())){
-                originalList.apply {
-                    add(course)
-                    sortBy {course -> course.id }
-                    notifyItemInserted(indexOf(course))
-                }
-            }
-            else if(query==null){
-                originalList.add(course)
-                notifyItemInserted(originalList.size)
-            }
-        }
     }
 
     fun deleteItem(position: Int){

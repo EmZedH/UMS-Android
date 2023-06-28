@@ -92,13 +92,13 @@ class StudentDAO(private val databaseHelper: DatabaseHelper) {
     fun getNewCurrentStudentsList(professorID: Int, courseID: Int): List<Student>{
         val students = mutableListOf<Student>()
         val cursor = databaseHelper.readableDatabase
-            .rawQuery("SELECT STUDENT.*, USER.*, COURSE.COURSE_SEM FROM STUDENT INNER JOIN USER ON " +
-                    "(USER.U_ID = STUDENT.STUDENT_ID) INNER JOIN COURSE ON " +
-                    "(COURSE.COURSE_ID = $courseID AND " +
-                    "COURSE.DEPT_ID = STUDENT.DEPT_ID AND " +
-                    "COURSE.COLLEGE_ID = STUDENT.COLLEGE_ID) WHERE STUDENT_ID NOT IN " +
-                    "(SELECT STUDENT_ID FROM RECORDS WHERE PROF_ID = $professorID AND COURSE_ID = $courseID) AND " +
-                    "STUDENT.S_SEM = COURSE.COURSE_SEM", null)
+//            .rawQuery("SELECT STUDENT.*, USER.*, COURSE.COURSE_SEM FROM STUDENT INNER JOIN USER ON " +
+//                    "(USER.U_ID = STUDENT.STUDENT_ID) INNER JOIN COURSE ON " +
+//                    "(COURSE.COURSE_ID = $courseID AND " +
+//                    "COURSE.COLLEGE_ID = STUDENT.COLLEGE_ID) WHERE STUDENT_ID NOT IN " +
+//                    "(SELECT STUDENT_ID FROM RECORDS WHERE PROF_ID = $professorID AND COURSE_ID = $courseID) AND " +
+//                    "STUDENT.S_SEM = COURSE.COURSE_SEM", null)
+            .rawQuery("SELECT STUDENT.*, USER.*, RECORDS.* FROM STUDENT INNER JOIN USER ON (USER.U_ID = STUDENT.STUDENT_ID) INNER JOIN RECORDS ON (RECORDS.STUDENT_ID = STUDENT.STUDENT_ID AND RECORDS.COLLEGE_ID = STUDENT.COLLEGE_ID) WHERE RECORDS.COURSE_ID = $courseID AND RECORDS.PROF_ID = $professorID AND RECORDS.STATUS = \"NOT_COMPLETED\"", null)
         cursor.moveToFirst()
         while (!cursor.isAfterLast){
             students.add(
@@ -199,15 +199,28 @@ class StudentDAO(private val databaseHelper: DatabaseHelper) {
 
     fun update(student: Student?){
 
-        if(student!=null){
+        student?.let{
             val db = databaseHelper.writableDatabase
-            val contentValues = ContentValues().apply{
+            val contentValuesUser = ContentValues().apply{
                 put(userNameColumn, student.user.name)
                 put(userContactColumn, student.user.contactNumber)
                 put(userAddressColumn, student.user.address)
             }
-
-            db.update(userTable,contentValues, "$userPrimaryKey=?", arrayOf(student.user.id.toString()))
+            val contentValuesStudent = ContentValues().apply {
+                put(semesterColumn, student.semester)
+            }
+            db.beginTransaction()
+            try{
+                db.update(userTable,contentValuesUser, "$userPrimaryKey=?", arrayOf(student.user.id.toString()))
+                db.update("STUDENT", contentValuesStudent, "STUDENT_ID = ?", arrayOf(student.user.id.toString()))
+                db.setTransactionSuccessful()
+            }
+            catch (e: Exception){
+                e.printStackTrace()
+            }
+            finally {
+                db.endTransaction()
+            }
             db.close()
         }
 

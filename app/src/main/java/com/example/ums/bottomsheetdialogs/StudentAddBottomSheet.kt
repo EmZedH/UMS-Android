@@ -313,7 +313,7 @@ class StudentAddBottomSheet : FullScreenBottomSheetDialog() {
                                 gender!!,
                                 userAddressText,
                                 userPasswordText,
-                                UserRole.COLLEGE_ADMIN.role,
+                                UserRole.STUDENT.role,
                                 emailAddressText
                             ),
                             (selectedSemester!!)+1,

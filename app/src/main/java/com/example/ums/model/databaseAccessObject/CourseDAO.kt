@@ -14,6 +14,7 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
     private val degreeColumn = "DEGREE"
     private val electiveColumn = "ELECTIVE"
 
+    private val professorTable = "PROFESSOR"
     private val testTable = "TEST"
     private val recordTable = "RECORDS"
     private val courseProfessorTable = "COURSE_PROFESSOR_TABLE"
@@ -85,7 +86,8 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
         val courses = mutableListOf<Course>()
         val cursor = databaseHelper.readableDatabase
             .rawQuery("SELECT * FROM $tableName WHERE ($courseKey, $departmentKey, $collegeKey) NOT IN " +
-                    "(SELECT $courseKey, $departmentKey, $collegeKey FROM $courseProfessorTable WHERE $professorKey = $professorID)", null)
+                    "(SELECT $courseKey, $departmentKey, $collegeKey FROM $courseProfessorTable WHERE $professorKey = $professorID) " +
+                    "AND $departmentKey = (SELECT $departmentKey FROM $professorTable WHERE $professorKey = $professorID)", null)
 
         if(cursor!=null && cursor.moveToFirst()){
             while (!cursor.isAfterLast){
@@ -113,7 +115,42 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
             .rawQuery("SELECT COURSE.* FROM COURSE INNER JOIN RECORDS ON " +
                     "(COURSE.COURSE_ID = RECORDS.COURSE_ID AND " +
                     "COURSE.DEPT_ID = RECORDS.DEPT_ID AND " +
-                    "COURSE.COLLEGE_ID = RECORDS.COLLEGE_ID) WHERE RECORDS.STUDENT_ID = $studentID AND COURSE.ELECTIVE = \"Professional\"",
+                    "COURSE.COLLEGE_ID = RECORDS.COLLEGE_ID) " +
+                    "WHERE RECORDS.STUDENT_ID = $studentID AND " +
+                    "COURSE.ELECTIVE = \"Professional\" AND " +
+                    "RECORDS.STATUS = \"NOT_COMPLETED\"",
+                null)
+
+        if(cursor!=null && cursor.moveToFirst()){
+            while (!cursor.isAfterLast){
+                courses.add(
+                    Course(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getInt(2),
+                        cursor.getInt(3),
+                        cursor.getInt(4),
+                        cursor.getString(5),
+                        cursor.getString(6)
+                    )
+                )
+                cursor.moveToNext()
+            }
+        }
+        cursor.close()
+        return courses
+    }
+
+    fun getCompletedProfessionalCourses(studentID: Int): List<Course>{
+        val courses = mutableListOf<Course>()
+        val cursor = databaseHelper.readableDatabase
+            .rawQuery("SELECT COURSE.* FROM COURSE INNER JOIN RECORDS ON " +
+                    "(COURSE.COURSE_ID = RECORDS.COURSE_ID AND " +
+                    "COURSE.DEPT_ID = RECORDS.DEPT_ID AND " +
+                    "COURSE.COLLEGE_ID = RECORDS.COLLEGE_ID) " +
+                    "WHERE RECORDS.STUDENT_ID = $studentID AND " +
+                    "COURSE.ELECTIVE = \"Professional\" AND " +
+                    "RECORDS.STATUS = \"COMPLETED\"",
                 null)
 
         if(cursor!=null && cursor.moveToFirst()){
@@ -144,7 +181,38 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
                     "COURSE.DEPT_ID = RECORDS.DEPT_ID AND " +
                     "COURSE.COLLEGE_ID = RECORDS.COLLEGE_ID) WHERE " +
                     "RECORDS.STUDENT_ID = $studentID AND " +
-                    "COURSE.ELECTIVE = \"Open\"",
+                    "COURSE.ELECTIVE = \"Open\" AND RECORDS.STATUS = \"NOT_COMPLETED\"",
+                null)
+
+        if(cursor!=null && cursor.moveToFirst()){
+            while (!cursor.isAfterLast){
+                courses.add(
+                    Course(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getInt(2),
+                        cursor.getInt(3),
+                        cursor.getInt(4),
+                        cursor.getString(5),
+                        cursor.getString(6)
+                    )
+                )
+                cursor.moveToNext()
+            }
+        }
+        cursor.close()
+        return courses
+    }
+
+    fun getCompletedOpenCourses(studentID: Int): List<Course>{
+        val courses = mutableListOf<Course>()
+        val cursor = databaseHelper.readableDatabase
+            .rawQuery("SELECT COURSE.* FROM COURSE INNER JOIN RECORDS ON " +
+                    "(COURSE.COURSE_ID = RECORDS.COURSE_ID AND " +
+                    "COURSE.DEPT_ID = RECORDS.DEPT_ID AND " +
+                    "COURSE.COLLEGE_ID = RECORDS.COLLEGE_ID) WHERE " +
+                    "RECORDS.STUDENT_ID = $studentID AND " +
+                    "COURSE.ELECTIVE = \"Open\" AND RECORDS.STATUS = \"COMPLETED\"",
                 null)
 
         if(cursor!=null && cursor.moveToFirst()){

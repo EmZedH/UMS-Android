@@ -1,11 +1,12 @@
 package com.example.ums.adapters
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.DeletableListItemViewHolder
 import com.example.ums.R
+import com.example.ums.listItemViewHolder.DeletableListItemViewHolder
 import com.example.ums.listener.DeleteClickListener
 import com.example.ums.model.CourseProfessor
 import com.example.ums.model.databaseAccessObject.CourseProfessorDAO
@@ -30,8 +31,8 @@ class ProfessorsCoursesListItemViewAdapter(private val professorID: Int, private
         }
         holder.itemView.setOnClickListener {
             val bundle = Bundle().apply {
-                putInt("professorID", professorID)
-                putInt("courseID", courseProfessor.course.id)
+                putInt("professor_id", professorID)
+                putInt("course_id", courseProfessor.course.id)
             }
             listener.onClick(bundle)
         }

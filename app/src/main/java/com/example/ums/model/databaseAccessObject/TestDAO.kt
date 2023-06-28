@@ -118,4 +118,17 @@ class TestDAO(private val databaseHelper: DatabaseHelper) {
         db.close()
     }
 
+    fun getAverageTestMark(studentID: Int?, courseID: Int?, departmentID: Int?): Int?{
+        studentID ?: return null
+        courseID ?: return null
+        departmentID ?: return null
+        val cursor = databaseHelper.readableDatabase
+            .rawQuery("SELECT AVG(TEST_MARKS) FROM TEST WHERE STUDENT_ID = ? AND COURSE_ID = ? AND DEPT_ID = ?", arrayOf(studentID.toString(), courseID.toString(), departmentID.toString()))
+        if(cursor!=null && cursor.moveToFirst()){
+            return cursor.getInt(0)
+        }
+        cursor.close()
+        return null
+    }
+
 }

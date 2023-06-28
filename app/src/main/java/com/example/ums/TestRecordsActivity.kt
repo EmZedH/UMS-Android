@@ -1,6 +1,8 @@
 package com.example.ums
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.SearchView
 import android.widget.TextView
@@ -13,14 +15,14 @@ import com.example.ums.adapters.TestListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.TestAddBottomSheet
 import com.example.ums.bottomsheetdialogs.TestUpdateBottomSheet
 import com.example.ums.dialogFragments.TestDeleteDialog
-import com.example.ums.listener.ItemListener
+import com.example.ums.listener.DeleteUpdateListener
 import com.example.ums.model.databaseAccessObject.CourseDAO
 import com.example.ums.model.databaseAccessObject.StudentDAO
 import com.example.ums.model.databaseAccessObject.TestDAO
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class TestRecordsActivity: AppCompatActivity(), ItemListener {
+class TestRecordsActivity: AppCompatActivity(), DeleteUpdateListener {
 
     private var searchView: SearchView? = null
     private var searchQuery: String? = null
@@ -76,14 +78,14 @@ class TestRecordsActivity: AppCompatActivity(), ItemListener {
             recyclerView.layoutManager = LinearLayoutManager(this)
 
             infoButton.setOnClickListener {
-//                val intent = Intent(this, CourseDetailsActivity::class.java)
-//                val courseDetailsBundle = Bundle().apply {
-//                    putInt("course_details_college_id", collegeID)
-//                    putInt("course_details_department_id", departmentID)
-//                    putInt("course_details_course_id", courseID)
-//                }
-//                intent.putExtras(courseDetailsBundle)
-//                startActivity(intent)
+                val intent = Intent(this, StudentCourseRecordPageActivity::class.java)
+                val courseDetailsBundle = Bundle().apply {
+                    putInt("student_course_record_student_id", studentID)
+                    putInt("student_course_record_course_id", courseID)
+                    putInt("student_course_record_department_id", departmentID)
+                }
+                intent.putExtras(courseDetailsBundle)
+                startActivity(intent)
             }
 
             addFloatingActionButton.setOnClickListener {
@@ -153,9 +155,6 @@ class TestRecordsActivity: AppCompatActivity(), ItemListener {
 
         val testDeleteDialog = TestDeleteDialog.getInstance(id)
         testDeleteDialog.show(supportFragmentManager, "TestDeleteDialog")
-    }
-
-    override fun onClick(bundle: Bundle?) {
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -1,8 +1,9 @@
-package com.example.ums
+package com.example.ums.listItemViewHolder
 
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ums.R
 
 class ClickableListItemViewHolder (itemView : View) : RecyclerView.ViewHolder(itemView) {
 

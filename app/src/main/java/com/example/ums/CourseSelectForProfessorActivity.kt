@@ -7,6 +7,7 @@ import android.widget.SearchView
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.adapters.NewCoursesForProfessorListItemViewAdapter
@@ -59,6 +60,7 @@ class CourseSelectForProfessorActivity: AppCompatActivity(), ClickListener, Sear
             secondTextView = findViewById(R.id.add_to_get_started_text_view)
 
             val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
+            val infoButton = findViewById<ActionMenuItemView>(R.id.info)
             firstTextView.text = getString(R.string.no_courses_string)
             secondTextView.text = getString(R.string.tap_add_button_to_select_courses_string)
             toolBar = findViewById(R.id.top_app_bar)
@@ -76,12 +78,12 @@ class CourseSelectForProfessorActivity: AppCompatActivity(), ClickListener, Sear
 
             initializeSearchView()
 
-
             onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true){
                 override fun handleOnBackPressed() {
                     onBack()
                 }
             })
+
 
             addFloatingActionButton.setOnClickListener {
                 val courseAddBottomSheet = CourseAddBottomSheet()

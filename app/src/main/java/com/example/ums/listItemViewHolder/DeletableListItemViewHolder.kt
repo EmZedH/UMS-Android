@@ -1,9 +1,10 @@
-package com.example.ums
+package com.example.ums.listItemViewHolder
 
 import android.view.View
 import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ums.R
 
 class DeletableListItemViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
 

@@ -68,8 +68,13 @@ class TestUpdateBottomSheet: FullScreenBottomSheetDialog() {
         testMark =
             view.findViewById(R.id.test_marks_text_layout)
 
+        val testDAO = TestDAO(DatabaseHelper(requireActivity()))
         if(testMarkTextView.isNotEmpty()){
             testMark.editText?.setText(testMarkTextView)
+        }
+        else{
+            val mark = testDAO.get(testID, studentID, courseID, departmentID)?.mark
+            mark?.let { testMark.editText?.setText(it.toString()) }
         }
 
         val addCollegeButton =
@@ -77,9 +82,6 @@ class TestUpdateBottomSheet: FullScreenBottomSheetDialog() {
 
         setView(view)
 
-        val testDAO = TestDAO(DatabaseHelper(requireActivity()))
-        val mark = testDAO.get(testID, studentID, courseID, departmentID)?.mark
-        mark?.let { testMark.editText?.setText(it.toString()) }
 
         testMark.editText?.addTextChangedListener(textListener(testMark) {
             testMarkError = null

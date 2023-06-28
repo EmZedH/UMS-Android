@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ums.adapters.DepartmentTabPageAdapter
+import com.example.ums.fragments.AddableSearchableFragment
 import com.example.ums.fragments.CourseFragment
 import com.example.ums.fragments.ProfessorFragment
 import com.example.ums.fragments.StudentFragment
@@ -30,7 +31,7 @@ class DepartmentActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.tabbed_page_layout)
+        setContentView(R.layout.tabbed_page_with_info_button_layout)
 
         if(savedInstanceState!=null){
             isConfigurationChanged = savedInstanceState.getBoolean("department_page_is_configuration_changed")

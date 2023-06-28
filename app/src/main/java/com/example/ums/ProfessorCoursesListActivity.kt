@@ -139,9 +139,9 @@ class ProfessorCoursesListActivity: AppCompatActivity(), DeleteClickListener {
     }
 
     override fun onClick(bundle: Bundle?) {
-//        val intent = Intent(this, StudentClassActivity::class.java)
-//        intent.putExtras(bundle ?: return)
-//        startActivity(intent)
+        val intent = Intent(this, CourseStudentsListActivity::class.java)
+        intent.putExtras(bundle ?: return)
+        startActivity(intent)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

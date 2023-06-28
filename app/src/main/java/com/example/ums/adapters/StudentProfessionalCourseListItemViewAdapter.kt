@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.DeletableListItemViewHolder
+import com.example.ums.listItemViewHolder.DeletableListItemViewHolder
 import com.example.ums.R
 import com.example.ums.listener.DeleteClickListener
 import com.example.ums.model.Course
 import com.example.ums.model.databaseAccessObject.CourseDAO
 import com.example.ums.model.databaseAccessObject.RecordsDAO
 
-class StudentProfessionalCourseListItemViewAdapter (private val studentID: Int, private val courseDAO: CourseDAO, private val recordsDAO: RecordsDAO, private val itemListener: DeleteClickListener): RecyclerView.Adapter<DeletableListItemViewHolder>() {
+class StudentProfessionalCourseListItemViewAdapter (private val studentID: Int, private val departmentID: Int, private val courseDAO: CourseDAO, private val recordsDAO: RecordsDAO, private val itemListener: DeleteClickListener): RecyclerView.Adapter<DeletableListItemViewHolder>() {
 
     private var originalList : MutableList<Course> = courseDAO.getProfessionalCourses(studentID).sortedBy { it.id }.toMutableList()
     private var filterQuery: String? = null
@@ -58,7 +58,7 @@ class StudentProfessionalCourseListItemViewAdapter (private val studentID: Int, 
 
     fun addItem(id: Int){
         val query = filterQuery
-        val record = recordsDAO.get(studentID, id)
+        val record = recordsDAO.get(studentID, id, departmentID)
         val course = courseDAO.get(id, record?.courseProfessor?.course?.departmentID, record?.courseProfessor?.course?.collegeID)
         if(course!=null){
             if(query!=null && course.semester.toString().lowercase().contains(query.lowercase())){

@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.AddableSearchableFragment
 import com.example.ums.CollegeActivity
 import com.example.ums.DatabaseHelper
 import com.example.ums.R

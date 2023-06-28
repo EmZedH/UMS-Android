@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun startMainPageActivity(userName : String, userID : Int, userRole : String){
 
-        val intent = Intent(this, MainPageActivity::class.java)
+        val intent = Intent(this, SuperAdminCollegeAdminMainPageActivity::class.java)
         val bundle = Bundle()
         bundle.putString("userName", userName)
         bundle.putInt("userID", userID)

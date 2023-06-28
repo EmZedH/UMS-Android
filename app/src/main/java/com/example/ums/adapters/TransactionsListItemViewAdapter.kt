@@ -3,13 +3,13 @@ package com.example.ums.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.DeletableListItemViewHolder
+import com.example.ums.listItemViewHolder.DeletableListItemViewHolder
 import com.example.ums.R
-import com.example.ums.listener.ItemListener
+import com.example.ums.listener.DeleteListener
 import com.example.ums.model.Transactions
 import com.example.ums.model.databaseAccessObject.TransactionDAO
 
-class TransactionsListItemViewAdapter (private val studentID: Int, private val transactionDAO: TransactionDAO, private val itemListener: ItemListener): RecyclerView.Adapter<DeletableListItemViewHolder>() {
+class TransactionsListItemViewAdapter (private val studentID: Int, private val transactionDAO: TransactionDAO, private val itemListener: DeleteListener): RecyclerView.Adapter<DeletableListItemViewHolder>() {
 
     private var originalList : MutableList<Transactions> = transactionDAO.getList(studentID).sortedBy { it.id }.toMutableList()
     private var filterQuery: String? = null
@@ -26,46 +26,11 @@ class TransactionsListItemViewAdapter (private val studentID: Int, private val t
     override fun onBindViewHolder(holder: DeletableListItemViewHolder, position: Int) {
         val transactions = originalList[position]
         holder.firstTextView.text = "ID: T/${transactions.id}"
-        holder.secondTextView.text = "Semester 1"
-        holder.itemView.setOnClickListener {
-//            val bundle = Bundle().apply {
-//                putInt("professor_profile_department_id", departmentID)
-//                putInt("professor_profile_college_id", collegeID)
-//                putInt("professor_profile_professor_id", transactions.user.id)
-//            }
-//            itemListener.onClick(bundle)
-        }
+        holder.secondTextView.text = "Semester ${transactions.semester}"
         holder.deleteButton.setOnClickListener {
             itemListener.onDelete(transactions.id)
         }
-//        holder.optionsButton.setOnClickListener {
-//            showOptionsPopupMenu(transactions, holder)
-//        }
     }
-
-//    private fun showOptionsPopupMenu(transactions : Transactions, holder: ListItemViewHolder){
-//        val context = holder.itemView.context
-//        val popupMenu = PopupMenu(context, holder.optionsButton)
-//
-//        popupMenu.inflate(R.menu.edit_delete_menu)
-//
-//        popupMenu.setOnMenuItemClickListener{menuItem ->
-//            when (menuItem.itemId) {
-//                R.id.edit_college -> {
-//                    itemListener.onUpdate(transactions.id)
-//                    true
-//                }
-//                R.id.delete_college -> {
-//                    itemListener.onDelete(transactions.id)
-//                    true
-//                }
-//
-//                else -> {
-//                    false
-//                }
-//            }}
-//        popupMenu.show()
-//    }
 
     fun filter(query: String?){
         val filteredList =
@@ -98,42 +63,6 @@ class TransactionsListItemViewAdapter (private val studentID: Int, private val t
             }
         }
     }
-
-//    fun updateItemInAdapter(id: Int){
-//        val query = filterQuery
-//        val transaction = transactionDAO.get(id) ?: return
-//        for (listProfessor in originalList){
-//            if(listProfessor.user.id == transaction.user.id){
-//                if(query!=null && query!=""){
-//                    val flag = transaction.user.name.lowercase().contains(query.lowercase())
-//                    if(flag){
-//                        originalList.apply {
-//                            set(originalList.indexOf(listProfessor), transaction)
-//                            sortBy { it.user.id }
-//                            notifyItemChanged(originalList.indexOf(transaction))
-//                        }
-//                        return
-//                    }
-//                    else{
-//                        originalList.apply {
-//                            notifyItemRemoved(originalList.indexOf(listProfessor))
-//                            remove(listProfessor)
-//                            sortBy { it.user.id }
-//                        }
-//                        return
-//                    }
-//                }
-//                else{
-//                    originalList.apply {
-//                        set(originalList.indexOf(listProfessor), transaction)
-//                        sortBy { it.user.id }
-//                        notifyItemChanged(originalList.indexOf(transaction))
-//                    }
-//                    return
-//                }
-//            }
-//        }
-//    }
 
     fun deleteItem(id: Int){
         val professor = transactionDAO.get(id)

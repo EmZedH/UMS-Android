@@ -11,7 +11,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.AddableSearchableFragment
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.StudentTransactionSelectActivity
@@ -23,6 +22,7 @@ import com.example.ums.model.Records
 import com.example.ums.model.databaseAccessObject.CourseDAO
 import com.example.ums.model.databaseAccessObject.CourseProfessorDAO
 import com.example.ums.model.databaseAccessObject.RecordsDAO
+import com.example.ums.model.databaseAccessObject.StudentDAO
 
 class StudentProfessionalElectiveFragment: AddableSearchableFragment(), DeleteClickListener {
 
@@ -37,7 +37,8 @@ class StudentProfessionalElectiveFragment: AddableSearchableFragment(), DeleteCl
         studentID = arguments?.getInt("student_activity_student_id")
         val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
         val recordsDAO = RecordsDAO(DatabaseHelper(requireActivity()))
-        studentProfessionalCourseListItemViewAdapter = StudentProfessionalCourseListItemViewAdapter(studentID ?: return, courseDAO, recordsDAO, this )
+        val departmentID = StudentDAO(DatabaseHelper(requireActivity())).get(studentID)?.departmentID
+        studentProfessionalCourseListItemViewAdapter = StudentProfessionalCourseListItemViewAdapter(studentID ?: return,departmentID ?: return, courseDAO, recordsDAO, this )
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -117,6 +118,7 @@ class StudentProfessionalElectiveFragment: AddableSearchableFragment(), DeleteCl
 
     override fun onResume() {
         super.onResume()
+        onRefresh()
         studentProfessionalCourseListItemViewAdapter?.updateList()
     }
 

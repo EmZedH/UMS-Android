@@ -63,15 +63,28 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun goToMainPage(user : User){
-        val intent = Intent(this, MainPageActivity::class.java)
-        val bundle = Bundle()
-        bundle.putString("userName", user.name)
-        bundle.putInt("userID", user.id)
-        bundle.putString("userRole", user.role)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
-        intent.putExtras(bundle)
-        startActivity(intent)
-        finish()
+        if(UserRole.SUPER_ADMIN.role == user.role || UserRole.COLLEGE_ADMIN.role == user.role){
+            val intent = Intent(this, SuperAdminCollegeAdminMainPageActivity::class.java)
+            val bundle = Bundle()
+            bundle.putString("userName", user.name)
+            bundle.putInt("userID", user.id)
+            bundle.putString("userRole", user.role)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            intent.putExtras(bundle)
+            startActivity(intent)
+            finish()
+        }
+        else if(UserRole.PROFESSOR.role == user.role){
+            val intent = Intent(this, ProfessorMainPageActivity::class.java)
+            val bundle = Bundle()
+            bundle.putString("userName", user.name)
+            bundle.putInt("userID", user.id)
+            bundle.putString("userRole", user.role)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            intent.putExtras(bundle)
+            startActivity(intent)
+            finish()
+        }
 
     }
 

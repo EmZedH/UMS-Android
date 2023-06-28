@@ -253,7 +253,7 @@ class ProfessorAddBottomSheet : FullScreenBottomSheetDialog() {
                                 gender!!,
                                 userAddressText,
                                 userPasswordText,
-                                UserRole.COLLEGE_ADMIN.role,
+                                UserRole.PROFESSOR.role,
                                 emailAddressText
                             ),
                             departmentID!!,

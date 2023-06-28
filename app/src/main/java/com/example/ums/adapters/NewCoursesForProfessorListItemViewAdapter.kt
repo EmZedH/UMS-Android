@@ -3,7 +3,7 @@ package com.example.ums.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.ClickableListItemViewHolder
+import com.example.ums.listItemViewHolder.ClickableListItemViewHolder
 import com.example.ums.R
 import com.example.ums.listener.ClickListener
 import com.example.ums.model.Course
@@ -24,7 +24,7 @@ class NewCoursesForProfessorListItemViewAdapter(private val professorID: Int, pr
 
     override fun onBindViewHolder(holder: ClickableListItemViewHolder, position: Int) {
         val course = originalList[position]
-        holder.firstTextView.text = "ID: C/${course.collegeID}-D/${course.departmentID}-U/${course.id}"
+        holder.firstTextView.text = "ID: C/${course.collegeID}-D/${course.departmentID}-CO/${course.id}"
         holder.secondTextView.text = course.name
         holder.itemView.setOnClickListener {
 

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.ListItemViewHolder
+import com.example.ums.listItemViewHolder.ListItemViewHolder
 import com.example.ums.R
 import com.example.ums.listener.ItemListener
 import com.example.ums.model.CollegeAdmin

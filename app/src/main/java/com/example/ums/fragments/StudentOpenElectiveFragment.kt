@@ -11,7 +11,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.AddableSearchableFragment
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.StudentTransactionSelectActivity
@@ -61,7 +60,7 @@ class StudentOpenElectiveFragment: AddableSearchableFragment(), DeleteClickListe
         super.onViewCreated(view, savedInstanceState)
 
         setFragmentResultListener("RecordDeleteDialog"){_, result->
-            val id = result.getInt("id")
+            val id = result.getInt("position")
             studentOpenCourseListItemViewAdapter?.deleteItem(id)
             onRefresh()
         }
@@ -123,6 +122,7 @@ class StudentOpenElectiveFragment: AddableSearchableFragment(), DeleteClickListe
 
     override fun onResume() {
         super.onResume()
+        onRefresh()
         studentOpenCourseListItemViewAdapter?.updateList()
     }
 

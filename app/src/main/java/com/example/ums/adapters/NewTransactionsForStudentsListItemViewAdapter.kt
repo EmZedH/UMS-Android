@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.ClickableListItemViewHolder
+import com.example.ums.listItemViewHolder.ClickableListItemViewHolder
 import com.example.ums.R
 import com.example.ums.listener.ClickListener
 import com.example.ums.model.Transactions
@@ -31,34 +31,12 @@ class NewTransactionsForStudentsListItemViewAdapter(studentID: Int, private val 
                     putInt("transaction_id", transactions.id)
                 }
             )
-//            courseProfessorDAO.insert(CourseProfessor(transactions, courseDAO.get(courseID, departmentID, collegeID) ?: return@setOnClickListener))
-//            val updatedPosition = originalList.indexOf(transactions)
-//            originalList.removeAt(updatedPosition)
-//            notifyItemRemoved(updatedPosition)
-//            clickListener.onClick(null)
         }
     }
 
     override fun getItemCount(): Int {
         return originalList.size
     }
-
-//    fun filter(query: String?){
-//        val filteredList =
-//            if(query.isNullOrEmpty())
-//                transactionDAO.getCurrentSemesterTransactionList(studentID).sortedBy { transaction ->  transaction.id }
-//            else
-//                transactionDAO.getCurrentSemesterTransactionList(studentID).filter { transaction -> transaction.semester.toString().contains(query, ignoreCase = true)}.sortedBy { transaction ->  transaction.id }
-//
-//        filterQuery = if(query.isNullOrEmpty()){
-//            null
-//        } else{
-//            query
-//        }
-//        originalList.clear()
-//        originalList.addAll(filteredList)
-//        notifyDataSetChanged()
-//    }
 
     fun addItem(id: Int){
         val query = filterQuery

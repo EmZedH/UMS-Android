@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.DeletableListItemViewHolder
+import com.example.ums.listItemViewHolder.DeletableListItemViewHolder
 import com.example.ums.R
 import com.example.ums.listener.DeleteClickListener
 import com.example.ums.model.CourseProfessor

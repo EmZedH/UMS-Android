@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".LoginActivity" android:windowSoftInputMode="adjustResize"/>
-        <activity android:name=".MainPageActivity"/>
+        <activity android:name=".SuperAdminCollegeAdminMainPageActivity"/>
         <activity android:name=".ManageProfileActivity" android:windowSoftInputMode="adjustResize"/>
         <activity android:name=".CollegeActivity"/>
         <activity android:name=".CollegeAdminDetailsActivity"/>
@@ -44,6 +44,12 @@
         <activity android:name=".OtherDepartmentSelectActivity"/>
         <activity android:name=".StudentProfessorsListActivity"/>
         <activity android:name=".TestRecordsActivity"/>
+        <activity android:name=".StudentCourseRecordPageActivity"/>
+        <activity android:name=".StudentDetailsActivity"/>
+        <activity android:name=".StudentCompletedCourseActivity"/>
+        <activity android:name=".StudentCompletedCourseRecordActivity"/>
+        <activity android:name=".CourseStudentsListActivity"/>
+        <activity android:name=".ProfessorMainPageActivity"/>
 
     </application>
 

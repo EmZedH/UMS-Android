@@ -11,15 +11,18 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.example.ums.dialogFragments.ExitDialog
 import com.example.ums.dialogFragments.LogOutDialog
+import com.example.ums.fragments.AddableSearchableFragment
+import com.example.ums.fragments.CollegeAdminMainPageFragment
 import com.example.ums.fragments.SuperAdminMainPageFragment
 import com.example.ums.model.User
+import com.example.ums.model.databaseAccessObject.CollegeAdminDAO
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.example.ums.model.databaseAccessObject.UserDAO
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.navigation.NavigationView
 
-class MainPageActivity: AppCompatActivity(){
+class SuperAdminCollegeAdminMainPageActivity: AppCompatActivity(){
 
     var userFragment: AddableSearchableFragment? = null
     private lateinit var drawerLayout: DrawerLayout
@@ -43,7 +46,7 @@ class MainPageActivity: AppCompatActivity(){
 
         val userDAO = UserDAO(DatabaseHelper(this))
         val bundle = intent.extras
-        val userID = bundle!!.getInt("userID")
+        val userID = bundle?.getInt("userID")
 
         val floatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
         floatingActionButton.setOnClickListener {
@@ -61,13 +64,18 @@ class MainPageActivity: AppCompatActivity(){
         if(userRole == UserRole.SUPER_ADMIN.role){
             superAdminProcesses()
         }
+        if(userRole == UserRole.COLLEGE_ADMIN.role){
+            val collegeAdminDAO = CollegeAdminDAO(DatabaseHelper(this))
+            collegeAdminProcesses(collegeAdminDAO.get(userID ?: return)?.collegeID)
+        }
     }
 
-    private fun setView(userID: Int, userDAO: UserDAO, bundle: Bundle){
+    private fun setView(userID: Int?, userDAO: UserDAO, bundle: Bundle?){
+        userID ?: return
         toolBar = findViewById(R.id.top_app_bar)
         setSupportActionBar(toolBar)
-        user = userDAO.get(userID)!!
-        userRole = bundle.getString("userRole")!!
+        user = userDAO.get(userID) ?: return
+        userRole = bundle?.getString("userRole")!!
 
         CollegeDAO(DatabaseHelper(this))
         drawerLayout = findViewById(R.id.main_page_drawer_layout)
@@ -102,7 +110,21 @@ class MainPageActivity: AppCompatActivity(){
 
         userFragment = SuperAdminMainPageFragment()
         supportFragmentManager.beginTransaction().apply {
-            replace(R.id.super_admin_fragment_container, userFragment!!)
+            replace(R.id.super_admin_fragment_container, userFragment ?: return)
+            commit()
+        }
+    }
+
+    private fun collegeAdminProcesses(collegeID: Int?){
+        navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_welcome_text_view).append(" ${user.name}")
+        navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_user_id).append(" CA/${user.id}")
+
+        userFragment = CollegeAdminMainPageFragment()
+        userFragment?.arguments = Bundle().apply {
+            putInt("college_id", collegeID ?: return)
+        }
+        supportFragmentManager.beginTransaction().apply {
+            replace(R.id.super_admin_fragment_container, userFragment ?: return)
             commit()
         }
     }

@@ -3,7 +3,7 @@ package com.example.ums.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.ClickableListItemViewHolder
+import com.example.ums.listItemViewHolder.ClickableListItemViewHolder
 import com.example.ums.R
 import com.example.ums.listener.ClickListener
 import com.example.ums.model.CourseProfessor
