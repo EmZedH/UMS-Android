@@ -24,6 +24,18 @@ import com.google.android.material.textfield.TextInputLayout
 
 class CourseAddBottomSheet: FullScreenBottomSheetDialog() {
 
+    companion object{
+
+        fun newInstance(departmentID: Int?, collegeID: Int?): CourseAddBottomSheet?{
+            val courseAddBottomSheet = CourseAddBottomSheet()
+            courseAddBottomSheet.arguments = Bundle().apply {
+                putInt("department_activity_college_id", collegeID ?: return null)
+                putInt("department_activity_department_id", departmentID ?: return null)
+            }
+            return courseAddBottomSheet
+        }
+    }
+
     private lateinit var courseName: TextInputLayout
     private lateinit var electiveRadio: RadioGroup
     private lateinit var degreeRadio: RadioGroup

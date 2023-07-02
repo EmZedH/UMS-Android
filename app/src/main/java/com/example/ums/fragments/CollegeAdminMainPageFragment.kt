@@ -75,8 +75,8 @@ class CollegeAdminMainPageFragment: AddableSearchableFragment(), ItemListener {
     }
 
     override fun onAdd() {
-        val departmentAddFragment = DepartmentAddBottomSheet.newInstance(collegeID!!)
-        departmentAddFragment.show(requireActivity().supportFragmentManager, "bottomSheetDialog")
+        val departmentAddFragment = DepartmentAddBottomSheet.newInstance(collegeID)
+        departmentAddFragment?.show(requireActivity().supportFragmentManager, "bottomSheetDialog")
     }
 
     override fun onSearch(query: String?) {
@@ -89,14 +89,9 @@ class CollegeAdminMainPageFragment: AddableSearchableFragment(), ItemListener {
     }
 
     override fun onUpdate(id: Int) {
-        val updateBottomSheet = DepartmentUpdateBottomSheet()
+        val updateBottomSheet = DepartmentUpdateBottomSheet.newInstance(id, collegeID)
 
-        updateBottomSheet.arguments = Bundle().apply{
-            putInt("department_update_college_id", collegeID!!)
-            putInt("department_update_department_id", id)
-        }
-
-        updateBottomSheet.show(requireActivity().supportFragmentManager, "updateDialog")
+        updateBottomSheet?.show(requireActivity().supportFragmentManager, "updateDialog")
     }
 
     override fun onDelete(id: Int) {

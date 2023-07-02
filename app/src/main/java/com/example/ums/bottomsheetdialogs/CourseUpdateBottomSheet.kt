@@ -20,6 +20,19 @@ import com.google.android.material.textfield.TextInputLayout
 
 class CourseUpdateBottomSheet: FullScreenBottomSheetDialog() {
 
+    companion object{
+
+        fun newInstance(courseID: Int?, departmentID: Int?, collegeID: Int?): CourseUpdateBottomSheet?{
+            val bottomSheet = CourseUpdateBottomSheet()
+            bottomSheet.arguments = Bundle().apply {
+                putInt("course_update_course_id", courseID ?: return null)
+                putInt("course_update_college_id", collegeID ?: return null)
+                putInt("course_update_department_id", departmentID ?: return null)
+            }
+            return bottomSheet
+        }
+    }
+
     private var collegeID: Int? = null
     private var departmentID: Int? = null
     private var courseID: Int? = null

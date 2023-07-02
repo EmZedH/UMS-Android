@@ -49,7 +49,13 @@
         <activity android:name=".StudentCompletedCourseActivity"/>
         <activity android:name=".StudentCompletedCourseRecordActivity"/>
         <activity android:name=".CourseStudentsListActivity"/>
-        <activity android:name=".ProfessorMainPageActivity"/>
+        <activity android:name=".professorActivities.ProfessorMainPageActivity"/>
+        <activity android:name=".ProfessorStudentsListActivity"/>
+        <activity android:name=".professorActivities.ProfessorCourseDetailsActivity"/>
+        <activity android:name=".StudentMainPageActivity"/>
+        <activity android:name=".studentActivities.StudentTestActivity"/>
+        <activity android:name=".StudentsProfileCourseRecordActivity"/>
+        <activity android:name=".studentActivities.StudentTransactionPage"/>
 
     </application>
 

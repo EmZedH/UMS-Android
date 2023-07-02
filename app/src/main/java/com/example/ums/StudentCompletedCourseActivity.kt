@@ -11,7 +11,6 @@ import com.example.ums.fragments.StudentCompletedOpenElectiveFragment
 import com.example.ums.fragments.StudentCompletedProfessionalElectiveFragment
 import com.example.ums.model.databaseAccessObject.StudentDAO
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 
@@ -27,14 +26,13 @@ class StudentCompletedCourseActivity: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.tabbed_page_layout)
+        setContentView(R.layout.tabbed_page_layout_without_fab)
 
         if(savedInstanceState!=null){
             isConfigurationChanged = savedInstanceState.getBoolean("student_completed_course_page_is_configuration_changed")
             searchQuery = savedInstanceState.getString("college_page_activity_search_query")
             isSearchViewOpen = savedInstanceState.getBoolean("college_page_activity_is_search_query_open")
         }
-        val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
         val studentDAO = StudentDAO(DatabaseHelper(this))
         val bundle = intent.extras
         studentID = bundle?.getInt("student_id")
@@ -68,7 +66,7 @@ class StudentCompletedCourseActivity: AppCompatActivity() {
             }.attach()
             searchView = findViewById(R.id.search)
 
-            viewPager.registerOnPageChangeCallback(onPageChangeCallback(addFloatingActionButton, viewPager, tabAdapter))
+            viewPager.registerOnPageChangeCallback(onPageChangeCallback(viewPager, tabAdapter))
 
             onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true){
                 override fun handleOnBackPressed() {
@@ -78,7 +76,7 @@ class StudentCompletedCourseActivity: AppCompatActivity() {
         }
     }
 
-    private fun onPageChangeCallback(addFloatingActionButton: FloatingActionButton, viewPager: ViewPager2, adapter: StudentCompletedTabPageAdapter): ViewPager2.OnPageChangeCallback{
+    private fun onPageChangeCallback(viewPager: ViewPager2, adapter: StudentCompletedTabPageAdapter): ViewPager2.OnPageChangeCallback{
         return object : ViewPager2.OnPageChangeCallback(){
 
             override fun onPageScrollStateChanged(state: Int) {
@@ -95,9 +93,6 @@ class StudentCompletedCourseActivity: AppCompatActivity() {
                     }
                     val selectedFragment = addableSearchableFragment
                     if (selectedFragment is AddableSearchableFragment) {
-                        addFloatingActionButton.setOnClickListener {
-                            selectedFragment.onAdd()
-                        }
                         searchView?.queryHint = getString(R.string.search)
                         if(isConfigurationChanged==true){
                             searchView?.isIconified = isSearchViewOpen
@@ -116,9 +111,6 @@ class StudentCompletedCourseActivity: AppCompatActivity() {
                             }
                         })
                         searchView?.setQuery(searchQuery, true)
-                    }
-                    else{
-                        addFloatingActionButton.setOnClickListener(null)
                     }
                 }
                 catch (e: IndexOutOfBoundsException){
@@ -149,12 +141,4 @@ class StudentCompletedCourseActivity: AppCompatActivity() {
             outState.putBoolean("college_page_activity_is_search_query_open",searchView!!.isIconified)
         }
     }
-
-//    override fun onResume() {
-//        super.onResume()
-
-//        if(studentID!=null){
-//            toolBar?.title = CollegeDAO(DatabaseHelper(this)).get(studentID!!)?.name
-//        }
-//    }
 }

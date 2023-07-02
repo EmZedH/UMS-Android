@@ -22,6 +22,31 @@ import com.google.android.material.textfield.TextInputLayout
 
 class CourseAddForStudentBottomSheet: FullScreenBottomSheetDialog() {
 
+    companion object{
+
+        fun newInstance(collegeID: Int?, departmentID: Int?, degree: String?, semester: Int?, elective: String?): CourseAddForStudentBottomSheet?{
+            val bottomSheet = CourseAddForStudentBottomSheet()
+            bottomSheet.arguments = Bundle().apply {
+                putInt("collegeID", collegeID ?: return null)
+                putInt("departmentID", departmentID ?: return null)
+                putString("student_degree", degree ?: return null)
+                putInt("student_semester", semester ?: return null)
+                putString("student_elective", elective ?: return null)
+            }
+            return bottomSheet
+        }
+
+        fun newInstance(departmentDetailsBundle: Bundle?, degree: String?, semester: Int?, elective: String?): CourseAddForStudentBottomSheet?{
+            val bottomSheet = CourseAddForStudentBottomSheet()
+            bottomSheet.arguments = departmentDetailsBundle?.apply {
+                putString("student_degree", degree ?: return null)
+                putInt("student_semester", semester ?: return null)
+                putString("student_elective", elective ?: return null)
+            }
+            return bottomSheet
+        }
+    }
+
     private lateinit var courseName: TextInputLayout
     private var semesterSpinner: Spinner? = null
     private lateinit var courseDAO: CourseDAO

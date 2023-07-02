@@ -69,11 +69,8 @@ class TransactionFragment: AddableSearchableFragment(), DeleteListener {
     }
 
     private fun addTestDialog(){
-        val transactionAddBottomSheet = TransactionAddBottomSheet()
-        transactionAddBottomSheet.arguments = Bundle().apply {
-            studentID?.let { studentID -> putInt("student_id", studentID) }
-        }
-        transactionAddBottomSheet.show(requireActivity().supportFragmentManager, "TransactionAddDialog")
+        val transactionAddBottomSheet = TransactionAddBottomSheet.newInstance(studentID)
+        transactionAddBottomSheet?.show(requireActivity().supportFragmentManager, "TransactionAddDialog")
     }
 
     override fun onDelete(id: Int) {

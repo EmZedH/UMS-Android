@@ -21,7 +21,17 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import java.util.Calendar
 
-class TransactionAddBottomSheet : FullScreenBottomSheetDialog() {
+class TransactionAddBottomSheet private constructor(): FullScreenBottomSheetDialog() {
+
+    companion object{
+        fun newInstance(studentID: Int?): TransactionAddBottomSheet?{
+            val bottomSheet = TransactionAddBottomSheet()
+            bottomSheet.arguments = Bundle().apply {
+                putInt("student_id", studentID ?: return null)
+            }
+            return bottomSheet
+        }
+    }
 
     private lateinit var transactionAmount: TextInputLayout
     private lateinit var transactionDate: TextInputLayout

@@ -26,15 +26,21 @@ import com.example.ums.model.databaseAccessObject.StudentDAO
 
 class StudentProfessionalElectiveFragment: AddableSearchableFragment(), DeleteClickListener {
 
+    companion object{
+        const val FRAGMENT_KEY = "StudentProfessionalElectiveFragment"
+    }
+
     private var studentProfessionalCourseListItemViewAdapter: StudentProfessionalCourseListItemViewAdapter? = null
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
 
     private var studentID: Int? = null
+    private var activityString: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         studentID = arguments?.getInt("student_activity_student_id")
+        activityString = arguments?.getString("activity_name")
         val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
         val recordsDAO = RecordsDAO(DatabaseHelper(requireActivity()))
         val departmentID = StudentDAO(DatabaseHelper(requireActivity())).get(studentID)?.departmentID
@@ -60,11 +66,7 @@ class StudentProfessionalElectiveFragment: AddableSearchableFragment(), DeleteCl
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        setFragmentResultListener("TransactionAddFragmentPosition"){_, result->
-//            val position = result.getInt("id")
-//            addAt(position)
-//        }
-        setFragmentResultListener("RecordDeleteDialog"){_, result->
+        setFragmentResultListener("RecordDeleteDialog$FRAGMENT_KEY"){ _, result->
             val position = result.getInt("position")
             studentProfessionalCourseListItemViewAdapter?.deleteItem(position)
             onRefresh()
@@ -72,7 +74,7 @@ class StudentProfessionalElectiveFragment: AddableSearchableFragment(), DeleteCl
     }
 
     override fun onDelete(id: Int) {
-        val deleteFragment = RecordDeleteDialog.getInstance(id)
+        val deleteFragment = RecordDeleteDialog.getInstance(id, FRAGMENT_KEY)
         deleteFragment.show(requireActivity().supportFragmentManager, "RecordDeleteDialog")
     }
 
@@ -97,11 +99,6 @@ class StudentProfessionalElectiveFragment: AddableSearchableFragment(), DeleteCl
     override fun onSearch(query: String?) {
         studentProfessionalCourseListItemViewAdapter?.filter(query)
     }
-
-//    private fun addAt(id: Int){
-//        studentProfessionalCourseListItemViewAdapter?.addItem(id)
-//        onRefresh()
-//    }
 
     private fun onRefresh(){
         val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))

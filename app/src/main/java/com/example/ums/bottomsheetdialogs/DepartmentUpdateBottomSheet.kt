@@ -20,6 +20,17 @@ import com.google.android.material.textfield.TextInputLayout
 
 class DepartmentUpdateBottomSheet: FullScreenBottomSheetDialog() {
 
+    companion object{
+        fun newInstance(departmentID: Int?, collegeID: Int?): DepartmentUpdateBottomSheet?{
+            val bottomSheet = DepartmentUpdateBottomSheet()
+            bottomSheet.arguments = Bundle().apply {
+                putInt("department_update_college_id", collegeID ?: return null)
+                putInt("department_update_department_id", departmentID ?: return null)
+            }
+            return bottomSheet
+        }
+    }
+
     private var collegeID: Int? = null
     private var departmentID: Int? = null
     private lateinit var department: Department

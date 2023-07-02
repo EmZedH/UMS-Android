@@ -31,12 +31,12 @@ class TestAddBottomSheet: FullScreenBottomSheetDialog() {
     private var testMarkError: String? = null
 
     companion object{
-        fun newInstance(studentID: Int, courseID: Int, departmentID: Int): TestAddBottomSheet{
+        fun newInstance(studentID: Int?, courseID: Int?, departmentID: Int?): TestAddBottomSheet?{
             return TestAddBottomSheet().apply {
                 arguments = Bundle().apply {
-                    putInt("test_add_student_id", studentID)
-                    putInt("test_add_course_id", courseID)
-                    putInt("test_add_department_id", departmentID)
+                    putInt("test_add_student_id", studentID ?: return null)
+                    putInt("test_add_course_id", courseID ?: return null)
+                    putInt("test_add_department_id", departmentID ?: return null)
                 }
             }
         }

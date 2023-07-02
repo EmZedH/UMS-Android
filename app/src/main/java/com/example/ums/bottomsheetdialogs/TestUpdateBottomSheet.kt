@@ -30,13 +30,13 @@ class TestUpdateBottomSheet: FullScreenBottomSheetDialog() {
     private var testMarkError: String? = null
 
     companion object{
-        fun newInstance(testID: Int, studentID: Int, courseID: Int, departmentID: Int): TestUpdateBottomSheet{
+        fun newInstance(testID: Int?, studentID: Int?, courseID: Int?, departmentID: Int?): TestUpdateBottomSheet?{
             return TestUpdateBottomSheet().apply {
                 arguments = Bundle().apply {
-                    putInt("test_update_test_id", testID)
-                    putInt("test_update_student_id", studentID)
-                    putInt("test_update_course_id", courseID)
-                    putInt("test_update_department_id", departmentID)
+                    putInt("test_update_test_id", testID ?: return null)
+                    putInt("test_update_student_id", studentID ?: return null)
+                    putInt("test_update_course_id", courseID ?: return null)
+                    putInt("test_update_department_id", departmentID ?: return null)
                 }
             }
         }

@@ -19,6 +19,15 @@ import com.google.android.material.textfield.TextInputLayout
 
 class DepartmentAddBottomSheet: FullScreenBottomSheetDialog() {
 
+    companion object{
+        fun newInstance(collegeID: Int?): DepartmentAddBottomSheet?{
+            val bottomSheet = DepartmentAddBottomSheet()
+            bottomSheet.arguments = Bundle().apply {
+                putInt("college_activity_college_id", collegeID ?: return null)
+            }
+            return bottomSheet
+        }
+    }
 
     private lateinit var departmentName : TextInputLayout
     private var collegeID: Int? = null
@@ -27,16 +36,6 @@ class DepartmentAddBottomSheet: FullScreenBottomSheetDialog() {
     private lateinit var departmentNameText: String
 
     private var departmentNameError: String? = null
-
-    companion object{
-        fun newInstance(collegeID: Int): DepartmentAddBottomSheet{
-            return DepartmentAddBottomSheet().apply {
-                arguments = Bundle().apply {
-                    putInt("college_activity_college_id", collegeID)
-                }
-            }
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

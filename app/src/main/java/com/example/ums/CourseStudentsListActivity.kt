@@ -2,7 +2,6 @@ package com.example.ums
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.SearchView
 import android.widget.TextView
@@ -51,7 +50,6 @@ class CourseStudentsListActivity: AppCompatActivity(), ClickListener {
         if(professorID!=null && courseID!=null){
             val studentDAO = StudentDAO(DatabaseHelper(this))
             val professorDAO = ProfessorDAO(DatabaseHelper(this))
-            Log.i("CourseStudentListItemViewAdapterClass","courseID: $courseID professorID: $professorID")
             courseStudentListItemViewAdapter = CourseStudentListItemViewAdapter(professorID, courseID, studentDAO, professorDAO, this)
             searchView = findViewById(R.id.search)
             firstTextView = findViewById(R.id.no_items_text_view)
@@ -75,7 +73,6 @@ class CourseStudentsListActivity: AppCompatActivity(), ClickListener {
             recyclerView.layoutManager = LinearLayoutManager(this)
 
             infoButton.setOnClickListener {
-                val professorDAO = ProfessorDAO(DatabaseHelper(this))
                 val professor = professorDAO.get(professorID)
                 val intent = Intent(this, CourseDetailsActivity::class.java)
                 val courseDetailsBundle = Bundle().apply {

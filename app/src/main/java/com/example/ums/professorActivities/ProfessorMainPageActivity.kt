@@ -1,4 +1,4 @@
-package com.example.ums
+package com.example.ums.professorActivities
 
 import android.content.Intent
 import android.os.Bundle
@@ -12,6 +12,11 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ums.DatabaseHelper
+import com.example.ums.ManageProfileActivity
+import com.example.ums.ProfessorStudentsListActivity
+import com.example.ums.R
+import com.example.ums.UserRole
 import com.example.ums.adapters.ProfessorMainPageListItemViewAdapter
 import com.example.ums.dialogFragments.ExitDialog
 import com.example.ums.dialogFragments.LogOutDialog
@@ -57,7 +62,7 @@ class ProfessorMainPageActivity: AppCompatActivity(), ClickListener{
         secondTextView = findViewById(R.id.second_text_view)
 
         firstTextView.text = "No Courses"
-        secondTextView.text = "Please be patient.Your admin will add your courses"
+        secondTextView.text = "Please wait. Admin yet to add courses"
 
         val recyclerView: RecyclerView = findViewById(R.id.list_view)
 
@@ -141,7 +146,7 @@ class ProfessorMainPageActivity: AppCompatActivity(), ClickListener{
         }
     }
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        if(userRole==UserRole.PROFESSOR.role) {
+        if(userRole== UserRole.PROFESSOR.role) {
             menuInflater.inflate(R.menu.search_menu, menu)
             val menuItem = menu.findItem(R.id.search)
             searchView = menuItem.actionView as SearchView
@@ -215,7 +220,7 @@ class ProfessorMainPageActivity: AppCompatActivity(), ClickListener{
     }
 
     override fun onClick(bundle: Bundle?) {
-        val intent = Intent(this, CourseStudentsListActivity::class.java)
+        val intent = Intent(this, ProfessorStudentsListActivity::class.java)
         intent.putExtras(bundle ?: return)
         startActivity(intent)
     }

@@ -6,12 +6,17 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ums.bottomsheetdialogs.StudentUpdateBottomSheet
+import com.example.ums.dialogFragments.AutoAddCourseDialog
 import com.example.ums.dialogFragments.StudentAdvanceSemesterConfirmationDialog
+import com.example.ums.model.Records
 import com.example.ums.model.databaseAccessObject.CollegeDAO
+import com.example.ums.model.databaseAccessObject.CourseDAO
+import com.example.ums.model.databaseAccessObject.CourseProfessorDAO
 import com.example.ums.model.databaseAccessObject.DepartmentDAO
 import com.example.ums.model.databaseAccessObject.RecordsDAO
 import com.example.ums.model.databaseAccessObject.StudentDAO
 import com.example.ums.model.databaseAccessObject.TestDAO
+import com.example.ums.model.databaseAccessObject.TransactionDAO
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -32,6 +37,7 @@ class StudentDetailsActivity: AppCompatActivity() {
 
             val completedCourseButton = findViewById<MaterialButton>(R.id.completed_courses_button)
             val advanceSemesterButton = findViewById<MaterialButton>(R.id.advance_semester_button)
+            val autoAddCoursesButton = findViewById<MaterialButton>(R.id.auto_add_courses_button)
 
             val userEmailIdTextView = findViewById<TextView>(R.id.user_email)
             val contactNumberTextView = findViewById<TextView>(R.id.contact_number)
@@ -87,7 +93,7 @@ class StudentDetailsActivity: AppCompatActivity() {
 
             semesterTextView.text = student?.semester.toString()
             degreeTextView.text = student?.degree
-            cgpaTextView.text = cgpa.toString()
+            cgpaTextView.text = if(cgpa.toString() == "NaN") "0.0" else cgpa.toString()
 
             studentNameTextView.text = student?.user?.name
             departmentIDTextView.text = student?.departmentID.toString()
@@ -96,8 +102,8 @@ class StudentDetailsActivity: AppCompatActivity() {
             collegeNameTextView.text = college?.name
 
             supportFragmentManager.setFragmentResultListener("StudentAdvanceSemesterConfirmationDialog", this){_, _ ->
-                val advanceableRecords = recordsDAO.getList(studentID)
-                for(record in advanceableRecords){
+                val advancableRecords = recordsDAO.getList(studentID)
+                for(record in advancableRecords){
                     val mark = record.externalMarks + (record.attendance/20) + record.assignmentMarks + (testDAO.getAverageTestMark(record.studentID, record.courseProfessor.course.id, record.courseProfessor.course.departmentID) ?: 0)
                     if(mark >= 60){
                         student?.semester?.let {
@@ -113,14 +119,12 @@ class StudentDetailsActivity: AppCompatActivity() {
                         recordsDAO.delete(record.studentID, record.courseProfessor.course.id, record.courseProfessor.course.departmentID)
                     }
                 }
+                cgpaTextView.text = if(cgpa.toString() == "NaN") "0.0" else cgpa.toString()
             }
 
             floatingActionButton.setOnClickListener{
-                val departmentUpdateBottomSheet = StudentUpdateBottomSheet()
-                departmentUpdateBottomSheet.arguments = Bundle().apply {
-                    putInt("department_activity_student_id", studentID)
-                }
-                departmentUpdateBottomSheet.show(supportFragmentManager, "StudentUpdateDialog")
+                val departmentUpdateBottomSheet = StudentUpdateBottomSheet.newInstance(studentID)
+                departmentUpdateBottomSheet?.show(supportFragmentManager, "StudentUpdateDialog")
             }
 
             completedCourseButton.setOnClickListener {
@@ -140,7 +144,52 @@ class StudentDetailsActivity: AppCompatActivity() {
                 }
             }
 
-            supportFragmentManager.setFragmentResultListener("StudentUpdateFragmentPosition", this){_, _->
+            autoAddCoursesButton.setOnClickListener{
+                val courseDAO = CourseDAO(DatabaseHelper(this))
+                val transactionDAO = TransactionDAO(DatabaseHelper(this))
+                val professionalCourses = courseDAO.getNewProfessionalCoursesWithProfessors(studentID)
+                if(!transactionDAO.hasPaidForCurrentSemester(studentID)){
+                Toast.makeText(this, "Current semester fees not paid", Toast.LENGTH_SHORT).show()
+                }
+                else if(professionalCourses.isEmpty()){
+                    Toast.makeText(this, "All Professional Courses registered", Toast.LENGTH_SHORT).show()
+                }
+                else{
+                    val autoCourseAddConfirmationDialog = AutoAddCourseDialog()
+                    autoCourseAddConfirmationDialog.show(supportFragmentManager, "AutoAddCourseDialog")
+                }
+            }
+
+            supportFragmentManager.setFragmentResultListener("AutoAddCourseDialog", this){ _, _ ->
+                val courseDAO = CourseDAO(DatabaseHelper(this))
+                val courseProfessorDAO = CourseProfessorDAO(DatabaseHelper(this))
+                val transactionDAO = TransactionDAO(DatabaseHelper(this))
+
+                val professionalCourses = courseDAO.getNewProfessionalCoursesWithProfessors(studentID)
+                val transactions = transactionDAO.getCurrentSemesterTransactionList(studentID)
+
+                for (course in professionalCourses){
+                    val courseProfessors = courseProfessorDAO.getList(course.id, course.departmentID, course.collegeID)
+                    if(courseProfessors.isNotEmpty() && transactions.isNotEmpty()){
+                        val courseProfessor = courseProfessors.random()
+                        recordsDAO.insert(
+                            Records(
+                                studentID,
+                                courseProfessor,
+                                transactions[0].id,
+                                0,
+                                0,
+                                0,
+                                "NOT_COMPLETED",
+                                0
+                            )
+                        )
+                    }
+                }
+                Toast.makeText(this, "Courses successfully registered", Toast.LENGTH_SHORT).show()
+            }
+
+            supportFragmentManager.setFragmentResultListener("StudentUpdateFragmentPosition", this){ _, _->
                 val newStudent = studentDAO.get(studentID)
                 studentNameTextView.text = newStudent?.user?.name
                 contactNumberTextView.text = newStudent?.user?.contactNumber

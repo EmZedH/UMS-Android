@@ -106,7 +106,7 @@ class OtherDepartmentSelectActivity: AppCompatActivity(), Addable, Searchable, I
                 addAt(id)
             }
 
-            supportFragmentManager.setFragmentResultListener("CourseAddForStudentFragmentPosition", this){_, result->
+            supportFragmentManager.setFragmentResultListener("CourseAddForStudentFragmentPosition", this){ _, _ ->
                 finish()
             }
 
@@ -123,8 +123,8 @@ class OtherDepartmentSelectActivity: AppCompatActivity(), Addable, Searchable, I
     }
 
     override fun onAdd() {
-        val departmentAddFragment = DepartmentAddBottomSheet.newInstance(collegeID!!)
-        departmentAddFragment.show(supportFragmentManager, "bottomSheetDialog")
+        val departmentAddFragment = DepartmentAddBottomSheet.newInstance(collegeID)
+        departmentAddFragment?.show(supportFragmentManager, "bottomSheetDialog")
     }
 
     override fun onSearch(query: String?) {
@@ -137,14 +137,9 @@ class OtherDepartmentSelectActivity: AppCompatActivity(), Addable, Searchable, I
     }
 
     override fun onUpdate(id: Int) {
-        val updateBottomSheet = DepartmentUpdateBottomSheet()
+        val updateBottomSheet = DepartmentUpdateBottomSheet.newInstance(id, collegeID)
 
-        updateBottomSheet.arguments = Bundle().apply{
-            putInt("department_update_college_id", collegeID!!)
-            putInt("department_update_department_id", id)
-        }
-
-        updateBottomSheet.show(supportFragmentManager, "updateDialog")
+        updateBottomSheet?.show(supportFragmentManager, "updateDialog")
     }
 
     override fun onDelete(id: Int) {
@@ -153,13 +148,8 @@ class OtherDepartmentSelectActivity: AppCompatActivity(), Addable, Searchable, I
     }
 
     override fun onClick(bundle: Bundle?) {
-        val courseAddBottomSheet = CourseAddForStudentBottomSheet()
-        courseAddBottomSheet.arguments = bundle?.apply {
-            putInt("student_semester", semester!!)
-            putString("student_degree", degree!!)
-            putString("student_elective", "Open")
-        }
-        courseAddBottomSheet.show(supportFragmentManager, "CourseAddDialog")
+        val courseAddBottomSheet = CourseAddForStudentBottomSheet.newInstance(bundle, degree, semester, "Open")
+        courseAddBottomSheet?.show(supportFragmentManager, "CourseAddDialog")
     }
 
     private fun onRefresh(){

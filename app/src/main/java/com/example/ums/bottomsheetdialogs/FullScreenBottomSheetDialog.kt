@@ -17,12 +17,6 @@ open class FullScreenBottomSheetDialog: BottomSheetDialogFragment() {
         }
     }
 
-//    override fun onStart() {
-//        super.onStart()
-//        dialog?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE)
-//    }
-
-
     private fun setFullScreen() {
         val bottomSheet = dialog?.findViewById<View>(com.google.android.material.R.id.design_bottom_sheet)
         bottomSheet?.layoutParams?.height = ViewGroup.LayoutParams.MATCH_PARENT

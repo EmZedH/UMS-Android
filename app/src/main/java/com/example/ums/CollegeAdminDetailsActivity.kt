@@ -58,11 +58,8 @@ class CollegeAdminDetailsActivity: AppCompatActivity() {
             collegeNameTextView.text = college?.name
 
             floatingActionButton.setOnClickListener{
-                val collegeAdminUpdateBottomSheet = CollegeAdminUpdateBottomSheet()
-                collegeAdminUpdateBottomSheet.arguments = Bundle().apply {
-                    putInt("college_activity_college_admin_id", collegeAdminId)
-                }
-                collegeAdminUpdateBottomSheet.show(supportFragmentManager, "collegeAdminUpdateDialog")
+                val collegeAdminUpdateBottomSheet = CollegeAdminUpdateBottomSheet.newInstance(collegeAdminId)
+                collegeAdminUpdateBottomSheet?.show(supportFragmentManager, "collegeAdminUpdateDialog")
             }
 
             supportFragmentManager.setFragmentResultListener("collegeAdminUpdateFragmentPosition", this){_, _->

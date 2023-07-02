@@ -2,7 +2,6 @@ package com.example.ums
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.SearchView
 import android.widget.TextView
@@ -91,7 +90,7 @@ class TestRecordsActivity: AppCompatActivity(), DeleteUpdateListener {
             addFloatingActionButton.setOnClickListener {
                 val testAddBottomSheet = TestAddBottomSheet.newInstance(
                     studentID, courseID, departmentID)
-                testAddBottomSheet.show(supportFragmentManager, "TestAddBottomSheetDialog")
+                testAddBottomSheet?.show(supportFragmentManager, "TestAddBottomSheetDialog")
             }
             searchView?.queryHint = getString(R.string.search)
             if(isConfigurationChanged==true){
@@ -147,8 +146,8 @@ class TestRecordsActivity: AppCompatActivity(), DeleteUpdateListener {
     }
 
     override fun onUpdate(id: Int) {
-        val testUpdateBottomSheet = TestUpdateBottomSheet.newInstance(id, studentID ?: return, courseID ?: return, departmentID ?: return)
-        testUpdateBottomSheet.show(supportFragmentManager, "TestUpdateDialog")
+        val testUpdateBottomSheet = TestUpdateBottomSheet.newInstance(id, studentID, courseID, departmentID)
+        testUpdateBottomSheet?.show(supportFragmentManager, "TestUpdateDialog")
     }
 
     override fun onDelete(id: Int) {

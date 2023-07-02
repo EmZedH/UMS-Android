@@ -97,11 +97,8 @@ class SuperAdminMainPageFragment : AddableSearchableFragment(), ItemListener {
     }
 
     override fun onUpdate(id: Int) {
-        val editFragment = CollegeUpdateBottomSheet()
-        editFragment.arguments = Bundle().apply {
-            putInt("college_update_college_id", id)
-        }
-        editFragment.show((context as AppCompatActivity).supportFragmentManager, "updateBottomSheetDialog")
+        val editFragment = CollegeUpdateBottomSheet.newInstance(id)
+        editFragment?.show((context as AppCompatActivity).supportFragmentManager, "updateBottomSheetDialog")
     }
 
     override fun onDelete(id: Int) {

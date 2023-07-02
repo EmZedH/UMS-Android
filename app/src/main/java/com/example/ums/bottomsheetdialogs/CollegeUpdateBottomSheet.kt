@@ -19,7 +19,19 @@ import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class CollegeUpdateBottomSheet : FullScreenBottomSheetDialog() {
+class CollegeUpdateBottomSheet: FullScreenBottomSheetDialog() {
+
+    companion object{
+
+        fun newInstance(collegeID: Int?): CollegeUpdateBottomSheet?{
+            val collegeUpdateBottomSheet = CollegeUpdateBottomSheet()
+            collegeUpdateBottomSheet.arguments = Bundle().apply {
+                putInt("college_update_college_id", collegeID ?: return null)
+            }
+            return collegeUpdateBottomSheet
+        }
+    }
+
     private var collegeID: Int? = null
     private lateinit var college: College
     private lateinit var collegeNameTextLayout: TextInputLayout

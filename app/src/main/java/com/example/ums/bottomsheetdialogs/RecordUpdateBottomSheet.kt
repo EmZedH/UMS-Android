@@ -20,7 +20,6 @@ import com.google.android.material.textfield.TextInputLayout
 
 class RecordUpdateBottomSheet: FullScreenBottomSheetDialog() {
 
-
     private lateinit var attendance : TextInputLayout
     private lateinit var externalMarks : TextInputLayout
     private lateinit var assignment : TextInputLayout
@@ -38,12 +37,12 @@ class RecordUpdateBottomSheet: FullScreenBottomSheetDialog() {
     private var assignmentError: String? = null
 
     companion object{
-        fun newInstance(studentID: Int, courseID: Int, departmentID: Int): RecordUpdateBottomSheet{
+        fun newInstance(studentID: Int?, courseID: Int?, departmentID: Int?): RecordUpdateBottomSheet?{
             return RecordUpdateBottomSheet().apply {
                 arguments = Bundle().apply {
-                    putInt("record_update_student_id", studentID)
-                    putInt("record_update_course_id", courseID)
-                    putInt("record_update_department_id", departmentID)
+                    putInt("record_update_student_id", studentID ?: return null)
+                    putInt("record_update_course_id", courseID ?: return null)
+                    putInt("record_update_department_id", departmentID ?: return null)
                 }
             }
         }

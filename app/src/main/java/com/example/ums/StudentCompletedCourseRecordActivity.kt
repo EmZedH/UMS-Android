@@ -37,8 +37,9 @@ class StudentCompletedCourseRecordActivity: AppCompatActivity() {
             val courseDAO = CourseDAO(databaseHelper)
             val testDAO = TestDAO(databaseHelper)
 
-            var record = recordsDAO.get(studentId, courseID, departmentId)
+            val record = recordsDAO.get(studentId, courseID, departmentId)
             val course = courseDAO.get(courseID, departmentId, record?.courseProfessor?.course?.collegeID)
+
             toolBar.setNavigationOnClickListener {
                 finish()
             }

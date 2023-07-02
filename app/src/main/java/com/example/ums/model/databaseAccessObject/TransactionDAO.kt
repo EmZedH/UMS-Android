@@ -77,19 +77,27 @@ class TransactionDAO(private val databaseHelper: DatabaseHelper) {
         return transactions
     }
 
-//    fun hasPaidForCurrentSemester(studentID: Int?): Boolean {
-//        studentID ?: return false
-//        val cursor = databaseHelper.readableDatabase
-//            .rawQuery("SELECT COUNT(*) FROM $tableName INNER JOIN STUDENT ON " +
-//                    "($tableName.STUDENT_ID = STUDENT.STUDENT_ID) WHERE " +
-//                    "STUDENT.S_SEM = $tableName.T_SEM", null)
-//        cursor.moveToFirst()
-//
-//        return cursor.getInt(0) > 0
-//    }
+    fun hasPaidForCurrentSemester(studentID: Int?): Boolean {
+        studentID ?: return false
+        val cursor = databaseHelper
+                .readableDatabase
+                .rawQuery("SELECT COUNT(*) FROM $tableName INNER JOIN STUDENT ON " +
+                    "($tableName.STUDENT_ID = STUDENT.STUDENT_ID) WHERE " +
+                    "STUDENT.S_SEM = $tableName.T_SEM AND STUDENT.STUDENT_ID = $studentID",
+                null)
+
+        cursor.moveToFirst()
+
+        val size = cursor.getInt(0)
+        cursor.close()
+        return size > 0
+    }
 
     fun getNewID(): Int{
-        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT COALESCE(MAX($primaryKey), 0) + 1 FROM $tableName"
+        val cursor =
+            databaseHelper
+            .readableDatabase
+            .rawQuery("SELECT COALESCE(MAX($primaryKey), 0) + 1 FROM $tableName"
             , null)
 
         cursor.moveToFirst()

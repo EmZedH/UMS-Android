@@ -61,11 +61,8 @@ class StudentTransactionSelectActivity: AppCompatActivity(), ClickListener {
             })
 
             addFloatingActionButton.setOnClickListener {
-                val transactionAddBottomSheet = TransactionAddBottomSheet()
-                transactionAddBottomSheet.arguments = Bundle().apply {
-                    putInt("student_id", studentID ?: return@setOnClickListener)
-                }
-                transactionAddBottomSheet.show(supportFragmentManager, "TransactionAddDialog")
+                val transactionAddBottomSheet = TransactionAddBottomSheet.newInstance(studentID)
+                transactionAddBottomSheet?.show(supportFragmentManager, "TransactionAddDialog")
             }
 
             supportFragmentManager.setFragmentResultListener("TransactionAddFragmentPosition", this){_, result->

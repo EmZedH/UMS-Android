@@ -23,10 +23,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class StudentProfessionalCourseSelectActivity: AppCompatActivity(), ClickListener, Searchable {
 
-//    companion object{
-//        const val REQUEST_CODE = 100
-//    }
-
     private var transactionID: Int? = null
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
@@ -90,15 +86,15 @@ class StudentProfessionalCourseSelectActivity: AppCompatActivity(), ClickListene
 
             addFloatingActionButton.setOnClickListener {
                 val student = studentDAO.get(studentID)
-                val courseAddBottomSheet = CourseAddForStudentBottomSheet()
-                courseAddBottomSheet.arguments = Bundle().apply {
-                    putInt("departmentID", student?.departmentID ?: return@setOnClickListener)
-                    putInt("collegeID", student.collegeID)
-                    putInt("student_semester", student.semester)
-                    putString("student_degree", student.degree)
-                    putString("student_elective", "Professional")
-                }
-                courseAddBottomSheet.show(supportFragmentManager, "CourseAddDialog")
+                val courseAddBottomSheet =
+                    CourseAddForStudentBottomSheet
+                        .newInstance(
+                            student?.collegeID,
+                            student?.departmentID,
+                            student?.degree,
+                            student?.semester,
+                            "Professional")
+                courseAddBottomSheet?.show(supportFragmentManager, "CourseAddDialog")
             }
 
             supportFragmentManager.setFragmentResultListener("CourseAddForStudentFragmentPosition", this){_, result->

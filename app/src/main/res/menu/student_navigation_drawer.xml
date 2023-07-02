@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/manage_profile_tab"
+        android:title="@string/manage_profile_string"
+        />
+    <item
+        android:id="@+id/pay_fees_tab"
+        android:title="@string/pay_fees_string"
+        />
+    <item
+        android:id="@+id/log_out_tab"
+        android:title="@string/log_out_string"
+        />
+</menu>

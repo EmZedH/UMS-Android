@@ -1,7 +1,6 @@
 package com.example.ums
 
 import android.app.Activity
-import android.util.Log
 import com.example.ums.model.databaseAccessObject.UserDAO
 
 class Utility {
@@ -28,8 +27,7 @@ class Utility {
         }
 
         fun isCorrectDateFormat(dateString: String): Boolean {
-            Log.i("UtilityClass","dateString: $dateString")
-            val regex = Regex("""^\d{4}-(0[1-9]|1[0-9]|2[0-9]|3[01])-([1-9]|1[0-2])$""")
+            val regex = Regex("""^\d{4}-([1-9]|1[0-9]|2[0-9]|3[01])-([1-9]|1[0-2])$""")
             return regex.matches(dateString)
 
         }

@@ -21,10 +21,10 @@ class CourseProfessorDAO(private val databaseHelper: DatabaseHelper) {
     private val userKey = "U_ID"
 
     fun get(professorID: Int?, courseID: Int?, departmentID: Int?, collegeID: Int?): CourseProfessor?{
-        val professorID = professorID ?: return null
-        val courseID = courseID ?: return null
-        val departmentID = departmentID ?: return null
-        val collegeID = collegeID ?: return null
+        professorID ?: return null
+        courseID ?: return null
+        departmentID ?: return null
+        collegeID ?: return null
         val cursor = databaseHelper.readableDatabase
             .rawQuery("SELECT * FROM $tableName " +
                     "INNER JOIN $courseTable ON " +
@@ -68,6 +68,7 @@ class CourseProfessorDAO(private val databaseHelper: DatabaseHelper) {
                     cursor.getString(10)
                 ))
         }
+        cursor.close()
         return null
     }
 
@@ -188,6 +189,7 @@ class CourseProfessorDAO(private val databaseHelper: DatabaseHelper) {
         db.beginTransaction()
         try {
             db.execSQL("DELETE FROM $tableName WHERE $professorKey = $professorID AND $courseKey = $courseID AND $departmentKey = $departmentID AND $collegeKey = $collegeID")
+            db.execSQL("DELETE FROM RECORDS WHERE $professorKey = $professorID AND $courseKey = $courseID AND $departmentKey = $departmentID AND $collegeKey = $collegeID")
             db.setTransactionSuccessful()
         }catch (e: Exception){
             e.printStackTrace()
@@ -197,26 +199,26 @@ class CourseProfessorDAO(private val databaseHelper: DatabaseHelper) {
         db.close()
     }
 
-    fun delete(professorID: Int?, courseID: Int?, departmentID: Int?, collegeID: Int?, newProfessorID: Int?){
-
-        professorID ?: return
-        courseID ?: return
-        departmentID ?: return
-        collegeID ?: return
-        newProfessorID ?: return
-        val db = databaseHelper.writableDatabase
-        db.beginTransaction()
-        try {
-            db.execSQL("DELETE FROM $tableName WHERE $professorKey = $professorID AND $courseKey = $courseID AND $departmentKey = $departmentID AND $collegeKey = $collegeID")
-            db.execSQL("INSERT INTO COURSE_PROFESSOR_TABLE VALUES ($newProfessorID, $courseID, $departmentID, $collegeID)")
-            db.setTransactionSuccessful()
-        }catch (e: Exception){
-            e.printStackTrace()
-        }finally {
-            db.endTransaction()
-        }
-        db.close()
-    }
+//    fun delete(professorID: Int?, courseID: Int?, departmentID: Int?, collegeID: Int?, newProfessorID: Int?){
+//
+//        professorID ?: return
+//        courseID ?: return
+//        departmentID ?: return
+//        collegeID ?: return
+//        newProfessorID ?: return
+//        val db = databaseHelper.writableDatabase
+//        db.beginTransaction()
+//        try {
+//            db.execSQL("DELETE FROM $tableName WHERE $professorKey = $professorID AND $courseKey = $courseID AND $departmentKey = $departmentID AND $collegeKey = $collegeID")
+//            db.execSQL("INSERT INTO COURSE_PROFESSOR_TABLE VALUES ($newProfessorID, $courseID, $departmentID, $collegeID)")
+//            db.setTransactionSuccessful()
+//        }catch (e: Exception){
+//            e.printStackTrace()
+//        }finally {
+//            db.endTransaction()
+//        }
+//        db.close()
+//    }
 
     fun insert(courseProfessor: CourseProfessor){
         val contentValues = ContentValues().apply {

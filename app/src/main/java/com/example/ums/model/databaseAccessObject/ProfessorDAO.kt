@@ -149,6 +149,50 @@ class ProfessorDAO (private val databaseHelper: DatabaseHelper) {
         return professors
     }
 
+    fun getCourseProfessors(courseID: Int, departmentID: Int, collegeID: Int): List<Professor>{
+
+        val professors = mutableListOf<Professor>()
+        val cursor = databaseHelper
+            .readableDatabase
+            .rawQuery("SELECT PROFESSOR.*, USER.* FROM PROFESSOR INNER JOIN USER ON " +
+                    "(PROFESSOR.PROF_ID = USER.U_ID) INNER JOIN COURSE_PROFESSOR_TABLE ON " +
+                    "(COURSE_PROFESSOR_TABLE.PROF_ID = PROFESSOR.PROF_ID) " +
+                    "WHERE COURSE_PROFESSOR_TABLE.COURSE_ID = ? AND " +
+                    "COURSE_PROFESSOR_TABLE.DEPT_ID = ? AND " +
+                    "COURSE_PROFESSOR_TABLE.COLLEGE_ID = ?",
+                arrayOf(
+                    courseID.toString(),
+                    departmentID.toString(),
+                    collegeID.toString()
+                )
+            )
+
+        if(cursor!=null && cursor.moveToFirst()){
+            while (!cursor.isAfterLast){
+                professors.add(
+                    Professor(
+                        User(
+                            cursor.getInt(3),
+                            cursor.getString(4),
+                            cursor.getString(5),
+                            cursor.getString(6),
+                            cursor.getString(7),
+                            cursor.getString(8),
+                            cursor.getString(9),
+                            cursor.getString(10),
+                            cursor.getString(11)
+                        ),
+                        cursor.getInt(1),
+                        cursor.getInt(2)
+                    )
+                )
+                cursor.moveToNext()
+            }
+        }
+        cursor.close()
+        return professors
+    }
+
     fun delete(userID: Int){
         val db = databaseHelper.writableDatabase
         db.beginTransaction()

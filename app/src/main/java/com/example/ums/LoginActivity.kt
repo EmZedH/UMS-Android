@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ums.model.User
 import com.example.ums.model.databaseAccessObject.UserDAO
+import com.example.ums.professorActivities.ProfessorMainPageActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -85,7 +86,17 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
+        else if(UserRole.STUDENT.role == user.role){
+            val intent = Intent(this, StudentMainPageActivity::class.java)
+            val bundle = Bundle()
+            bundle.putString("userName", user.name)
+            bundle.putInt("userID", user.id)
+            bundle.putString("userRole", user.role)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            intent.putExtras(bundle)
+            startActivity(intent)
+            finish()
+        }
     }
 
     private fun saveUserData(user : User){

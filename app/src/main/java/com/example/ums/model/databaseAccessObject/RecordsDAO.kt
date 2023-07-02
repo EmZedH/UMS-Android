@@ -90,6 +90,16 @@ class RecordsDAO(private val databaseHelper: DatabaseHelper) {
         return records
     }
 
+//    fun printRecord(studentID: Int){
+//        val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM RECORDS WHERE STUDENT_ID = $studentID", null)
+//        cursor.moveToFirst()
+//        while (!cursor.isAfterLast){
+//            Log.i("RecordsDAOClass","studentID: ${cursor.getInt(0)} course: ${cursor.getInt(1)}")
+//            cursor.moveToNext()
+//        }
+//        cursor.close()
+//    }
+
     fun getList(professorID: Int, courseID: Int, isComplete: Boolean): List<Records>{
         val completeString = if(isComplete) "COMPLETED" else "NOT_COMPLETED"
         val records = mutableListOf<Records>()

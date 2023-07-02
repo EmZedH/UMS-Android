@@ -86,12 +86,8 @@ class CourseSelectForProfessorActivity: AppCompatActivity(), ClickListener, Sear
 
 
             addFloatingActionButton.setOnClickListener {
-                val courseAddBottomSheet = CourseAddBottomSheet()
-                courseAddBottomSheet.arguments = Bundle().apply {
-                    putInt("department_activity_department_id", professor?.departmentID ?: return@setOnClickListener)
-                    putInt("department_activity_college_id", professor.collegeID)
-                }
-                courseAddBottomSheet.show(supportFragmentManager, "CourseAddDialog")
+                val courseAddBottomSheet = CourseAddBottomSheet.newInstance(professor?.departmentID, professor?.collegeID)
+                courseAddBottomSheet?.show(supportFragmentManager, "CourseAddDialog")
             }
 
             supportFragmentManager.setFragmentResultListener("CourseAddFragmentPosition", this){_, result->

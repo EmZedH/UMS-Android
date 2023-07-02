@@ -235,6 +235,42 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
         return courses
     }
 
+    fun getNewProfessionalCoursesWithProfessors(studentID: Int): List<Course>{
+        val courses = mutableListOf<Course>()
+        val cursor  = databaseHelper.readableDatabase
+            .rawQuery("SELECT COURSE.* FROM COURSE INNER JOIN COURSE_PROFESSOR_TABLE ON " +
+                    "(COURSE_PROFESSOR_TABLE.COURSE_ID = COURSE.COURSE_ID AND " +
+                    "COURSE_PROFESSOR_TABLE.DEPT_ID = COURSE.DEPT_ID AND " +
+                    "COURSE_PROFESSOR_TABLE.COLLEGE_ID = COURSE.COLLEGE_ID) WHERE " +
+                    "(COURSE.COURSE_ID, COURSE.DEPT_ID, COURSE.COLLEGE_ID) NOT IN " +
+                    "(SELECT COURSE_ID, DEPT_ID, COLLEGE_ID FROM RECORDS WHERE RECORDS.STUDENT_ID = $studentID) AND " +
+                    "COURSE.DEPT_ID = (SELECT DEPT_ID FROM STUDENT WHERE STUDENT_ID = $studentID) AND " +
+                    "COURSE.COLLEGE_ID = (SELECT COLLEGE_ID FROM STUDENT WHERE STUDENT_ID = $studentID) AND " +
+                    "COURSE.ELECTIVE = \"Professional\" " +
+                    "AND COURSE.COURSE_SEM <= (SELECT S_SEM FROM STUDENT WHERE STUDENT_ID = $studentID) AND " +
+                    "COURSE.DEGREE = (SELECT S_DEGREE FROM STUDENT WHERE STUDENT_ID = $studentID)",
+                null)
+
+        if(cursor!=null && cursor.moveToFirst()){
+            while (!cursor.isAfterLast){
+                courses.add(
+                    Course(
+                        cursor.getInt(0),
+                        cursor.getString(1),
+                        cursor.getInt(2),
+                        cursor.getInt(3),
+                        cursor.getInt(4),
+                        cursor.getString(5),
+                        cursor.getString(6)
+                    )
+                )
+                cursor.moveToNext()
+            }
+        }
+        cursor.close()
+        return courses
+    }
+
     fun getNewProfessionalCourses(studentID: Int): List<Course>{
         val courses = mutableListOf<Course>()
         val cursor = databaseHelper.readableDatabase

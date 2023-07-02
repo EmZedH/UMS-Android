@@ -265,6 +265,17 @@
                 android:textColor="@color/light_onSurface"
                 />
 
+            <com.google.android.material.button.MaterialButton
+                style="@style/Widget.MaterialComponents.Button.TextButton.Dialog"
+                android:id="@+id/auto_add_courses_button"
+                android:text="@string/auto_add_courses_string"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/semester"
+                app:layout_constraintTop_toTopOf="@id/semester"
+                app:layout_constraintBottom_toBottomOf="@id/semester"
+                />
+
             <TextView
                 android:id="@+id/degree_text_view"
                 android:layout_width="wrap_content"

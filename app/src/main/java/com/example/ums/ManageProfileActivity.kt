@@ -105,9 +105,8 @@ class ManageProfileActivity : AppCompatActivity() {
         }
 
         passwordChangeButton.setOnClickListener {
-            val changePasswordBottomSheet = ChangePasswordBottomSheet()
-            changePasswordBottomSheet.arguments = bundle
-            changePasswordBottomSheet.show(supportFragmentManager, "bottomSheetDialog")
+            val changePasswordBottomSheet = ChangePasswordBottomSheet.newInstance(userID)
+            changePasswordBottomSheet?.show(supportFragmentManager, "bottomSheetDialog")
         }
     }
 

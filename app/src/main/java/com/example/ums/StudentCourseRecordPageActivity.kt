@@ -1,7 +1,6 @@
 package com.example.ums
 
 import android.os.Bundle
-import android.util.Log
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -36,6 +35,8 @@ class StudentCourseRecordPageActivity: AppCompatActivity() {
             val externalMarksTextView = findViewById<TextView>(R.id.external_marks)
             val assignmentMarksTextView = findViewById<TextView>(R.id.assignment_marks)
             val courseStatusTextView = findViewById<TextView>(R.id.course_status)
+            val professorIDTextView = findViewById<TextView>(R.id.professor_id)
+            val professorNameTextView = findViewById<TextView>(R.id.professor_name)
 
             val attendanceIncreaseButton = findViewById<MaterialButton>(R.id.attendance_increase_button)
             val floatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
@@ -60,6 +61,8 @@ class StudentCourseRecordPageActivity: AppCompatActivity() {
             internalMarksTextView.text = "${((record?.attendance ?: 0)/20) + (record?.assignmentMarks ?: 0) +((testDAO.getAverageTestMark(
                 studentId, courseId, departmentId) ?: 0))} (Out of 40)"
             externalMarksTextView.text = "${record?.externalMarks ?: 0} (Out of 60)"
+            professorIDTextView.text = record?.courseProfessor?.professor?.user?.id.toString()
+            professorNameTextView.text = record?.courseProfessor?.professor?.user?.name
 
             if(course?.semester != null && student?.semester != null){
                 courseStatusTextView.text = if(record?.status == "NOT_COMPLETED" && (student.semester > course.semester)) "Ongoing (Backlog)" else "Ongoing"
@@ -81,7 +84,7 @@ class StudentCourseRecordPageActivity: AppCompatActivity() {
 
             floatingActionButton.setOnClickListener{
                 val departmentUpdateBottomSheet = RecordUpdateBottomSheet.newInstance(studentId, courseId, departmentId)
-                departmentUpdateBottomSheet.show(supportFragmentManager, "DepartmentUpdateDialog")
+                departmentUpdateBottomSheet?.show(supportFragmentManager, "DepartmentUpdateDialog")
             }
 
             supportFragmentManager.setFragmentResultListener("RecordUpdateBottomSheerFragment", this){_, _->

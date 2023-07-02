@@ -48,12 +48,8 @@ class DepartmentDetailsActivity: AppCompatActivity() {
             collegeNameTextView.text = college?.name
 
             floatingActionButton.setOnClickListener{
-                val departmentUpdateBottomSheet = DepartmentUpdateBottomSheet()
-                departmentUpdateBottomSheet.arguments = Bundle().apply {
-                    putInt("department_update_college_id", collegeId)
-                    putInt("department_update_department_id", departmentId)
-                }
-                departmentUpdateBottomSheet.show(supportFragmentManager, "DepartmentUpdateDialog")
+                val departmentUpdateBottomSheet = DepartmentUpdateBottomSheet.newInstance(departmentId, collegeId)
+                departmentUpdateBottomSheet?.show(supportFragmentManager, "DepartmentUpdateDialog")
             }
 
             supportFragmentManager.setFragmentResultListener("DepartmentUpdateBottomSheet", this){_, _->

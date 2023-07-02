@@ -20,6 +20,10 @@ import com.example.ums.model.databaseAccessObject.RecordsDAO
 
 class StudentCompletedOpenElectiveFragment: AddableSearchableFragment(), DeleteClickListener {
 
+    companion object{
+        const val FRAGMENT_KEY = "StudentCompletedOpenElectiveFragment"
+    }
+
     private var studentCompletedOpenCourseListItemViewAdapter: StudentCompletedOpenCourseListItemViewAdapter? = null
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
@@ -53,7 +57,7 @@ class StudentCompletedOpenElectiveFragment: AddableSearchableFragment(), DeleteC
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setFragmentResultListener("RecordDeleteDialog"){_, result->
+        setFragmentResultListener("RecordDeleteDialog$FRAGMENT_KEY"){ _, result->
             val id = result.getInt("position")
             studentCompletedOpenCourseListItemViewAdapter?.deleteItem(id)
             onRefresh()
@@ -61,7 +65,7 @@ class StudentCompletedOpenElectiveFragment: AddableSearchableFragment(), DeleteC
     }
 
     override fun onDelete(id: Int) {
-        val deleteFragment = RecordDeleteDialog.getInstance(id)
+        val deleteFragment = RecordDeleteDialog.getInstance(id, FRAGMENT_KEY)
         deleteFragment.show(requireActivity().supportFragmentManager, "RecordDeleteDialog")
     }
 

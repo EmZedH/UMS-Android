@@ -16,7 +16,17 @@ import com.example.ums.model.databaseAccessObject.UserDAO
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 
-class ChangePasswordBottomSheet : FullScreenBottomSheetDialog() {
+class ChangePasswordBottomSheet: FullScreenBottomSheetDialog() {
+
+    companion object{
+        fun newInstance(userID: Int?): ChangePasswordBottomSheet?{
+            val changePasswordBottomSheet = ChangePasswordBottomSheet()
+            changePasswordBottomSheet.arguments = Bundle().apply {
+                putInt("userID", userID ?: return null)
+            }
+            return changePasswordBottomSheet
+        }
+    }
 
     private lateinit var currentPassword : TextInputLayout
     private lateinit var newPassword : TextInputLayout
@@ -106,9 +116,6 @@ class ChangePasswordBottomSheet : FullScreenBottomSheetDialog() {
                 if(currentPasswordText.isNotEmpty() and
                     newPasswordText.isNotEmpty() and
                     confirmPasswordText.isNotEmpty()){
-//                    currentPassword.error = null
-//                    newPassword.error = null
-//                    confirmPassword.error = null
                     if(currentPasswordText != user!!.password){
                         currentPassword.error = "Current password is wrong"
                     }

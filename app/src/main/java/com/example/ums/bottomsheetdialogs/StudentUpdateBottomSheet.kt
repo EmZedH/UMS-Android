@@ -20,6 +20,15 @@ import com.google.android.material.textfield.TextInputLayout
 
 class StudentUpdateBottomSheet: FullScreenBottomSheetDialog() {
 
+    companion object{
+        fun newInstance(studentID: Int?): StudentUpdateBottomSheet?{
+            val bottomSheet = StudentUpdateBottomSheet()
+            bottomSheet.arguments = Bundle().apply {
+                putInt("department_activity_student_id", studentID ?: return null)
+            }
+            return bottomSheet
+        }
+    }
 
     private lateinit var userName : TextInputLayout
     private lateinit var contactNumber: TextInputLayout

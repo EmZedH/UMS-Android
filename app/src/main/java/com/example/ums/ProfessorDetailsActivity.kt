@@ -66,11 +66,8 @@ class ProfessorDetailsActivity: AppCompatActivity() {
             collegeNameTextView.text = college?.name
 
             floatingActionButton.setOnClickListener{
-                val departmentUpdateBottomSheet = ProfessorUpdateBottomSheet()
-                departmentUpdateBottomSheet.arguments = Bundle().apply {
-                    putInt("college_activity_professor_id", professorID)
-                }
-                departmentUpdateBottomSheet.show(supportFragmentManager, "ProfessorUpdateDialog")
+                val departmentUpdateBottomSheet = ProfessorUpdateBottomSheet.newInstance(professorID)
+                departmentUpdateBottomSheet?.show(supportFragmentManager, "ProfessorUpdateDialog")
             }
 
             supportFragmentManager.setFragmentResultListener("ProfessorUpdateFragmentPosition", this){_, _->

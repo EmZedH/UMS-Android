@@ -65,13 +65,8 @@ class CourseDetailsActivity: AppCompatActivity() {
             courseDegreeTextView.text = course?.degree
 
             floatingActionButton.setOnClickListener{
-                val departmentUpdateBottomSheet = CourseUpdateBottomSheet()
-                departmentUpdateBottomSheet.arguments = Bundle().apply {
-                    putInt("course_update_course_id", courseID)
-                    putInt("course_update_college_id", collegeId)
-                    putInt("course_update_department_id", departmentId)
-                }
-                departmentUpdateBottomSheet.show(supportFragmentManager, "DepartmentUpdateDialog")
+                val departmentUpdateBottomSheet = CourseUpdateBottomSheet.newInstance(courseID, departmentId, collegeId)
+                departmentUpdateBottomSheet?.show(supportFragmentManager, "DepartmentUpdateDialog")
             }
 
             supportFragmentManager.setFragmentResultListener("CourseUpdateBottomSheet", this){_, _->

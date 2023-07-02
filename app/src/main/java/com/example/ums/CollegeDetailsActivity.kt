@@ -39,11 +39,8 @@ class CollegeDetailsActivity: AppCompatActivity() {
             userAddressTextView.text = college?.address
 
             floatingActionButton.setOnClickListener{
-                val collegeUpdateBottomSheet = CollegeUpdateBottomSheet()
-                collegeUpdateBottomSheet.arguments = Bundle().apply {
-                    putInt("college_update_college_id", collegeId)
-                }
-                collegeUpdateBottomSheet.show(supportFragmentManager, "CollegeUpdateDialog")
+                val collegeUpdateBottomSheet = CollegeUpdateBottomSheet.newInstance(collegeId)
+                collegeUpdateBottomSheet?.show(supportFragmentManager, "CollegeUpdateDialog")
             }
 
             supportFragmentManager.setFragmentResultListener("CollegeUpdateBottomSheet", this){_, _->

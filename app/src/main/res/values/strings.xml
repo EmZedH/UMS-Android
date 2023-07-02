@@ -135,4 +135,7 @@
     <string name="next_semester_string">Next Semester</string>
     <string name="completed_courses_string">Completed Courses</string>
     <string name="auto_add_courses_string">Auto Add Courses</string>
+    <string name="please_wait_admin_yet_to_add_students_string">Please wait. Admin yet to add Students</string>
+    <string name="pay_fees_string">Pay Fees</string>
+    <string name="amount_string">Amount:</string>
 </resources>

@@ -26,7 +26,17 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import java.util.Calendar
 
-class CollegeAdminAddBottomSheet : FullScreenBottomSheetDialog() {
+class CollegeAdminAddBottomSheet: FullScreenBottomSheetDialog() {
+
+    companion object{
+        fun newInstance(collegeID: Int?): CollegeAdminAddBottomSheet?{
+            val collegeAdminAddBottomSheet = CollegeAdminAddBottomSheet()
+            collegeAdminAddBottomSheet.arguments = Bundle().apply {
+                putInt("college_activity_college_id", collegeID ?: return null)
+            }
+            return collegeAdminAddBottomSheet
+        }
+    }
 
     private lateinit var userName : TextInputLayout
     private lateinit var contactNumber: TextInputLayout
