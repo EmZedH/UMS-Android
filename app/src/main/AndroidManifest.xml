@@ -52,7 +52,7 @@
         <activity android:name=".professorActivities.ProfessorMainPageActivity"/>
         <activity android:name=".ProfessorStudentsListActivity"/>
         <activity android:name=".professorActivities.ProfessorCourseDetailsActivity"/>
-        <activity android:name=".StudentMainPageActivity"/>
+        <activity android:name=".studentActivities.StudentMainPageActivity"/>
         <activity android:name=".studentActivities.StudentTestActivity"/>
         <activity android:name=".StudentsProfileCourseRecordActivity"/>
         <activity android:name=".studentActivities.StudentTransactionPage"/>

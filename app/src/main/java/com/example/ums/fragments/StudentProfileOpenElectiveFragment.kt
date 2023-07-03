@@ -12,9 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
-import com.example.ums.StudentTransactionSelectActivity
+import com.example.ums.SearchableFragment
 import com.example.ums.adapters.StudentProfileOpenCourseListItemViewAdapter
-import com.example.ums.dialogFragments.StudentOpenCourseAddConfirmationDialog
 import com.example.ums.listener.DeleteClickListener
 import com.example.ums.model.Records
 import com.example.ums.model.databaseAccessObject.CourseDAO
@@ -22,7 +21,7 @@ import com.example.ums.model.databaseAccessObject.CourseProfessorDAO
 import com.example.ums.model.databaseAccessObject.RecordsDAO
 import com.example.ums.studentActivities.StudentTestActivity
 
-class StudentProfileOpenElectiveFragment: AddableSearchableFragment(), DeleteClickListener {
+class StudentProfileOpenElectiveFragment: SearchableFragment(), DeleteClickListener {
 
     private var studentOpenCourseListItemViewAdapter: StudentProfileOpenCourseListItemViewAdapter? = null
     private lateinit var firstTextView: TextView
@@ -36,7 +35,6 @@ class StudentProfileOpenElectiveFragment: AddableSearchableFragment(), DeleteCli
         studentID = arguments?.getInt("student_activity_student_id")
         activityString = arguments?.getString("activity_name")
         val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
-        val recordsDAO = RecordsDAO(DatabaseHelper(requireActivity()))
         studentOpenCourseListItemViewAdapter = StudentProfileOpenCourseListItemViewAdapter(
             studentID ?: return,
             courseDAO,
@@ -72,26 +70,6 @@ class StudentProfileOpenElectiveFragment: AddableSearchableFragment(), DeleteCli
         }
     }
 
-    override fun onAdd() {
-        val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
-        if(courseDAO.getOpenCourses(studentID ?: return).size >= 2){
-            val studentOpenCourseAddConfirmationDialog = StudentOpenCourseAddConfirmationDialog()
-            studentOpenCourseAddConfirmationDialog.show(requireActivity().supportFragmentManager, "StudentOpenCourseAddConfirmationDialog")
-            return
-        }
-        showAddCourseActivity()
-    }
-
-    private fun showAddCourseActivity(){
-        val intent = Intent(requireContext(), StudentTransactionSelectActivity::class.java)
-        val bundle = Bundle().apply {
-            putString("student_transaction_select_activity_activity_name", "StudentOpenCourseSelectActivity")
-            putInt("student_transaction_select_activity_student_id", studentID ?: return)
-        }
-        intent.putExtras(bundle)
-        resultLauncher.launch(intent)
-    }
-
     override fun onSearch(query: String?) {
         studentOpenCourseListItemViewAdapter?.filter(query)
     }
@@ -104,6 +82,7 @@ class StudentProfileOpenElectiveFragment: AddableSearchableFragment(), DeleteCli
         }
         else{
             firstTextView.text = getString(R.string.no_courses_string)
+            secondTextView.text = getString(R.string.pay_fees_to_register_courses_string)
             firstTextView.visibility = View.VISIBLE
             secondTextView.visibility = View.VISIBLE
         }

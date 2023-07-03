@@ -3,8 +3,8 @@ package com.example.ums.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.listItemViewHolder.ClickableListItemViewHolder
 import com.example.ums.R
+import com.example.ums.listItemViewHolder.ClickableListItemViewHolder
 import com.example.ums.listener.ClickListener
 import com.example.ums.model.CourseProfessor
 import com.example.ums.model.Professor
@@ -74,12 +74,4 @@ class NewProfessorsForCoursesListItemViewAdapter(private val courseID: Int, priv
             }
         }
     }
-
-//    fun deleteItem(professorID: Int){
-//        val department = professorDAO.get(professorID, courseID, departmentID, collegeID)
-//        val updatedPosition = originalList.indexOf(department)
-//        professorDAO.delete(professorID, courseID, departmentID, collegeID)
-//        originalList.removeAt(updatedPosition)
-//        notifyItemRemoved(updatedPosition)
-//    }
 }

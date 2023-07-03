@@ -6,12 +6,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.R
 import com.example.ums.listItemViewHolder.DeletableListItemViewHolder
-import com.example.ums.listener.DeleteClickListener
+import com.example.ums.listener.OpenCourseItemListener
 import com.example.ums.model.Course
 import com.example.ums.model.databaseAccessObject.CourseDAO
 import com.example.ums.model.databaseAccessObject.RecordsDAO
 
-class StudentOpenCourseListItemViewAdapter (private val studentID: Int, private val courseDAO: CourseDAO, private val recordsDAO: RecordsDAO, private val listener: DeleteClickListener): RecyclerView.Adapter<DeletableListItemViewHolder>() {
+class StudentOpenCourseListItemViewAdapter (private val studentID: Int, private val courseDAO: CourseDAO, private val recordsDAO: RecordsDAO, private val listener: OpenCourseItemListener): RecyclerView.Adapter<DeletableListItemViewHolder>() {
 
     private var originalList : MutableList<Course> = courseDAO.getOpenCourses(studentID).sortedBy { it.id }.toMutableList()
     private var filterQuery: String? = null
@@ -27,7 +27,7 @@ class StudentOpenCourseListItemViewAdapter (private val studentID: Int, private 
 
     override fun onBindViewHolder(holder: DeletableListItemViewHolder, position: Int) {
         val course = originalList[position]
-        holder.firstTextView.text = "ID: C/${course.collegeID}-D/${course.departmentID}-CO/${course.id}"
+        "ID: C/${course.collegeID}-D/${course.departmentID}-CO/${course.id}".also { holder.firstTextView.text = it }
         holder.secondTextView.text = course.name
         holder.itemView.setOnClickListener {
             val bundle = Bundle().apply {
@@ -38,7 +38,7 @@ class StudentOpenCourseListItemViewAdapter (private val studentID: Int, private 
             listener.onClick(bundle)
         }
         holder.deleteButton.setOnClickListener {
-            listener.onDelete(position)
+            listener.onDelete(course.id, course.departmentID)
         }
     }
 
@@ -47,7 +47,7 @@ class StudentOpenCourseListItemViewAdapter (private val studentID: Int, private 
             if(query.isNullOrEmpty())
                 courseDAO.getOpenCourses(studentID).sortedBy { it.id }
             else
-                courseDAO.getOpenCourses(studentID).filter { transaction -> transaction.name.contains(query, ignoreCase = true) }.sortedBy { it.id }
+                courseDAO.getOpenCourses(studentID).filter { it.name.contains(query, ignoreCase = true) }.sortedBy { it.id }
 
         filterQuery = if(query.isNullOrEmpty()) null else query
 
@@ -56,11 +56,13 @@ class StudentOpenCourseListItemViewAdapter (private val studentID: Int, private 
         notifyDataSetChanged()
     }
 
-    fun deleteItem(position: Int){
-        val course = originalList[position]
-        recordsDAO.delete(studentID, course.id, course.departmentID)
-        originalList.removeAt(position)
-        notifyItemRemoved(position)
+    fun deleteItem(id: Int, departmentID: Int){
+        val record = recordsDAO.get(studentID, id, departmentID)
+        val course = courseDAO.get(id, departmentID, record?.courseProfessor?.course?.collegeID)
+        val updatedPosition = originalList.indexOf(course)
+        recordsDAO.delete(studentID, id, departmentID)
+        originalList.removeAt(updatedPosition)
+        notifyItemRemoved(updatedPosition)
     }
 
     fun updateList(){

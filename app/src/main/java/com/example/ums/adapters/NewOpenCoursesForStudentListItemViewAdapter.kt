@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.listItemViewHolder.ClickableListItemViewHolder
 import com.example.ums.R
+import com.example.ums.listItemViewHolder.ClickableListItemViewHolder
 import com.example.ums.listener.ClickListener
 import com.example.ums.model.Course
 import com.example.ums.model.databaseAccessObject.CourseDAO
@@ -32,11 +32,6 @@ class NewOpenCoursesForStudentListItemViewAdapter(private val studentID: Int, pr
                 putInt("course_professor_list_activity_course_id", course.id)
             }
             clickListener.onClick(bundle)
-//            courseProfessorDAO.insert(CourseProfessor(professorDAO.get(professorID) ?: return@setOnClickListener, course))
-//            val updatedPosition = originalList.indexOf(course)
-//            originalList.removeAt(updatedPosition)
-//            notifyItemRemoved(updatedPosition)
-//            clickListener.onClick(null)
         }
     }
 
@@ -84,12 +79,4 @@ class NewOpenCoursesForStudentListItemViewAdapter(private val studentID: Int, pr
         originalList = courseDAO.getNewOpenCourses(studentID).sortedBy { it.id }.toMutableList()
         notifyDataSetChanged()
     }
-
-//    fun deleteItem(professorID: Int){
-//        val department = professorDAO.get(professorID, courseID, departmentID, collegeID)
-//        val updatedPosition = originalList.indexOf(department)
-//        professorDAO.delete(professorID, courseID, departmentID, collegeID)
-//        originalList.removeAt(updatedPosition)
-//        notifyItemRemoved(updatedPosition)
-//    }
 }

@@ -9,23 +9,35 @@ import androidx.fragment.app.setFragmentResult
 
 class RecordDeleteDialog: DialogFragment() {
 
-    private var position: Int? = null
+    private var courseID: Int? = null
+    private var departmentID: Int? = null
     private var fragmentKey: String? = null
 
     companion object{
         fun getInstance(position: Int, fragmentKey: String): RecordDeleteDialog{
             val courseDeleteDialog = RecordDeleteDialog()
             courseDeleteDialog.arguments = Bundle().apply {
-                putInt("delete_dialog_position_id", position)
-                putString("delete_dialog_fragment_key", fragmentKey)
+                putInt("record_delete_dialog_course_id", position)
+                putString("record_delete_dialog_fragment_key", fragmentKey)
+            }
+            return courseDeleteDialog
+        }
+
+        fun getInstance(courseID: Int, departmentID: Int, fragmentKey: String): RecordDeleteDialog{
+            val courseDeleteDialog = RecordDeleteDialog()
+            courseDeleteDialog.arguments = Bundle().apply {
+                putInt("record_delete_dialog_course_id", courseID)
+                putInt("record_delete_dialog_department_id", departmentID)
+                putString("record_delete_dialog_fragment_key", fragmentKey)
             }
             return courseDeleteDialog
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        position = arguments?.getInt("delete_dialog_position_id")
-        fragmentKey = arguments?.getString("delete_dialog_fragment_key")
+        courseID = arguments?.getInt("record_delete_dialog_course_id")
+        departmentID = arguments?.getInt("record_delete_dialog_department_id")
+        fragmentKey = arguments?.getString("record_delete_dialog_fragment_key")
         super.onCreate(savedInstanceState)
     }
 
@@ -36,9 +48,11 @@ class RecordDeleteDialog: DialogFragment() {
             setFragmentResult(
                 "RecordDeleteDialog$fragmentKey",
                 bundleOf(
-                    "position" to position,
+                    "course_id" to courseID,
+                    "department_id" to departmentID
                 )
             )
+            courseID = null
             dialog.dismiss()
         }
 

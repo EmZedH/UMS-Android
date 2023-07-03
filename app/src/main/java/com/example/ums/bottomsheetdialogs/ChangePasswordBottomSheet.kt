@@ -22,7 +22,7 @@ class ChangePasswordBottomSheet: FullScreenBottomSheetDialog() {
         fun newInstance(userID: Int?): ChangePasswordBottomSheet?{
             val changePasswordBottomSheet = ChangePasswordBottomSheet()
             changePasswordBottomSheet.arguments = Bundle().apply {
-                putInt("userID", userID ?: return null)
+                putInt("user_id", userID ?: return null)
             }
             return changePasswordBottomSheet
         }
@@ -44,7 +44,7 @@ class ChangePasswordBottomSheet: FullScreenBottomSheetDialog() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userID = arguments?.getInt("userID")
+        userID = arguments?.getInt("user_id")
         if(savedInstanceState!=null){
             currentPasswordText = savedInstanceState.getString("change_password_bottom_sheet_current_password")
             newPasswordText = savedInstanceState.getString("change_password_bottom_sheet_new_password")

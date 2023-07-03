@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.listItemViewHolder.DeletableListItemViewHolder
 import com.example.ums.R
+import com.example.ums.listItemViewHolder.DeletableListItemViewHolder
 import com.example.ums.listener.DeleteClickListener
 import com.example.ums.model.Course
 import com.example.ums.model.databaseAccessObject.CourseDAO
 import com.example.ums.model.databaseAccessObject.RecordsDAO
 
-class StudentCompletedProfessionalListItemViewAdapter (private val studentID: Int, private val departmentID: Int, private val courseDAO: CourseDAO, private val recordsDAO: RecordsDAO, private val itemListener: DeleteClickListener): RecyclerView.Adapter<DeletableListItemViewHolder>() {
+class StudentCompletedProfessionalListItemViewAdapter (private val studentID: Int, private val departmentID: Int, private val courseDAO: CourseDAO, private val recordsDAO: RecordsDAO, private val listener: DeleteClickListener): RecyclerView.Adapter<DeletableListItemViewHolder>() {
 
     private var originalList : MutableList<Course> = courseDAO.getCompletedProfessionalCourses(studentID).sortedBy { it.id }.toMutableList()
     private var filterQuery: String? = null
@@ -35,10 +35,10 @@ class StudentCompletedProfessionalListItemViewAdapter (private val studentID: In
                 putInt("student_course_record_course_id", course.id)
                 putInt("student_course_record_department_id", course.departmentID)
             }
-            itemListener.onClick(bundle)
+            listener.onClick(bundle)
         }
         holder.deleteButton.setOnClickListener{
-            itemListener.onDelete(position)
+            listener.onDelete(position)
         }
     }
 

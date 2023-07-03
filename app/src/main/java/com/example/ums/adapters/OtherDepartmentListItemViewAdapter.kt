@@ -4,13 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.listItemViewHolder.ClickableListItemViewHolder
 import com.example.ums.R
-import com.example.ums.listener.ItemListener
+import com.example.ums.listItemViewHolder.ClickableListItemViewHolder
+import com.example.ums.listener.ClickListener
 import com.example.ums.model.Department
 import com.example.ums.model.databaseAccessObject.DepartmentDAO
 
-class OtherDepartmentListItemViewAdapter(private val departmentID: Int, private val collegeID: Int, private val departmentDAO: DepartmentDAO, private val itemListener: ItemListener): RecyclerView.Adapter<ClickableListItemViewHolder>() {
+class OtherDepartmentListItemViewAdapter(private val departmentID: Int, private val collegeID: Int, private val departmentDAO: DepartmentDAO, private val listener: ClickListener): RecyclerView.Adapter<ClickableListItemViewHolder>() {
 
     private var originalList : MutableList<Department> = departmentDAO.getOtherDepartment(departmentID, collegeID).sortedBy { it.id }.toMutableList()
     private var filterQuery: String? = null
@@ -32,36 +32,9 @@ class OtherDepartmentListItemViewAdapter(private val departmentID: Int, private 
             val bundle = Bundle()
             bundle.putInt("departmentID",department.id)
             bundle.putInt("collegeID", collegeID)
-            itemListener.onClick(bundle)
+            listener.onClick(bundle)
         }
-//        holder.optionsButton.setOnClickListener {
-//            showOptionsPopupMenu(department, holder)
-//        }
     }
-
-//    private fun showOptionsPopupMenu(department : Department, holder: ListItemViewHolder){
-//        val context = holder.itemView.context
-//        val popupMenu = PopupMenu(context, holder.optionsButton)
-//
-//        popupMenu.inflate(R.menu.edit_delete_menu)
-//
-//        popupMenu.setOnMenuItemClickListener{menuItem ->
-//            when (menuItem.itemId) {
-//                R.id.edit_college -> {
-//                    itemListener.onUpdate(department.id)
-//                    true
-//                }
-//                R.id.delete_college -> {
-//                    itemListener.onDelete(department.id)
-//                    true
-//                }
-//
-//                else -> {
-//                    false
-//                }
-//            }}
-//        popupMenu.show()
-//    }
 
     fun filter(query: String?){
         val filteredList =

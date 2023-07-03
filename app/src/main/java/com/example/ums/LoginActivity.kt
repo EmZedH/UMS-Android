@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.ums.model.User
 import com.example.ums.model.databaseAccessObject.UserDAO
 import com.example.ums.professorActivities.ProfessorMainPageActivity
+import com.example.ums.studentActivities.StudentMainPageActivity
 
 class LoginActivity : AppCompatActivity() {
 

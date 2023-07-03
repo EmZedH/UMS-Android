@@ -92,7 +92,7 @@ class TestAddBottomSheet: FullScreenBottomSheetDialog() {
             }
             else if(testMarkTextView.toInt() !in 0..25){
                 flag = false
-                testMarkError = "Enter mark below 25"
+                testMarkError = "Enter mark equal to or below 25"
                 testMark.error = testMarkError
             }
 

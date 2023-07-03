@@ -11,7 +11,7 @@ import com.example.ums.model.Course
 import com.example.ums.model.databaseAccessObject.CourseDAO
 import com.example.ums.model.databaseAccessObject.RecordsDAO
 
-class StudentProfessionalCourseListItemViewAdapter (private val studentID: Int, private val departmentID: Int, private val courseDAO: CourseDAO, private val recordsDAO: RecordsDAO, private val itemListener: DeleteClickListener): RecyclerView.Adapter<DeletableListItemViewHolder>() {
+class StudentProfessionalCourseListItemViewAdapter (private val studentID: Int, private val departmentID: Int, private val courseDAO: CourseDAO, private val recordsDAO: RecordsDAO, private val listener: DeleteClickListener): RecyclerView.Adapter<DeletableListItemViewHolder>() {
 
     private var originalList : MutableList<Course> = courseDAO.getProfessionalCourses(studentID).sortedBy { it.id }.toMutableList()
     private var filterQuery: String? = null
@@ -35,10 +35,10 @@ class StudentProfessionalCourseListItemViewAdapter (private val studentID: Int, 
                 putInt("courseID", course.id)
                 putInt("departmentID", course.departmentID)
             }
-            itemListener.onClick(bundle)
+            listener.onClick(bundle)
         }
         holder.deleteButton.setOnClickListener{
-            itemListener.onDelete(position)
+            listener.onDelete(course.id)
         }
     }
 
@@ -75,12 +75,13 @@ class StudentProfessionalCourseListItemViewAdapter (private val studentID: Int, 
         }
     }
 
-    fun deleteItem(position: Int){
-        val course = originalList[position]
-
-        recordsDAO.delete(studentID, course.id, course.departmentID)
-        originalList.removeAt(position)
-        notifyItemRemoved(position)
+    fun deleteItem(id: Int){
+        val record = recordsDAO.get(studentID, id, departmentID)
+        val course = courseDAO.get(id, departmentID, record?.courseProfessor?.course?.collegeID)
+        val updatedPosition = originalList.indexOf(course)
+        recordsDAO.delete(studentID, id, departmentID)
+        originalList.removeAt(updatedPosition)
+        notifyItemRemoved(updatedPosition)
     }
 
     fun updateList(){

@@ -67,7 +67,7 @@ class StudentProfessionalElectiveFragment: AddableSearchableFragment(), DeleteCl
         super.onViewCreated(view, savedInstanceState)
 
         setFragmentResultListener("RecordDeleteDialog$FRAGMENT_KEY"){ _, result->
-            val position = result.getInt("position")
+            val position = result.getInt("course_id")
             studentProfessionalCourseListItemViewAdapter?.deleteItem(position)
             onRefresh()
         }

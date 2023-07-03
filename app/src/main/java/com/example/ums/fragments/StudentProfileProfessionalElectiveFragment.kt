@@ -10,14 +10,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
+import com.example.ums.SearchableFragment
 import com.example.ums.adapters.StudentProfileProfessionalCourseListItemViewAdapter
 import com.example.ums.listener.DeleteClickListener
 import com.example.ums.model.databaseAccessObject.CourseDAO
-import com.example.ums.model.databaseAccessObject.RecordsDAO
-import com.example.ums.model.databaseAccessObject.StudentDAO
 import com.example.ums.studentActivities.StudentTestActivity
 
-class StudentProfileProfessionalElectiveFragment: AddableSearchableFragment(), DeleteClickListener {
+class StudentProfileProfessionalElectiveFragment: SearchableFragment(), DeleteClickListener {
 
     private var studentProfessionalCourseListItemViewAdapter: StudentProfileProfessionalCourseListItemViewAdapter? = null
     private lateinit var firstTextView: TextView
@@ -31,8 +30,6 @@ class StudentProfileProfessionalElectiveFragment: AddableSearchableFragment(), D
         studentID = arguments?.getInt("student_activity_student_id")
         activityString = arguments?.getString("activity_name")
         val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
-        val recordsDAO = RecordsDAO(DatabaseHelper(requireActivity()))
-        val departmentID = StudentDAO(DatabaseHelper(requireActivity())).get(studentID)?.departmentID
         studentProfessionalCourseListItemViewAdapter = StudentProfileProfessionalCourseListItemViewAdapter(
             studentID ?: return,
             courseDAO,
@@ -67,8 +64,8 @@ class StudentProfileProfessionalElectiveFragment: AddableSearchableFragment(), D
         }
     }
 
-    override fun onAdd() {
-    }
+//    override fun onAdd() {
+//    }
 
     override fun onSearch(query: String?) {
         studentProfessionalCourseListItemViewAdapter?.filter(query)
@@ -82,6 +79,7 @@ class StudentProfileProfessionalElectiveFragment: AddableSearchableFragment(), D
         }
         else{
             firstTextView.text = getString(R.string.no_courses_string)
+            secondTextView.text = getString(R.string.pay_fees_to_register_courses_string)
             firstTextView.visibility = View.VISIBLE
             secondTextView.visibility = View.VISIBLE
         }

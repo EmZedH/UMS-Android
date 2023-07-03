@@ -10,16 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.adapters.OtherDepartmentListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.CourseAddForStudentBottomSheet
 import com.example.ums.bottomsheetdialogs.DepartmentAddBottomSheet
-import com.example.ums.bottomsheetdialogs.DepartmentUpdateBottomSheet
-import com.example.ums.dialogFragments.DepartmentDeleteDialog
 import com.example.ums.listener.Addable
-import com.example.ums.listener.ItemListener
+import com.example.ums.listener.ClickListener
 import com.example.ums.listener.Searchable
 import com.example.ums.model.databaseAccessObject.DepartmentDAO
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class OtherDepartmentSelectActivity: AppCompatActivity(), Addable, Searchable, ItemListener {
+class OtherDepartmentSelectActivity: AppCompatActivity(), Addable, Searchable, ClickListener {
     private var searchView: SearchView? = null
     private var searchQuery: String? = null
     private var isSearchViewOpen: Boolean = true
@@ -136,16 +134,16 @@ class OtherDepartmentSelectActivity: AppCompatActivity(), Addable, Searchable, I
         onRefresh()
     }
 
-    override fun onUpdate(id: Int) {
-        val updateBottomSheet = DepartmentUpdateBottomSheet.newInstance(id, collegeID)
-
-        updateBottomSheet?.show(supportFragmentManager, "updateDialog")
-    }
-
-    override fun onDelete(id: Int) {
-        val deleteFragment = DepartmentDeleteDialog.getInstance(id)
-        deleteFragment.show(supportFragmentManager, "deleteDialog")
-    }
+//    override fun onUpdate(id: Int) {
+//        val updateBottomSheet = DepartmentUpdateBottomSheet.newInstance(id, collegeID)
+//
+//        updateBottomSheet?.show(supportFragmentManager, "updateDialog")
+//    }
+//
+//    override fun onDelete(id: Int) {
+//        val deleteFragment = DepartmentDeleteDialog.getInstance(id)
+//        deleteFragment.show(supportFragmentManager, "deleteDialog")
+//    }
 
     override fun onClick(bundle: Bundle?) {
         val courseAddBottomSheet = CourseAddForStudentBottomSheet.newInstance(bundle, degree, semester, "Open")

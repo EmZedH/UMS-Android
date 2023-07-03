@@ -4,8 +4,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.listItemViewHolder.ClickableListItemViewHolder
 import com.example.ums.R
+import com.example.ums.listItemViewHolder.ClickableListItemViewHolder
 import com.example.ums.listener.ClickListener
 import com.example.ums.model.CourseProfessor
 import com.example.ums.model.databaseAccessObject.CourseProfessorDAO
@@ -24,9 +24,6 @@ class StudentProfessorsListItemViewAdapter(private val courseID: Int, private va
         val courseProfessor = originalList[position]
         holder.firstTextView.text = "ID: C/$collegeID-D/${courseProfessor.professor.departmentID}-U/${courseProfessor.professor.user.id}"
         holder.secondTextView.text = courseProfessor.professor.user.name
-//        holder.deleteButton.setOnClickListener {
-//            listener.onDelete(courseProfessor.professor.user.id)
-//        }
         holder.itemView.setOnClickListener {
             val bundle = Bundle().apply {
                 putInt("professor_id", courseProfessor.professor.user.id)

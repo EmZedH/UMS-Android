@@ -3,8 +3,8 @@ package com.example.ums.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.listItemViewHolder.DeletableListItemViewHolder
 import com.example.ums.R
+import com.example.ums.listItemViewHolder.DeletableListItemViewHolder
 import com.example.ums.listener.DeleteListener
 import com.example.ums.model.Transactions
 import com.example.ums.model.databaseAccessObject.TransactionDAO
@@ -26,7 +26,7 @@ class TransactionsListItemViewAdapter (private val studentID: Int, private val t
     override fun onBindViewHolder(holder: DeletableListItemViewHolder, position: Int) {
         val transactions = originalList[position]
         holder.firstTextView.text = "ID: T/${transactions.id}"
-        holder.secondTextView.text = "Semester ${transactions.semester}"
+        holder.secondTextView.text = "₹${transactions.amount} (Semester ${transactions.semester})"
         holder.deleteButton.setOnClickListener {
             itemListener.onDelete(transactions.id)
         }
@@ -37,7 +37,7 @@ class TransactionsListItemViewAdapter (private val studentID: Int, private val t
             if(query.isNullOrEmpty())
                 transactionDAO.getList(studentID).sortedBy { it.id }
             else
-                transactionDAO.getList(studentID).filter { transaction -> transaction.semester.toString().contains(query, ignoreCase = true) }.sortedBy { it.id }
+                transactionDAO.getList(studentID).filter { transaction -> "₹${transaction.amount} (Semester ${transaction.semester})".contains(query, ignoreCase = true) }.sortedBy { it.id }
 
         filterQuery = if(query.isNullOrEmpty()) null else query
 
