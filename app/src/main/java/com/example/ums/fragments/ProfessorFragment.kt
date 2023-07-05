@@ -10,16 +10,16 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
-import com.example.ums.ProfessorCoursesListActivity
+import com.example.ums.superAdminCollegeAdminActivities.ProfessorCoursesListActivity
 import com.example.ums.R
 import com.example.ums.adapters.ProfessorListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.ProfessorAddBottomSheet
 import com.example.ums.bottomsheetdialogs.ProfessorUpdateBottomSheet
 import com.example.ums.dialogFragments.ProfessorDeleteDialog
-import com.example.ums.listener.ItemListener
+import com.example.ums.interfaces.ItemListener
 import com.example.ums.model.databaseAccessObject.ProfessorDAO
 
-class ProfessorFragment: AddableSearchableFragment(), ItemListener {
+class ProfessorFragment: ListFragment(), ItemListener {
 
     private lateinit var professorDAO: ProfessorDAO
     private var professorListItemViewAdapter: ProfessorListItemViewAdapter? = null

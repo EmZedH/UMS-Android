@@ -76,9 +76,6 @@ class TransactionAddBottomSheet private constructor(): FullScreenBottomSheetDial
         transactionAmount = view.findViewById(R.id.transaction_amount)
         transactionDate = view.findViewById(R.id.date_of_transaction)
 
-        transactionDate.setStartIconOnClickListener {
-            showDatePicker()
-        }
 
         bottomSheetCloseButton?.setOnClickListener {
             dismiss()
@@ -93,6 +90,7 @@ class TransactionAddBottomSheet private constructor(): FullScreenBottomSheetDial
 
         setCollegeIDTextView(view)
 
+        dateEntryTextInputLayout(transactionDate)
         transactionAmount.editText?.addTextChangedListener(textListener(transactionAmount) {
             transactionAmountError = null
         })
@@ -216,6 +214,20 @@ class TransactionAddBottomSheet private constructor(): FullScreenBottomSheetDial
 
             override fun afterTextChanged(p0: Editable?) {
             }
+        }
+    }
+
+    private fun dateEntryTextInputLayout(textInputLayout: TextInputLayout?){
+        textInputLayout?.editText?.setOnFocusChangeListener { _, hasFocus ->
+            if(hasFocus){
+                showDatePicker()
+            }
+        }
+        textInputLayout?.editText?.setOnClickListener {
+            showDatePicker()
+        }
+        textInputLayout?.setStartIconOnClickListener {
+            showDatePicker()
         }
     }
 }

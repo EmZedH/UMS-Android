@@ -11,15 +11,15 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
-import com.example.ums.StudentActivity
 import com.example.ums.adapters.StudentListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.StudentAddBottomSheet
 import com.example.ums.bottomsheetdialogs.StudentUpdateBottomSheet
 import com.example.ums.dialogFragments.StudentDeleteDialog
-import com.example.ums.listener.ItemListener
+import com.example.ums.interfaces.ItemListener
 import com.example.ums.model.databaseAccessObject.StudentDAO
+import com.example.ums.superAdminCollegeAdminActivities.StudentActivity
 
-class StudentFragment: AddableSearchableFragment(), ItemListener {
+class StudentFragment: ListFragment(), ItemListener {
 
     private lateinit var studentDAO: StudentDAO
     private var studentListItemViewAdapter: StudentListItemViewAdapter? = null

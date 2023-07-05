@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.UMS" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Primary brand color. -->
@@ -15,6 +15,7 @@
 
         <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
     </style>
+
     
     <style name="FloatingActionButtonStyle" parent="Widget.Design.FloatingActionButton">
         <item name="shapeAppearanceOverlay">@style/FabShapeStyle1</item>

@@ -119,10 +119,6 @@ class CollegeAdminAddBottomSheet: FullScreenBottomSheetDialog() {
         genderRadio = view.findViewById(R.id.elective_radio_group)
         genderTextView = view.findViewById(R.id.elective_text_view)
 
-        dateOfBirth.setStartIconOnClickListener {
-            showDatePicker()
-        }
-
         bottomSheetCloseButton?.setOnClickListener {
             dismiss()
         }
@@ -152,6 +148,8 @@ class CollegeAdminAddBottomSheet: FullScreenBottomSheetDialog() {
         }
 
         setCollegeIDTextView(view)
+
+        dateEntryTextInputLayout(dateOfBirth)
 
         userName.editText?.addTextChangedListener(textListener(userName) {
             userNameError = null
@@ -267,7 +265,6 @@ class CollegeAdminAddBottomSheet: FullScreenBottomSheetDialog() {
                         )
                     )
                 }
-
                 setCollegeIDTextView(view)
                 setFragmentResult("collegeAdminAddFragmentPosition", bundleOf("id" to newID))
                 dismiss()
@@ -313,7 +310,6 @@ class CollegeAdminAddBottomSheet: FullScreenBottomSheetDialog() {
                     savedYear = year
                 }
             }, savedYear ?: calendarYear, savedMonth ?: calendarMonth, savedDate ?: calendarDay)
-
 
         datePickerDialog.datePicker.maxDate = calendar.timeInMillis - 488400000000
         datePickerDialog.show()
@@ -372,6 +368,20 @@ class CollegeAdminAddBottomSheet: FullScreenBottomSheetDialog() {
 
             override fun afterTextChanged(p0: Editable?) {
             }
+        }
+    }
+
+    private fun dateEntryTextInputLayout(textInputLayout: TextInputLayout?){
+        textInputLayout?.editText?.setOnFocusChangeListener { _, hasFocus ->
+            if(hasFocus){
+                showDatePicker()
+            }
+        }
+        textInputLayout?.editText?.setOnClickListener {
+            showDatePicker()
+        }
+        textInputLayout?.setStartIconOnClickListener {
+            showDatePicker()
         }
     }
 }

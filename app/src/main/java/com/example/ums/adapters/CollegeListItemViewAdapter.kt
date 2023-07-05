@@ -6,12 +6,14 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.R
+import com.example.ums.Utility
+import com.example.ums.interfaces.LatestItemListener
 import com.example.ums.listItemViewHolder.ListItemViewHolder
-import com.example.ums.listener.ItemListener
 import com.example.ums.model.College
+import com.example.ums.model.SelectionItem
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 
-class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val itemListener: ItemListener) : RecyclerView.Adapter<ListItemViewHolder>() {
+class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val listener: LatestItemListener) : RecyclerView.Adapter<ListItemViewHolder>() {
 
     private var originalList : MutableList<College> = collegeDAO.getList().sortedBy { it.id }.toMutableList()
     private var filterQuery: String? = null
@@ -27,15 +29,28 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
 
     override fun onBindViewHolder(holder: ListItemViewHolder, position: Int) {
         val college = originalList[position]
+
         holder.itemIDTextView.setText(R.string.college_id)
         holder.itemIDTextView.append(college.id.toString())
+
         holder.itemNameTextView.text = college.name
+
+        holder.itemView.setOnLongClickListener {
+            val selectList: MutableList<SelectionItem> = mutableListOf()
+            for (collegeItem in originalList){
+                selectList.add(SelectionItem(Utility.idsToString(intArrayOf(collegeItem.id)), "CID : C/${collegeItem.id}", collegeItem.name))
+            }
+            listener.onLongClick(Utility.idsToString(intArrayOf(college.id)), selectList)
+            listener.switchToolbar(true)
+            true
+        }
 
         holder.itemView.setOnClickListener {
             val bundle = Bundle()
             bundle.putInt("collegeID",college.id)
-            itemListener.onClick(bundle)
+            listener.onClick(bundle)
         }
+
         holder.optionsButton.setOnClickListener {
             showOptionsPopupMenu(college, holder)
         }
@@ -50,11 +65,11 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
         popupMenu.setOnMenuItemClickListener{menuItem ->
             when (menuItem.itemId) {
                 R.id.edit_college -> {
-                    itemListener.onUpdate(college.id)
+                    listener.onUpdate(college.id)
                     true
                 }
                 R.id.delete_college -> {
-                    itemListener.onDelete(college.id)
+                    listener.onDelete(college.id)
                     true
                 }
 
@@ -65,7 +80,7 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
         popupMenu.show()
     }
 
-    fun filter(query: String?){
+    fun filter(query: String?): List<College>{
         val filteredList =
             if(query.isNullOrEmpty())
                 collegeDAO.getList().sortedBy {college -> college.id }
@@ -80,6 +95,7 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
         originalList.clear()
         originalList.addAll(filteredList)
         notifyDataSetChanged()
+        return filteredList
     }
 
     fun updateItemInAdapter(id: Int) {
@@ -142,5 +158,11 @@ class CollegeListItemViewAdapter(private val collegeDAO: CollegeDAO, private val
         collegeDAO.delete(id)
         originalList.removeAt(updatedPosition)
         notifyItemRemoved(updatedPosition)
+    }
+
+    fun updateList(){
+        originalList.removeAll(originalList.filter { it !in collegeDAO.getList() })
+        notifyDataSetChanged()
+
     }
 }

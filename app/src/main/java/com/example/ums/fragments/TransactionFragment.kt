@@ -14,11 +14,11 @@ import com.example.ums.adapters.TransactionsListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.TransactionAddBottomSheet
 import com.example.ums.dialogFragments.TransactionAddConfirmationDialog
 import com.example.ums.dialogFragments.TransactionDeleteDialog
-import com.example.ums.listener.DeleteListener
+import com.example.ums.interfaces.DeleteListener
 import com.example.ums.model.databaseAccessObject.StudentDAO
 import com.example.ums.model.databaseAccessObject.TransactionDAO
 
-class TransactionFragment: AddableSearchableFragment(), DeleteListener {
+class TransactionFragment: ListFragment(), DeleteListener {
 
     private var professorListItemViewAdapter: TransactionsListItemViewAdapter? = null
     private lateinit var firstTextView: TextView

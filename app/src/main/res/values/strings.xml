@@ -139,4 +139,7 @@
     <string name="pay_fees_string">Pay Fees</string>
     <string name="amount_string">Amount:</string>
     <string name="pay_fees_to_register_courses_string">Pay Fees to register courses</string>
+    <string name="selected_string">Selected</string>
+    <string name="top_app_bar_selected_string">Top app bar selected</string>
+    <string name="select_all_toolbar_string">Select All Toolbar</string>
 </resources>

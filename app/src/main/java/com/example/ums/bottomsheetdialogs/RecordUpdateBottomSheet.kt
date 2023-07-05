@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.example.ums.DatabaseHelper
@@ -105,18 +106,23 @@ class RecordUpdateBottomSheet: FullScreenBottomSheetDialog() {
 
         val updateButton =
             view.findViewById<MaterialButton>(R.id.update_button)
-
+        updateButton.isEnabled = false
+        if(attendance.editText?.text.toString() != record?.attendance.toString() ||
+                assignment.editText?.text.toString() != record?.assignmentMarks.toString() ||
+                externalMarks.editText?.text.toString() != record?.externalMarks.toString()){
+            updateButton.isEnabled = true
+        }
         setView(view)
 
-        attendance.editText?.addTextChangedListener(textListener(attendance) {
+        attendance.editText?.addTextChangedListener(textListener(attendance, {
             attendanceError = null
-        })
-        externalMarks.editText?.addTextChangedListener(textListener(externalMarks) {
-            externalMarksError = null
-        })
-        assignment.editText?.addTextChangedListener(textListener(assignment) {
+        }, record?.attendance.toString(), updateButton))
+        assignment.editText?.addTextChangedListener(textListener(assignment, {
             assignmentError = null
-        })
+        }, record?.assignmentMarks.toString(), updateButton))
+        externalMarks.editText?.addTextChangedListener(textListener(externalMarks, {
+            externalMarksError = null
+        }, record?.externalMarks.toString(), updateButton))
 
 
         updateButton.setOnClickListener {
@@ -165,7 +171,7 @@ class RecordUpdateBottomSheet: FullScreenBottomSheetDialog() {
                 recordsDAO.update(updatedRecord)
 
                 setView(view)
-
+                Toast.makeText(requireContext(), "Record Updated", Toast.LENGTH_SHORT).show()
                 setFragmentResult("RecordUpdateBottomSheerFragment", bundleOf())
                 dismiss()
             }
@@ -208,7 +214,7 @@ class RecordUpdateBottomSheet: FullScreenBottomSheetDialog() {
         attendance.error = attendanceError
     }
 
-    private fun textListener(layout: TextInputLayout, errorOperation: (() -> Unit)): TextWatcher {
+    private fun textListener(layout: TextInputLayout, errorOperation: (() -> Unit), recordDetail: String, button: MaterialButton): TextWatcher {
         return object: TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
             }
@@ -216,6 +222,7 @@ class RecordUpdateBottomSheet: FullScreenBottomSheetDialog() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 layout.error = null
                 errorOperation()
+                button.isEnabled = p0?.toString() != recordDetail
             }
 
             override fun afterTextChanged(p0: Editable?) {

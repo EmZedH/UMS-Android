@@ -12,7 +12,7 @@ import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.SearchableFragment
 import com.example.ums.adapters.StudentProfileProfessionalCourseListItemViewAdapter
-import com.example.ums.listener.DeleteClickListener
+import com.example.ums.interfaces.DeleteClickListener
 import com.example.ums.model.databaseAccessObject.CourseDAO
 import com.example.ums.studentActivities.StudentTestActivity
 

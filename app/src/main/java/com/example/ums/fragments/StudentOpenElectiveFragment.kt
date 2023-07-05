@@ -13,18 +13,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
-import com.example.ums.StudentTransactionSelectActivity
-import com.example.ums.TestRecordsActivity
+import com.example.ums.superAdminCollegeAdminActivities.StudentTransactionSelectActivity
+import com.example.ums.superAdminCollegeAdminActivities.TestRecordsActivity
 import com.example.ums.adapters.StudentOpenCourseListItemViewAdapter
 import com.example.ums.dialogFragments.RecordDeleteDialog
 import com.example.ums.dialogFragments.StudentOpenCourseAddConfirmationDialog
-import com.example.ums.listener.OpenCourseItemListener
+import com.example.ums.interfaces.OpenCourseItemListener
 import com.example.ums.model.Records
 import com.example.ums.model.databaseAccessObject.CourseDAO
 import com.example.ums.model.databaseAccessObject.CourseProfessorDAO
 import com.example.ums.model.databaseAccessObject.RecordsDAO
 
-class StudentOpenElectiveFragment: AddableSearchableFragment(), OpenCourseItemListener {
+class StudentOpenElectiveFragment: ListFragment(), OpenCourseItemListener {
 
     companion object{
         const val FRAGMENT_KEY = "StudentOpenElectiveFragment"

@@ -10,7 +10,6 @@ import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.viewpager2.widget.ViewPager2
 import com.example.ums.DatabaseHelper
-import com.example.ums.ManageProfileActivity
 import com.example.ums.R
 import com.example.ums.SearchableFragment
 import com.example.ums.adapters.StudentCoursesTabAdapter
@@ -18,6 +17,7 @@ import com.example.ums.dialogFragments.LogOutDialog
 import com.example.ums.fragments.StudentProfileOpenElectiveFragment
 import com.example.ums.fragments.StudentProfileProfessionalElectiveFragment
 import com.example.ums.model.databaseAccessObject.StudentDAO
+import com.example.ums.superAdminCollegeAdminActivities.ManageProfileActivity
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.tabs.TabLayout

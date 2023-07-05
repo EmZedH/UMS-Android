@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.R
 import com.example.ums.listItemViewHolder.ClickableListItemViewHolder
-import com.example.ums.listener.ClickListener
+import com.example.ums.interfaces.ClickListener
 import com.example.ums.model.Student
 import com.example.ums.model.databaseAccessObject.ProfessorDAO
 import com.example.ums.model.databaseAccessObject.StudentDAO

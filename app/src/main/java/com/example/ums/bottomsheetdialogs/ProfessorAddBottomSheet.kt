@@ -123,10 +123,6 @@ class ProfessorAddBottomSheet: FullScreenBottomSheetDialog() {
         genderRadio = view.findViewById(R.id.elective_radio_group)
         genderTextView = view.findViewById(R.id.elective_text_view)
 
-        dateOfBirth.setStartIconOnClickListener {
-            showDatePicker()
-        }
-
         bottomSheetCloseButton?.setOnClickListener {
             dismiss()
         }
@@ -156,6 +152,8 @@ class ProfessorAddBottomSheet: FullScreenBottomSheetDialog() {
         }
 
         setCollegeIDTextView(view)
+
+        dateEntryTextInputLayout(dateOfBirth)
 
         userName.editText?.addTextChangedListener(textListener(userName) {
             userNameError = null
@@ -376,6 +374,20 @@ class ProfessorAddBottomSheet: FullScreenBottomSheetDialog() {
 
             override fun afterTextChanged(p0: Editable?) {
             }
+        }
+    }
+
+    private fun dateEntryTextInputLayout(textInputLayout: TextInputLayout?){
+        textInputLayout?.editText?.setOnFocusChangeListener { _, hasFocus ->
+            if(hasFocus){
+                showDatePicker()
+            }
+        }
+        textInputLayout?.editText?.setOnClickListener {
+            showDatePicker()
+        }
+        textInputLayout?.setStartIconOnClickListener {
+            showDatePicker()
         }
     }
 }

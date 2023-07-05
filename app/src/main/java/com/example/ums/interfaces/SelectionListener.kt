@@ -1,0 +1,3 @@
+package com.example.ums.interfaces
+
+interface SelectionListener: ToolbarSwitchListener, SelectionClearable, SelectionCountListener

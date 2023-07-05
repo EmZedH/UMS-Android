@@ -16,7 +16,7 @@ import com.example.ums.StudentsProfileCourseRecordActivity
 import com.example.ums.adapters.SelectableTestListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.TestUpdateBottomSheet
 import com.example.ums.dialogFragments.TestDeleteDialog
-import com.example.ums.listener.DeleteUpdateListener
+import com.example.ums.interfaces.DeleteUpdateListener
 import com.example.ums.model.databaseAccessObject.CourseDAO
 import com.example.ums.model.databaseAccessObject.StudentDAO
 import com.example.ums.model.databaseAccessObject.TestDAO

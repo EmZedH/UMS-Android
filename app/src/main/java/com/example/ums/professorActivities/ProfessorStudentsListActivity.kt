@@ -1,4 +1,4 @@
-package com.example.ums
+package com.example.ums.professorActivities
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,12 +10,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.ActionMenuItemView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ums.DatabaseHelper
+import com.example.ums.R
 import com.example.ums.adapters.CourseStudentListItemViewAdapter
-import com.example.ums.listener.ClickListener
+import com.example.ums.interfaces.ClickListener
 import com.example.ums.model.databaseAccessObject.CourseDAO
 import com.example.ums.model.databaseAccessObject.ProfessorDAO
 import com.example.ums.model.databaseAccessObject.StudentDAO
-import com.example.ums.professorActivities.ProfessorCourseDetailsActivity
+import com.example.ums.superAdminCollegeAdminActivities.TestRecordsActivity
 import com.google.android.material.appbar.MaterialToolbar
 
 class ProfessorStudentsListActivity: AppCompatActivity(), ClickListener {
@@ -74,7 +76,6 @@ class ProfessorStudentsListActivity: AppCompatActivity(), ClickListener {
             recyclerView.layoutManager = LinearLayoutManager(this)
 
             infoButton.setOnClickListener {
-                val professorDAO = ProfessorDAO(DatabaseHelper(this))
                 val professor = professorDAO.get(professorID)
                 val intent = Intent(this, ProfessorCourseDetailsActivity::class.java)
                 val courseDetailsBundle = Bundle().apply {

@@ -145,10 +145,6 @@ class StudentAddBottomSheet: FullScreenBottomSheetDialog() {
         semesterSpinner = view.findViewById(R.id.semester_spinner_id)
         semesterSpinner?.isEnabled = false
 
-        dateOfBirth.setStartIconOnClickListener {
-            showDatePicker()
-        }
-
         bottomSheetCloseButton?.setOnClickListener {
             dismiss()
         }
@@ -208,6 +204,8 @@ class StudentAddBottomSheet: FullScreenBottomSheetDialog() {
         }
 
         setCollegeIDTextView(view)
+
+        dateEntryTextInputLayout(dateOfBirth)
 
         userName.editText?.addTextChangedListener(textListener(userName) {
             userNameError = null
@@ -445,6 +443,19 @@ class StudentAddBottomSheet: FullScreenBottomSheetDialog() {
 
             override fun afterTextChanged(p0: Editable?) {
             }
+        }
+    }
+    private fun dateEntryTextInputLayout(textInputLayout: TextInputLayout?){
+        textInputLayout?.editText?.setOnFocusChangeListener { _, hasFocus ->
+            if(hasFocus){
+                showDatePicker()
+            }
+        }
+        textInputLayout?.editText?.setOnClickListener {
+            showDatePicker()
+        }
+        textInputLayout?.setStartIconOnClickListener {
+            showDatePicker()
         }
     }
 }

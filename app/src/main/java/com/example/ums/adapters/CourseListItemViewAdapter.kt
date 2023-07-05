@@ -1,14 +1,13 @@
 package com.example.ums.adapters
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.listItemViewHolder.ListItemViewHolder
 import com.example.ums.R
-import com.example.ums.listener.ItemListener
+import com.example.ums.interfaces.ItemListener
+import com.example.ums.listItemViewHolder.ListItemViewHolder
 import com.example.ums.model.Course
 import com.example.ums.model.databaseAccessObject.CourseDAO
 
@@ -135,7 +134,6 @@ class CourseListItemViewAdapter(private val departmentID: Int, private val colle
 
     fun deleteItem(id: Int){
         val course = courseDAO.get(id, departmentID, collegeID)
-        Log.i("CourseListItemViewAdapterClass","course name: ${course?.name}")
         val updatedPosition = originalList.indexOf(course)
         courseDAO.delete(id, departmentID, collegeID)
         originalList.removeAt(updatedPosition)

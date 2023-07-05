@@ -11,6 +11,7 @@ import com.example.ums.model.User
 import com.example.ums.model.databaseAccessObject.UserDAO
 import com.example.ums.professorActivities.ProfessorMainPageActivity
 import com.example.ums.studentActivities.StudentMainPageActivity
+import com.example.ums.superAdminCollegeAdminActivities.SuperAdminCollegeAdminMainPageActivity
 
 class LoginActivity : AppCompatActivity() {
 
@@ -19,11 +20,19 @@ class LoginActivity : AppCompatActivity() {
 
     private val userDAO = UserDAO(DatabaseHelper(this))
 
+    private var textViewUserNamePasswordIncorrect: TextView? = null
+
+    private var errorText: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.login_page)
+        setContentView(R.layout.login_layout_page)
 
-        val textViewUserNamePasswordIncorrect = findViewById<TextView>(R.id.textViewUserIDPasswordNotCorrect)
+        errorText = savedInstanceState?.getString("error_text")
+        textViewUserNamePasswordIncorrect = findViewById(R.id.textViewUserIDPasswordNotCorrect)
+        textViewUserNamePasswordIncorrect?.text = errorText
+
+
         val loginButton = findViewById<Button>(R.id.login_button)
         val userIDEditText = findViewById<EditText>(R.id.userIDEditText)
         val passwordEditText = findViewById<EditText>(R.id.passwordEditText)
@@ -34,26 +43,27 @@ class LoginActivity : AppCompatActivity() {
         val isLoggedOut = sharedPreferences.getBoolean("isLoggedOut", true)
 
         if(userEmail != null && userPassword != null && !isLoggedOut){
-            val user = userDAO.get(userEmail, userPassword)!!
+            val user = userDAO.get(userEmail, userPassword)
             goToMainPage(user)
         }
         else{
             loginButton.setOnClickListener {
 
-                textViewUserNamePasswordIncorrect.text = ""
+                textViewUserNamePasswordIncorrect?.text = ""
 
                 val userEmailID = userIDEditText.text.toString().lowercase()
                 val password = passwordEditText.text.toString()
-
                 val user = userDAO.get(userEmailID, password)
 
                 if(user == null){
 
-                    textViewUserNamePasswordIncorrect.text =
+                    errorText =
                         if(userEmailID == "" || password == "")
                             userIDPasswordProperString
                         else
                             userIDPasswordIncorrectString
+
+                    textViewUserNamePasswordIncorrect?.text = errorText
 
                 }
                 else{
@@ -64,8 +74,8 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private fun goToMainPage(user : User){
-        if(UserRole.SUPER_ADMIN.role == user.role || UserRole.COLLEGE_ADMIN.role == user.role){
+    private fun goToMainPage(user : User?){
+        if(UserRole.SUPER_ADMIN.role == user?.role || UserRole.COLLEGE_ADMIN.role == user?.role){
             val intent = Intent(this, SuperAdminCollegeAdminMainPageActivity::class.java)
             val bundle = Bundle()
             bundle.putString("userName", user.name)
@@ -76,7 +86,7 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-        else if(UserRole.PROFESSOR.role == user.role){
+        else if(UserRole.PROFESSOR.role == user?.role){
             val intent = Intent(this, ProfessorMainPageActivity::class.java)
             val bundle = Bundle()
             bundle.putString("userName", user.name)
@@ -87,7 +97,7 @@ class LoginActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-        else if(UserRole.STUDENT.role == user.role){
+        else if(UserRole.STUDENT.role == user?.role){
             val intent = Intent(this, StudentMainPageActivity::class.java)
             val bundle = Bundle()
             bundle.putString("userName", user.name)
@@ -106,5 +116,10 @@ class LoginActivity : AppCompatActivity() {
         editor.putString("password", user.password)
         editor.putBoolean("isLoggedOut", false)
         editor.apply()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("error_text", errorText)
     }
 }

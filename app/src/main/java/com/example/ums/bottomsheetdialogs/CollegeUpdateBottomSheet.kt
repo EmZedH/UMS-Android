@@ -33,11 +33,13 @@ class CollegeUpdateBottomSheet: FullScreenBottomSheetDialog() {
     }
 
     private var collegeID: Int? = null
-    private lateinit var college: College
+
     private lateinit var collegeNameTextLayout: TextInputLayout
     private lateinit var collegeTelephoneTextLayout: TextInputLayout
     private lateinit var collegeAddressTextLayout: TextInputLayout
+
     private lateinit var updateButton: MaterialButton
+
     private lateinit var collegeNameText: String
     private lateinit var collegeAddressText: String
     private lateinit var collegeTelephoneText: String
@@ -47,9 +49,8 @@ class CollegeUpdateBottomSheet: FullScreenBottomSheetDialog() {
         super.onCreate(savedInstanceState)
         val bundle = arguments
         collegeID = bundle?.getInt("college_update_college_id")
-        if(savedInstanceState!=null){
-            isRotate = savedInstanceState.getBoolean("college_update_is_rotate")
-        }
+
+        isRotate = savedInstanceState?.getBoolean("college_update_is_rotate") ?: return
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,9 +58,8 @@ class CollegeUpdateBottomSheet: FullScreenBottomSheetDialog() {
     ): View? {
         val collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
         val view = inflater.inflate(R.layout.fragment_update_college, container, false)
-        val collegeID = collegeID
-        if(collegeID!=null){
-            college = collegeDAO.get(collegeID)!!
+        val college = collegeDAO.get(collegeID)
+        if(college!=null){
             val closeButton = view.findViewById<ImageButton>(R.id.close_button)
             val collegeIDTextView = view.findViewById<TextView>(R.id.course_id_text_view)
             collegeNameTextLayout = view.findViewById(R.id.user_password_layout)
@@ -77,24 +77,25 @@ class CollegeUpdateBottomSheet: FullScreenBottomSheetDialog() {
 
             updateButton.isEnabled = false
             if(isRotate){
-                collegeNameTextLayout.editText!!.setText(college.name)
-                collegeAddressTextLayout.editText!!.setText(college.address)
-                collegeTelephoneTextLayout.editText!!.setText(college.telephone)
+                collegeNameTextLayout.editText?.setText(college.name)
+                collegeAddressTextLayout.editText?.setText(college.address)
+                collegeTelephoneTextLayout.editText?.setText(college.telephone)
             }
             else{
-                collegeNameTextLayout.editText!!.setText(collegeNameText)
-                collegeAddressTextLayout.editText!!.setText(collegeAddressText)
-                collegeTelephoneTextLayout.editText!!.setText(collegeTelephoneText)
+                collegeNameTextLayout.editText?.setText(collegeNameText)
+                collegeAddressTextLayout.editText?.setText(collegeAddressText)
+                collegeTelephoneTextLayout.editText?.setText(collegeTelephoneText)
             }
 
-            if(collegeNameTextLayout.editText!!.text.toString() != college.name ||
-                collegeAddressTextLayout.editText!!.text.toString() != college.address ||
-                collegeTelephoneTextLayout.editText!!.text.toString() != college.telephone){
+            if(collegeNameTextLayout.editText?.text.toString() != college.name ||
+                collegeAddressTextLayout.editText?.text.toString() != college.address ||
+                collegeTelephoneTextLayout.editText?.text.toString() != college.telephone){
                 updateButton.isEnabled = true
             }
-            collegeNameTextLayout.editText!!.addTextChangedListener(textListener(college.name, collegeNameTextLayout))
-            collegeAddressTextLayout.editText!!.addTextChangedListener(textListener(college.address, collegeAddressTextLayout))
-            collegeTelephoneTextLayout.editText!!.addTextChangedListener(textListener(college.telephone, collegeTelephoneTextLayout))
+
+            collegeNameTextLayout.editText?.addTextChangedListener(textListener(college.name, collegeNameTextLayout))
+            collegeAddressTextLayout.editText?.addTextChangedListener(textListener(college.address, collegeAddressTextLayout))
+            collegeTelephoneTextLayout.editText?.addTextChangedListener(textListener(college.telephone, collegeTelephoneTextLayout))
 
             closeButton.setOnClickListener {
                 dismiss()
@@ -124,7 +125,7 @@ class CollegeUpdateBottomSheet: FullScreenBottomSheetDialog() {
                 }
                 if (flag) {
                     val newCollege = College(
-                        collegeID,
+                        college.id,
                         collegeNameText,
                         collegeAddressText,
                         collegeTelephoneText

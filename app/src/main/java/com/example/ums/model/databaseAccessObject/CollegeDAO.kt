@@ -2,9 +2,11 @@ package com.example.ums.model.databaseAccessObject
 
 import android.content.ContentValues
 import com.example.ums.DatabaseHelper
+import com.example.ums.Utility
+import com.example.ums.interfaces.DeletableDAO
 import com.example.ums.model.College
 
-class CollegeDAO(private val databaseHelper: DatabaseHelper) {
+class CollegeDAO(private val databaseHelper: DatabaseHelper): DeletableDAO {
 
     private val tableName = "COLLEGE"
     private val primaryKey = "C_ID"
@@ -22,7 +24,7 @@ class CollegeDAO(private val databaseHelper: DatabaseHelper) {
     private val studentTable = "STUDENT"
     private val testTable = "TEST"
     fun get(collegeID : Int?) : College?{
-        val collegeID = collegeID ?: return null
+        collegeID ?: return null
         var college : College? = null
         val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName WHERE $primaryKey = $collegeID", null)
         if(cursor.moveToFirst()){
@@ -88,6 +90,14 @@ class CollegeDAO(private val databaseHelper: DatabaseHelper) {
             db.endTransaction()
         }
         db.close()
+    }
+
+    override fun deleteList(idStrings: List<String>) {
+        for (idString in idStrings){
+            val ids = Utility.stringToIds(idString)
+            val collegeID = ids[0]
+            delete(collegeID)
+        }
     }
 
     fun getNewID() : Int {

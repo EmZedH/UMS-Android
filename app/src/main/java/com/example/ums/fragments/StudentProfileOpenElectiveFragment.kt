@@ -1,24 +1,19 @@
 package com.example.ums.fragments
 
-import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.SearchableFragment
 import com.example.ums.adapters.StudentProfileOpenCourseListItemViewAdapter
-import com.example.ums.listener.DeleteClickListener
-import com.example.ums.model.Records
+import com.example.ums.interfaces.DeleteClickListener
 import com.example.ums.model.databaseAccessObject.CourseDAO
-import com.example.ums.model.databaseAccessObject.CourseProfessorDAO
-import com.example.ums.model.databaseAccessObject.RecordsDAO
 import com.example.ums.studentActivities.StudentTestActivity
 
 class StudentProfileOpenElectiveFragment: SearchableFragment(), DeleteClickListener {
@@ -92,40 +87,5 @@ class StudentProfileOpenElectiveFragment: SearchableFragment(), DeleteClickListe
         super.onResume()
         onRefresh()
         studentOpenCourseListItemViewAdapter?.updateList()
-    }
-
-    private val resultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
-            val courseID = data?.getIntExtra("course_id", -1)
-            val departmentID = data?.getIntExtra("department_id", -1)
-            val collegeID = data?.getIntExtra("college_id", -1)
-            val professorID = data?.getIntExtra("professor_id", -1)
-            val transactionID = data?.getIntExtra("transaction_id", -1)
-            val recordsDAO = RecordsDAO(DatabaseHelper(requireActivity()))
-            val courseProfessorDAO = CourseProfessorDAO(DatabaseHelper(requireActivity()))
-            val courseProfessor = courseProfessorDAO.get(professorID, courseID, departmentID, collegeID)
-
-            if(courseID!=null && courseID != -1 && departmentID != null &&
-                departmentID != -1 && collegeID != null && collegeID != -1 &&
-                professorID!=null && professorID!=-1 &&
-                transactionID!=null && transactionID!=-1 && courseProfessor!=null){
-                recordsDAO.insert(
-                    Records(
-                        studentID ?: return@registerForActivityResult,
-                        courseProfessor,
-                        transactionID,
-                        0,
-                        0,
-                        0,
-                        "NOT_COMPLETED",
-                        0
-                    )
-                )
-                onRefresh()
-                studentOpenCourseListItemViewAdapter?.updateList()
-            }
-
-        }
     }
 }

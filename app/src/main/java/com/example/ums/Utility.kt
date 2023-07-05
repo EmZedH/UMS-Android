@@ -31,5 +31,13 @@ class Utility {
             return regex.matches(dateString)
 
         }
+
+        fun idsToString(array: IntArray): String{
+            return array.joinToString("-")
+        }
+
+        fun stringToIds(idString: String): IntArray{
+            return idString.split("-").map { it.toInt() }.toIntArray()
+        }
     }
 }

@@ -13,23 +13,22 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
-import com.example.ums.ManageProfileActivity
-import com.example.ums.ProfessorStudentsListActivity
 import com.example.ums.R
 import com.example.ums.UserRole
 import com.example.ums.adapters.ProfessorMainPageListItemViewAdapter
 import com.example.ums.dialogFragments.ExitDialog
 import com.example.ums.dialogFragments.LogOutDialog
-import com.example.ums.listener.ClickListener
+import com.example.ums.interfaces.ClickListener
 import com.example.ums.model.User
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.example.ums.model.databaseAccessObject.CourseProfessorDAO
 import com.example.ums.model.databaseAccessObject.ProfessorDAO
 import com.example.ums.model.databaseAccessObject.UserDAO
+import com.example.ums.superAdminCollegeAdminActivities.ManageProfileActivity
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.navigation.NavigationView
 
-class ProfessorMainPageActivity: AppCompatActivity(), ClickListener{
+class ProfessorMainPageActivity: AppCompatActivity(), ClickListener {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var userRole : String

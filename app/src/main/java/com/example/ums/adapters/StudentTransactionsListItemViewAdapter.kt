@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.R
-import com.example.ums.listItemViewHolder.StudentTransactionsListItemViewHolder
+import com.example.ums.superAdminCollegeAdminActivities.StudentTransactionsListItemViewHolder
 import com.example.ums.model.Transactions
 import com.example.ums.model.databaseAccessObject.TransactionDAO
 

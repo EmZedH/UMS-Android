@@ -11,14 +11,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
-import com.example.ums.StudentCompletedCourseRecordActivity
+import com.example.ums.superAdminCollegeAdminActivities.StudentCompletedCourseRecordActivity
 import com.example.ums.adapters.StudentCompletedOpenCourseListItemViewAdapter
 import com.example.ums.dialogFragments.RecordDeleteDialog
-import com.example.ums.listener.DeleteClickListener
+import com.example.ums.interfaces.DeleteClickListener
 import com.example.ums.model.databaseAccessObject.CourseDAO
 import com.example.ums.model.databaseAccessObject.RecordsDAO
 
-class StudentCompletedOpenElectiveFragment: AddableSearchableFragment(), DeleteClickListener {
+class StudentCompletedOpenElectiveFragment: ListFragment(), DeleteClickListener {
 
     companion object{
         const val FRAGMENT_KEY = "StudentCompletedOpenElectiveFragment"

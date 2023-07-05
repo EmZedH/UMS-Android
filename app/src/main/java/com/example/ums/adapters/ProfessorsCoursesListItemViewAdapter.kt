@@ -1,13 +1,12 @@
 package com.example.ums.adapters
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.R
 import com.example.ums.listItemViewHolder.DeletableListItemViewHolder
-import com.example.ums.listener.DeleteClickListener
+import com.example.ums.interfaces.DeleteClickListener
 import com.example.ums.model.CourseProfessor
 import com.example.ums.model.databaseAccessObject.CourseProfessorDAO
 import com.example.ums.model.databaseAccessObject.ProfessorDAO

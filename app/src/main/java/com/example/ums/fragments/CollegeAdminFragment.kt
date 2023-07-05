@@ -9,17 +9,17 @@ import android.widget.TextView
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.CollegeAdminDetailsActivity
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.adapters.CollegeAdminListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.CollegeAdminAddBottomSheet
 import com.example.ums.bottomsheetdialogs.CollegeAdminUpdateBottomSheet
 import com.example.ums.dialogFragments.CollegeAdminDeleteDialog
-import com.example.ums.listener.ItemListener
+import com.example.ums.interfaces.ItemListener
 import com.example.ums.model.databaseAccessObject.CollegeAdminDAO
+import com.example.ums.superAdminCollegeAdminActivities.CollegeAdminDetailsActivity
 
-class CollegeAdminFragment: AddableSearchableFragment(), ItemListener {
+class CollegeAdminFragment: ListFragment(), ItemListener {
 
     private lateinit var collegeAdminDAO: CollegeAdminDAO
     private var collegeAdminListItemViewAdapter: CollegeAdminListItemViewAdapter? = null

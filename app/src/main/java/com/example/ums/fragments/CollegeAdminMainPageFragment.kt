@@ -10,16 +10,16 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
-import com.example.ums.DepartmentActivity
 import com.example.ums.R
 import com.example.ums.adapters.DepartmentListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.DepartmentAddBottomSheet
 import com.example.ums.bottomsheetdialogs.DepartmentUpdateBottomSheet
 import com.example.ums.dialogFragments.DepartmentDeleteDialog
-import com.example.ums.listener.ItemListener
+import com.example.ums.interfaces.ItemListener
 import com.example.ums.model.databaseAccessObject.DepartmentDAO
+import com.example.ums.superAdminCollegeAdminActivities.DepartmentActivity
 
-class CollegeAdminMainPageFragment: AddableSearchableFragment(), ItemListener {
+class CollegeAdminMainPageFragment: LatestListFragment(), ItemListener {
     private lateinit var departmentDAO: DepartmentDAO
     private var departmentListItemViewAdapter: DepartmentListItemViewAdapter? = null
     private lateinit var firstTextView: TextView
@@ -81,6 +81,16 @@ class CollegeAdminMainPageFragment: AddableSearchableFragment(), ItemListener {
 
     override fun onSearch(query: String?) {
         departmentListItemViewAdapter?.filter(query)
+    }
+
+    override fun clearSelection() {
+
+    }
+
+    override fun deleteAll() {
+    }
+
+    override fun selectAll() {
     }
 
     private fun addAt(id: Int){
