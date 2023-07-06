@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.fragment.app.setFragmentResultListener
@@ -15,21 +14,24 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.Utility
-import com.example.ums.adapters.CollegeListItemViewAdapter
+import com.example.ums.adapters.ListItemViewAdapter
 import com.example.ums.adapters.SelectableListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.CollegeAddBottomSheet
 import com.example.ums.bottomsheetdialogs.CollegeUpdateBottomSheet
 import com.example.ums.dialogFragments.CollegeDeleteDialog
-import com.example.ums.interfaces.LatestItemListener
+import com.example.ums.interfaces.ListIdItemListener
 import com.example.ums.interfaces.SelectionListener
-import com.example.ums.model.SelectionItem
+import com.example.ums.model.AdapterItem
 import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.example.ums.superAdminCollegeAdminActivities.CollegeActivity
 
-class SuperAdminMainPageFragment : LatestListFragment(), LatestItemListener, SelectionListener {
+class SuperAdminMainPageFragment : LatestListFragment(), SelectionListener, ListIdItemListener {
 
-    private lateinit var addCollegeBottomSheet : CollegeAddBottomSheet
-    private var collegeListItemViewAdapter : CollegeListItemViewAdapter? = null
+//    private lateinit var addCollegeBottomSheet : CollegeAddBottomSheet
+
+    private var listItemViewAdapter: ListItemViewAdapter? = null
+
+//    private var collegeListItemViewAdapter : CollegeListItemViewAdapter? = null
     private var selectableListItemViewAdapter: SelectableListItemViewAdapter? = null
     private lateinit var collegeDAO: CollegeDAO
     private lateinit var firstTextView: TextView
@@ -38,12 +40,14 @@ class SuperAdminMainPageFragment : LatestListFragment(), LatestItemListener, Sel
     private var recyclerView: RecyclerView? = null
     private var editCollegeId: Int? = null
 
-    private var selectedItems: MutableList<String> = mutableListOf()
+    private var selectedItems: MutableList<List<Int>> = mutableListOf()
     private var isSelectionEnabled = false
+    private var searchQuery: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
-        collegeListItemViewAdapter = CollegeListItemViewAdapter(collegeDAO, this)
+//        collegeListItemViewAdapter = CollegeListItemViewAdapter(collegeDAO, this)
+        listItemViewAdapter = ListItemViewAdapter(getAdapterItemList(), this)
     }
 
     override fun onCreateView(
@@ -54,10 +58,11 @@ class SuperAdminMainPageFragment : LatestListFragment(), LatestItemListener, Sel
 
         if(savedInstanceState!=null){
             val idStringList = savedInstanceState.getStringArray("selected_items_id_string_list") ?: arrayOf()
+            searchQuery = savedInstanceState.getString("search_query")
             isSelectionEnabled = savedInstanceState.getBoolean("is_selection_enabled")
             for(index in idStringList.indices){
                 selectedItems.add(
-                    idStringList[index]
+                    Utility.stringToIds(idStringList[index])
                 )
             }
         }
@@ -67,8 +72,6 @@ class SuperAdminMainPageFragment : LatestListFragment(), LatestItemListener, Sel
 
         firstTextView = view.findViewById(R.id.no_items_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
-
-        addCollegeBottomSheet = CollegeAddBottomSheet()
 
         if(collegeDAO.getList().isNotEmpty()){
 
@@ -81,15 +84,16 @@ class SuperAdminMainPageFragment : LatestListFragment(), LatestItemListener, Sel
             secondTextView.visibility = View.VISIBLE
         }
         if(selectedItems.isNotEmpty() && isSelectionEnabled){
-            val selectList: MutableList<SelectionItem> = mutableListOf()
+            val selectList: MutableList<AdapterItem> = mutableListOf()
             for (collegeItem in collegeDAO.getList()){
-                selectList.add(SelectionItem(Utility.idsToString(intArrayOf(collegeItem.id)), "CID : C/${collegeItem.id}", collegeItem.name))
+                selectList.add(AdapterItem(listOf(collegeItem.id), "CID : C/${collegeItem.id}", collegeItem.name))
             }
             selectableListItemViewAdapter = SelectableListItemViewAdapter(selectedItems, selectList, this , collegeDAO)
             recyclerView?.adapter = selectableListItemViewAdapter
         }
         else{
-            recyclerView?.adapter = collegeListItemViewAdapter
+//            recyclerView?.adapter = collegeListItemViewAdapter
+            recyclerView?.adapter = listItemViewAdapter
         }
         recyclerView?.layoutManager = LinearLayoutManager(this.context)
         return view
@@ -100,36 +104,54 @@ class SuperAdminMainPageFragment : LatestListFragment(), LatestItemListener, Sel
         super.onViewCreated(view, savedInstanceState)
         setFragmentResultListener("collegeAddBottomSheet"){_, result->
             val id = result.getInt("id")
-            addAt(id)
+            val college = collegeDAO.get(id)
+            college?.let {
+                listItemViewAdapter?.addItem(
+                    AdapterItem(
+                        listOf(id),
+                        "CID : C/${college.id}",
+                        college.name
+                    )
+                )
+            }
+            onRefresh()
         }
         setFragmentResultListener("collegeDeleteDialog"){_, result->
             val id = result.getInt("collegeID")
-            collegeListItemViewAdapter?.deleteItem(id)
+            collegeDAO.delete(id)
+            listItemViewAdapter?.deleteItem(listOf(id))
             onRefresh()
         }
         setFragmentResultListener("CollegeUpdateBottomSheet"){_, result->
             val id = result.getInt("collegeID")
-            collegeListItemViewAdapter?.updateItemInAdapter(id)
+            val college = collegeDAO.get(id)
+            college?.let {
+                listItemViewAdapter?.updateItemInAdapter(
+                    AdapterItem(
+                        listOf(id),
+                        "CID : C/${college.id}",
+                        college.name
+                    )
+                )
+            }
         }
     }
 
     override fun onAdd() {
+        val addCollegeBottomSheet = CollegeAddBottomSheet()
         addCollegeBottomSheet.show(requireActivity().supportFragmentManager, "bottomSheetDialog")
     }
 
-    private fun addAt(id: Int) {
-        collegeListItemViewAdapter?.addItem(id)
-        onRefresh()
-    }
-
     override fun onSearch(query: String?) {
-        recyclerView?.adapter = collegeListItemViewAdapter
-        val list = collegeListItemViewAdapter?.filter(query)
+        searchQuery = query
+        recyclerView?.adapter = listItemViewAdapter
+
+        val list = listItemViewAdapter?.filter(query)
         if(selectedItems.isNotEmpty() && !list.isNullOrEmpty() && isSelectionEnabled){
 
-            val selectList: MutableList<SelectionItem> = mutableListOf()
-            for (collegeItem in list){
-                selectList.add(SelectionItem(Utility.idsToString(intArrayOf(collegeItem.id)), "CID : C/${collegeItem.id}", collegeItem.name))
+            val selectList: MutableList<AdapterItem> = mutableListOf()
+            for (item in list){
+                selectList.add(AdapterItem(item.id, item.firstText, item.secondText))
             }
             selectableListItemViewAdapter = SelectableListItemViewAdapter(selectedItems, selectList, this, collegeDAO)
             recyclerView?.adapter = selectableListItemViewAdapter
@@ -142,9 +164,12 @@ class SuperAdminMainPageFragment : LatestListFragment(), LatestItemListener, Sel
     override fun clearSelection() {
         isSelectionEnabled = false
         selectableListItemViewAdapter = null
-        collegeListItemViewAdapter?.updateList()
-//        collegeListItemViewAdapter = CollegeListItemViewAdapter(collegeDAO, this)
-        recyclerView?.adapter = collegeListItemViewAdapter
+
+        listItemViewAdapter = ListItemViewAdapter(getAdapterItemList(), this)
+        recyclerView?.adapter = listItemViewAdapter
+        if(searchQuery!=null){
+            listItemViewAdapter?.filter(searchQuery)
+        }
         recyclerView?.layoutManager = LinearLayoutManager(this.context)
     }
 
@@ -152,34 +177,41 @@ class SuperAdminMainPageFragment : LatestListFragment(), LatestItemListener, Sel
         setFragmentResult("FragmentSelectionCount", bundleOf("selected_count" to size))
     }
 
-    override fun onUpdate(id: Int) {
-        val editFragment = CollegeUpdateBottomSheet.newInstance(id)
-        editFragment?.show((context as AppCompatActivity).supportFragmentManager, "updateBottomSheetDialog")
-    }
-
-    override fun onDelete(id: Int) {
-        val deleteFragment = CollegeDeleteDialog()
-        deleteFragment.setCollegeID(id)
-        deleteFragment.show((context as AppCompatActivity).supportFragmentManager, "deleteDialog")
-    }
-
-    override fun onClick(bundle: Bundle?) {
-        val intent = Intent(requireContext(), CollegeActivity::class.java)
-        if(bundle!=null){
-            editCollegeId = bundle.getInt("collegeID")
-            intent.putExtras(bundle)
-            startActivity(intent)
-        }
-    }
-
     override fun switchToolbar(shouldSwitchToolbar: Boolean) {
         setFragmentResult("FragmentSwitchToolbar", bundleOf("switch_toolbar" to shouldSwitchToolbar))
     }
 
-    override fun onLongClick(selectedItemId: String, itemList: MutableList<SelectionItem>) {
+    override fun onDelete(id: List<Int>) {
+        val deleteFragment = CollegeDeleteDialog()
+        deleteFragment.setCollegeID(id[0])
+        deleteFragment.show(requireActivity().supportFragmentManager, "deleteDialog")
+    }
+
+    override fun onUpdate(id: List<Int>) {
+        val editFragment = CollegeUpdateBottomSheet.newInstance(id[0])
+        editFragment?.show(requireActivity().supportFragmentManager, "updateBottomSheetDialog")
+    }
+
+    override fun onClick(id: List<Int>) {
+        val intent = Intent(requireContext(), CollegeActivity::class.java)
+        editCollegeId = id[0]
+        intent.putExtras(
+            Bundle().apply {
+                putInt("collegeID", id[0])
+            })
+        startActivity(intent)
+    }
+
+    override fun onLongClick(id: List<Int>) {
         isSelectionEnabled = true
-        selectableListItemViewAdapter = SelectableListItemViewAdapter(mutableListOf(selectedItemId),itemList, this , collegeDAO)
+        val selectList: MutableList<AdapterItem> = mutableListOf()
+        val list = listItemViewAdapter?.filter(searchQuery)
+        for (item in list ?: return){
+            selectList.add(AdapterItem(item.id, item.firstText, item.secondText))
+        }
+        selectableListItemViewAdapter = SelectableListItemViewAdapter(mutableListOf(id),selectList, this , collegeDAO)
         recyclerView?.adapter = selectableListItemViewAdapter
+        switchToolbar(true)
         selectionCount(1)
     }
 
@@ -207,7 +239,13 @@ class SuperAdminMainPageFragment : LatestListFragment(), LatestItemListener, Sel
     override fun onResume() {
         super.onResume()
         if(editCollegeId!=null){
-            collegeListItemViewAdapter?.updateItemInAdapter(editCollegeId!!)
+            listItemViewAdapter?.updateItemInAdapter(
+                AdapterItem(
+                    listOf(editCollegeId!!),
+                    "CID : C/$editCollegeId",
+                    "${collegeDAO.get(editCollegeId)?.name}"
+                )
+            )
             editCollegeId=null
         }
     }
@@ -216,9 +254,22 @@ class SuperAdminMainPageFragment : LatestListFragment(), LatestItemListener, Sel
         super.onSaveInstanceState(outState)
         val adapter = selectableListItemViewAdapter
         outState.putBoolean("is_selection_enabled", isSelectionEnabled)
+        outState.putString("search_query", searchQuery)
         if(adapter!=null){
-            outState.putStringArray("selected_items_id_string_list", adapter.selectedItemsIds.toTypedArray())
+            val idStringList = adapter.selectedItemsIds.map { it.joinToString ("-") }.toTypedArray()
+            outState.putStringArray("selected_items_id_string_list", idStringList)
         }
+    }
+
+    private fun getAdapterItemList(): MutableList<AdapterItem>{
+        val list = collegeDAO.getList()
+        return list.map {
+            AdapterItem(
+                listOf(it.id),
+                "CID : C/${it.id}",
+                it.name
+            )
+        }.toMutableList()
     }
 }
 

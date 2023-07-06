@@ -107,7 +107,7 @@ class CourseUpdateBottomSheet: FullScreenBottomSheetDialog() {
                         course.elective
                     )
                     courseDAO.update(newCourse)
-                    setFragmentResult("CourseUpdateBottomSheet", bundleOf("courseID" to departmentID))
+                    setFragmentResult("CourseUpdateBottomSheet", bundleOf("courseID" to courseID))
                     Toast.makeText(requireContext(), "Details Updated!", Toast.LENGTH_SHORT).show()
                     dismiss()
                 }

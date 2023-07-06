@@ -93,7 +93,7 @@ class SuperAdminCollegeAdminMainPageActivity: AppCompatActivity(){
         setSupportActionBar(toolBar)
         user = userDAO.get(userID) ?: return
         userRole = user.role
-
+        toolBar.title = if(userRole == UserRole.SUPER_ADMIN.role) "Colleges" else "Departments"
         if(isSelectionToolbarOpen == true){
             selectionToolbar.title = "Selected $selectionNumber"
             switchToSelectionToolbar()
@@ -165,7 +165,6 @@ class SuperAdminCollegeAdminMainPageActivity: AppCompatActivity(){
     private fun superAdminProcesses() {
         navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_welcome_text_view).append(" ${user.name}")
         navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_user_id).append(" SA/${user.id}")
-
         userFragment = SuperAdminMainPageFragment()
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, userFragment ?: return, "LatestListFragment")

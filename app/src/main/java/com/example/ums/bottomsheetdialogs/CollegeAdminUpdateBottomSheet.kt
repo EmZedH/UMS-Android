@@ -143,9 +143,10 @@ class CollegeAdminUpdateBottomSheet: FullScreenBottomSheetDialog() {
 
             if (flag) {
 
-                if(collegeAdminId!=null){
+                collegeAdminId?.let {
+
                     collegeAdminDAO.update(
-                        collegeAdminDAO.get(collegeAdminId!!)?.apply {
+                        collegeAdminDAO.get(it)?.apply {
                             user.name = userNameText
                             user.address = userAddressText
                             user.contactNumber = contactNumberText

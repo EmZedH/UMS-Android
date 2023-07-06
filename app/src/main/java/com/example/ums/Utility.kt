@@ -32,12 +32,8 @@ class Utility {
 
         }
 
-        fun idsToString(array: IntArray): String{
-            return array.joinToString("-")
-        }
-
-        fun stringToIds(idString: String): IntArray{
-            return idString.split("-").map { it.toInt() }.toIntArray()
+        fun stringToIds(idString: String): List<Int>{
+            return idString.split("-").map { it.toInt() }
         }
     }
 }

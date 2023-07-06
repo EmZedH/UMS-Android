@@ -2,7 +2,6 @@ package com.example.ums.model.databaseAccessObject
 
 import android.content.ContentValues
 import com.example.ums.DatabaseHelper
-import com.example.ums.Utility
 import com.example.ums.interfaces.DeletableDAO
 import com.example.ums.model.College
 
@@ -92,10 +91,9 @@ class CollegeDAO(private val databaseHelper: DatabaseHelper): DeletableDAO {
         db.close()
     }
 
-    override fun deleteList(idStrings: List<String>) {
-        for (idString in idStrings){
-            val ids = Utility.stringToIds(idString)
-            val collegeID = ids[0]
+    override fun deleteList(idList: MutableList<List<Int>>) {
+        for (id in idList){
+            val collegeID = id[0]
             delete(collegeID)
         }
     }

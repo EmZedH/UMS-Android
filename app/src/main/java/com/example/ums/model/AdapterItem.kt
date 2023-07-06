@@ -1,7 +1,7 @@
 package com.example.ums.model
 
-data class SelectionItem(
-    var idString: String,
+data class AdapterItem(
+    var id: List<Int>,
     var firstText: String,
     var secondText: String
 )

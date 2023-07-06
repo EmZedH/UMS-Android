@@ -1,5 +1,5 @@
 package com.example.ums.interfaces
 
 interface DeletableDAO {
-    fun deleteList(idStrings: List<String>)
+    fun deleteList(idList: MutableList<List<Int>>)
 }

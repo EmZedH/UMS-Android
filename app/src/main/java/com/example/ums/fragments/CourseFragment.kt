@@ -9,7 +9,6 @@ import android.widget.TextView
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.ums.superAdminCollegeAdminActivities.CourseProfessorsListActivity
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.adapters.CourseListItemViewAdapter
@@ -18,6 +17,7 @@ import com.example.ums.bottomsheetdialogs.CourseUpdateBottomSheet
 import com.example.ums.dialogFragments.CourseDeleteDialog
 import com.example.ums.interfaces.ItemListener
 import com.example.ums.model.databaseAccessObject.CourseDAO
+import com.example.ums.superAdminCollegeAdminActivities.CourseProfessorsListActivity
 
 class CourseFragment: ListFragment(), ItemListener {
     private lateinit var courseDAO: CourseDAO

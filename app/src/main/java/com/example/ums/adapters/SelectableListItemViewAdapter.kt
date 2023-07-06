@@ -1,5 +1,6 @@
 package com.example.ums.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
@@ -8,9 +9,9 @@ import com.example.ums.R
 import com.example.ums.interfaces.DeletableDAO
 import com.example.ums.interfaces.SelectionListener
 import com.example.ums.listItemViewHolder.ClickableListItemViewHolder
-import com.example.ums.model.SelectionItem
+import com.example.ums.model.AdapterItem
 
-class SelectableListItemViewAdapter(var selectedItemsIds: MutableList<String>, var originalList: MutableList<SelectionItem>, private val listener: SelectionListener, private val deletableDAO: DeletableDAO) : RecyclerView.Adapter<ClickableListItemViewHolder>() {
+class SelectableListItemViewAdapter(var selectedItemsIds: MutableList<List<Int>>, var originalList: MutableList<AdapterItem>, private val listener: SelectionListener, private val deletableDAO: DeletableDAO) : RecyclerView.Adapter<ClickableListItemViewHolder>() {
 
     private var shouldSelectAll = false
 
@@ -28,24 +29,26 @@ class SelectableListItemViewAdapter(var selectedItemsIds: MutableList<String>, v
 
         holder.firstTextView.text = item.firstText
         holder.secondTextView.text = item.secondText
+        Log.i("SuperAdminMainPageFragmentClass","inside long click: id - ${listOf(intArrayOf(1), intArrayOf(2)).contains(
+            intArrayOf(1))}")
 
         if(shouldSelectAll){
-            selectedItemsIds = originalList.map { it.idString }.toMutableList()
+            selectedItemsIds = originalList.map { it.id }.toMutableList()
             setSelectedItemView(holder)
         }
-        if(selectedItemsIds.containsAll(originalList.map{ it.idString })){
+        if(selectedItemsIds.containsAll(originalList.map{ it.id })){
             shouldSelectAll = false
         }
-        if(selectedItemsIds.contains(item.idString)){
+        if(selectedItemsIds.contains(item.id)){
             setSelectedItemView(holder)
         }
         holder.itemView.setOnClickListener {
-            if(selectedItemsIds.contains(item.idString)){
-                selectedItemsIds.remove(item.idString)
+            if(selectedItemsIds.contains(item.id)){
+                selectedItemsIds.remove(item.id)
                 setUnSelectedItemView(holder)
             }
             else{
-                selectedItemsIds.add(item.idString)
+                selectedItemsIds.add(item.id)
                 setSelectedItemView(holder)
             }
             listener.selectionCount(selectedItemsIds.size)
