@@ -27,11 +27,8 @@ import com.example.ums.superAdminCollegeAdminActivities.CollegeActivity
 
 class SuperAdminMainPageFragment : LatestListFragment(), SelectionListener, ListIdItemListener {
 
-//    private lateinit var addCollegeBottomSheet : CollegeAddBottomSheet
-
     private var listItemViewAdapter: ListItemViewAdapter? = null
 
-//    private var collegeListItemViewAdapter : CollegeListItemViewAdapter? = null
     private var selectableListItemViewAdapter: SelectableListItemViewAdapter? = null
     private lateinit var collegeDAO: CollegeDAO
     private lateinit var firstTextView: TextView

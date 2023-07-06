@@ -10,18 +10,20 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
-import com.example.ums.superAdminCollegeAdminActivities.DepartmentActivity
 import com.example.ums.R
-import com.example.ums.adapters.DepartmentListItemViewAdapter
+import com.example.ums.adapters.ListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.DepartmentAddBottomSheet
 import com.example.ums.bottomsheetdialogs.DepartmentUpdateBottomSheet
 import com.example.ums.dialogFragments.DepartmentDeleteDialog
-import com.example.ums.interfaces.ItemListener
+import com.example.ums.interfaces.ListIdItemListener
+import com.example.ums.model.AdapterItem
 import com.example.ums.model.databaseAccessObject.DepartmentDAO
+import com.example.ums.superAdminCollegeAdminActivities.DepartmentActivity
 
-class DepartmentFragment: ListFragment(), ItemListener {
+class DepartmentFragment: ListFragment(), ListIdItemListener {
     private lateinit var departmentDAO: DepartmentDAO
-    private var departmentListItemViewAdapter: DepartmentListItemViewAdapter? = null
+
+    private var listItemViewAdapter: ListItemViewAdapter? = null
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
     private var collegeID: Int? = null
@@ -34,7 +36,9 @@ class DepartmentFragment: ListFragment(), ItemListener {
         collegeID = arguments?.getInt("college_activity_college_id")
         departmentDAO = DepartmentDAO(DatabaseHelper(requireActivity()))
         if(collegeID!=null){
-            departmentListItemViewAdapter = DepartmentListItemViewAdapter(collegeID!!, departmentDAO, this )
+
+            listItemViewAdapter = ListItemViewAdapter(getAdapterItemList(), this)
+
         }
     }
 
@@ -50,7 +54,8 @@ class DepartmentFragment: ListFragment(), ItemListener {
         firstTextView = view.findViewById(R.id.no_items_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
         onRefresh()
-        recyclerView.adapter = departmentListItemViewAdapter
+
+        recyclerView.adapter = listItemViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
         return view
     }
@@ -60,17 +65,37 @@ class DepartmentFragment: ListFragment(), ItemListener {
 
         setFragmentResultListener("departmentAddFragmentPosition"){_, result->
             val id = result.getInt("id")
-            addAt(id)
+
+            val department = departmentDAO.get(id, collegeID)
+            department?.let {
+                listItemViewAdapter?.addItem(
+                    AdapterItem(
+                        listOf(it.id, it.collegeID),
+                        "ID : C/${it.collegeID}-D/${it.id}",
+                        it.name
+                    )
+                )
+            }
+            onRefresh()
         }
 
         setFragmentResultListener("departmentDeleteDialog"){_, result->
             val id = result.getInt("departmentID")
-            departmentListItemViewAdapter?.deleteItem(id)
+            collegeID?.let { listItemViewAdapter?.deleteItem(listOf(id, it)) }
             onRefresh()
         }
         setFragmentResultListener("DepartmentUpdateBottomSheet"){_, result->
             val id = result.getInt("departmentID")
-            departmentListItemViewAdapter?.updateItemInAdapter(id)
+            val department = departmentDAO.get(id, collegeID)
+            department?.let {
+                listItemViewAdapter?.updateItemInAdapter(
+                    AdapterItem(
+                        listOf(it.id, it.collegeID),
+                        "ID : C/${it.collegeID}-D/${it.id}",
+                        it.name
+                    )
+                )
+            }
         }
     }
 
@@ -80,33 +105,7 @@ class DepartmentFragment: ListFragment(), ItemListener {
     }
 
     override fun onSearch(query: String?) {
-        departmentListItemViewAdapter?.filter(query)
-    }
-
-    private fun addAt(id: Int){
-        departmentListItemViewAdapter?.addItem(id)
-        onRefresh()
-    }
-
-    override fun onUpdate(id: Int) {
-        val updateBottomSheet = DepartmentUpdateBottomSheet.newInstance(id, collegeID)
-
-        updateBottomSheet?.show(requireActivity().supportFragmentManager, "updateDialog")
-    }
-
-    override fun onDelete(id: Int) {
-        val deleteFragment = DepartmentDeleteDialog.getInstance(id)
-        deleteFragment.show(requireActivity().supportFragmentManager, "deleteDialog")
-    }
-
-    override fun onClick(bundle: Bundle?) {
-        val intent = Intent(requireContext(), DepartmentActivity::class.java)
-        if(bundle!=null){
-            editCollegeId = bundle.getInt("collegeID")
-            editDepartmentId = bundle.getInt("departmentID")
-            intent.putExtras(bundle)
-            startActivity(intent)
-        }
+        listItemViewAdapter?.filter(query)
     }
 
     private fun onRefresh(){
@@ -122,6 +121,52 @@ class DepartmentFragment: ListFragment(), ItemListener {
     }
     override fun onResume() {
         super.onResume()
-        departmentListItemViewAdapter?.updateList()
+        if(editCollegeId!=null && editDepartmentId!=null){
+            val department = departmentDAO.get(editDepartmentId, editCollegeId)
+            department?.let {
+                listItemViewAdapter?.updateItemInAdapter(
+                    AdapterItem(
+                        listOf(it.id, it.collegeID),
+                        "ID : C/${it.collegeID}-D/${it.id}",
+                        it.name
+                    )
+                )
+            }
+        }
+    }
+
+    override fun onDelete(id: List<Int>) {
+        val deleteFragment = DepartmentDeleteDialog.getInstance(id[0])
+        deleteFragment.show(requireActivity().supportFragmentManager, "deleteDialog")
+    }
+
+    override fun onUpdate(id: List<Int>) {
+        val updateBottomSheet = DepartmentUpdateBottomSheet.newInstance(id[0], collegeID)
+        updateBottomSheet?.show(requireActivity().supportFragmentManager, "updateDialog")
+    }
+
+    override fun onClick(id: List<Int>) {
+        val intent = Intent(requireContext(), DepartmentActivity::class.java)
+        editCollegeId = id[1]
+        editDepartmentId = id[0]
+        intent.putExtras(Bundle().apply {
+            putInt("collegeID", id[1])
+            putInt("departmentID", id[0])
+        })
+        startActivity(intent)
+    }
+
+    override fun onLongClick(id: List<Int>) {
+    }
+
+    private fun getAdapterItemList(): MutableList<AdapterItem>{
+        val list = departmentDAO.getList(collegeID)
+        return list.map {
+            AdapterItem(
+                listOf(it.id, it.collegeID),
+                "ID : C/${it.collegeID}-D/${it.id}",
+                it.name
+            )
+        }.toMutableList()
     }
 }

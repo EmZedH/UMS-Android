@@ -34,7 +34,8 @@ class DepartmentDAO(private val databaseHelper: DatabaseHelper) {
         cursor.close()
         return department
     }
-    fun getList(collegeID: Int) : List<Department>{
+    fun getList(collegeID: Int?) : List<Department>{
+        collegeID ?: return emptyList()
         val departments = mutableListOf<Department>()
         val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName WHERE ${this.collegeIDKey} = $collegeID", null)
         cursor.moveToFirst()

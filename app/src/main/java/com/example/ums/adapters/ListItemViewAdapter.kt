@@ -128,9 +128,10 @@ class ListItemViewAdapter(list: MutableList<AdapterItem>, private val listener: 
         notifyItemRemoved(index)
     }
 
-//    fun updateList(list: MutableList<AdapterItem>){
-//        this.list = list
-//        filterQuery = null
-//        notifyDataSetChanged()
-//    }
+    fun updateList(list: MutableList<AdapterItem>){
+        this.list = list
+        preFilteredList = list
+        filterQuery = null
+        notifyDataSetChanged()
+    }
 }
