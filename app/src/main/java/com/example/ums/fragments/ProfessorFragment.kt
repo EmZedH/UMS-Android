@@ -10,19 +10,21 @@ import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
-import com.example.ums.superAdminCollegeAdminActivities.ProfessorCoursesListActivity
 import com.example.ums.R
-import com.example.ums.adapters.ProfessorListItemViewAdapter
+import com.example.ums.adapters.ListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.ProfessorAddBottomSheet
 import com.example.ums.bottomsheetdialogs.ProfessorUpdateBottomSheet
 import com.example.ums.dialogFragments.ProfessorDeleteDialog
-import com.example.ums.interfaces.ItemListener
+import com.example.ums.interfaces.ListIdItemListener
+import com.example.ums.model.AdapterItem
+import com.example.ums.model.Professor
 import com.example.ums.model.databaseAccessObject.ProfessorDAO
+import com.example.ums.superAdminCollegeAdminActivities.ProfessorCoursesListActivity
 
-class ProfessorFragment: ListFragment(), ItemListener {
+class ProfessorFragment: ListFragment(), ListIdItemListener {
 
     private lateinit var professorDAO: ProfessorDAO
-    private var professorListItemViewAdapter: ProfessorListItemViewAdapter? = null
+    private var listItemViewAdapter: ListItemViewAdapter? = null
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
 
@@ -36,7 +38,7 @@ class ProfessorFragment: ListFragment(), ItemListener {
         collegeID = arguments?.getInt("department_activity_college_id")
         professorDAO = ProfessorDAO(DatabaseHelper(requireActivity()))
         if(collegeID!=null){
-            professorListItemViewAdapter = ProfessorListItemViewAdapter(departmentID!!, collegeID!!, professorDAO, this )
+            listItemViewAdapter = ListItemViewAdapter(getAdapterItems(), this)
         }
     }
     override fun onCreateView(
@@ -50,7 +52,7 @@ class ProfessorFragment: ListFragment(), ItemListener {
         firstTextView = view.findViewById(R.id.no_items_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
         onRefresh()
-        recyclerView.adapter = professorListItemViewAdapter
+        recyclerView.adapter = listItemViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(this.context)
         return view
     }
@@ -59,51 +61,35 @@ class ProfessorFragment: ListFragment(), ItemListener {
         super.onViewCreated(view, savedInstanceState)
 
         setFragmentResultListener("ProfessorAddFragmentPosition"){_, result->
-            val position = result.getInt("id")
-            addAt(position)
+            val id = result.getInt("id")
+            val collegeAdmin = professorDAO.get(id)
+            collegeAdmin?.let {
+                listItemViewAdapter?.addItem(getAdapterItem(it))
+            }
+            onRefresh()
         }
 
         setFragmentResultListener("ProfessorDeleteDialog"){_, result->
             val id = result.getInt("id")
-            professorListItemViewAdapter?.deleteItem(id)
+            professorDAO.delete(id)
+            listItemViewAdapter?.deleteItem(listOf(id))
             onRefresh()
         }
         setFragmentResultListener("ProfessorUpdateFragmentPosition"){_, result->
             val id = result.getInt("id")
-            professorListItemViewAdapter?.updateItemInAdapter(id)
+            val professor = professorDAO.get(id)
+            professor?.let {
+                listItemViewAdapter?.updateItem(getAdapterItem(it))
+            }
         }
     }
-    override fun onUpdate(id: Int) {
-        val collegeAdminUpdateBottomSheet = ProfessorUpdateBottomSheet.newInstance(id)
-        collegeAdminUpdateBottomSheet?.show(requireActivity().supportFragmentManager, "collegeAdminUpdateDialog")
-    }
-
-    override fun onDelete(id: Int) {
-        val deleteFragment = ProfessorDeleteDialog.getInstance(id)
-        deleteFragment.show(requireActivity().supportFragmentManager, "ProfessorDeleteDialog")
-    }
-
-    override fun onClick(bundle: Bundle?) {
-        val intent = Intent(requireContext(), ProfessorCoursesListActivity::class.java)
-        if(bundle!=null){
-            editProfessorId = bundle.getInt("professor_profile_professor_id")
-            intent.putExtras(bundle)
-            startActivity(intent)
-        }
-    }
-
     override fun onAdd() {
         val professorAddBottomSheet = ProfessorAddBottomSheet.newInstance(departmentID, collegeID)
         professorAddBottomSheet?.show(requireActivity().supportFragmentManager, "ProfessorAddDialog")
     }
 
     override fun onSearch(query: String?) {
-        professorListItemViewAdapter?.filter(query)
-    }
-
-    private fun addAt(id: Int){
-        professorListItemViewAdapter?.addItem(id)
-        onRefresh()
+        listItemViewAdapter?.filter(query)
     }
 
     private fun onRefresh(){
@@ -121,12 +107,53 @@ class ProfessorFragment: ListFragment(), ItemListener {
     override fun onResume() {
         super.onResume()
         if(editProfessorId!=null){
-            professorListItemViewAdapter?.updateItemInAdapter(editProfessorId!!)
+            val professor = professorDAO.get(editProfessorId)
+            professor?.let {
+                listItemViewAdapter?.updateItem(getAdapterItem(it))
+            }
             editProfessorId=null
         }
         else{
             onRefresh()
-            professorListItemViewAdapter?.updateList()
+            listItemViewAdapter?.updateAdapter(getAdapterItems())
         }
+    }
+    private fun getAdapterItems(): MutableList<AdapterItem>{
+        val list = professorDAO.getList(departmentID, collegeID)
+        return list.map {
+            getAdapterItem(it)
+        }.toMutableList()
+    }
+
+    private fun getAdapterItem(professor: Professor): AdapterItem {
+        return AdapterItem(
+            listOf(professor.user.id),
+            "ID : C/${professor.collegeID}-D/${professor.departmentID}-U/${professor.user.id}",
+            professor.user.name
+        )
+    }
+
+    override fun onDelete(id: List<Int>) {
+        val deleteFragment = ProfessorDeleteDialog.getInstance(id[0])
+        deleteFragment.show(requireActivity().supportFragmentManager, "ProfessorDeleteDialog")
+    }
+
+    override fun onUpdate(id: List<Int>) {
+        val collegeAdminUpdateBottomSheet = ProfessorUpdateBottomSheet.newInstance(id[0])
+        collegeAdminUpdateBottomSheet?.show(requireActivity().supportFragmentManager, "collegeAdminUpdateDialog")
+    }
+
+    override fun onClick(id: List<Int>) {
+        val intent = Intent(requireContext(), ProfessorCoursesListActivity::class.java)
+        editProfessorId = id[0]
+        intent.putExtras(
+            Bundle().apply {
+                putInt("professor_profile_professor_id", id[0])
+            }
+        )
+        startActivity(intent)
+    }
+
+    override fun onLongClick(id: List<Int>) {
     }
 }

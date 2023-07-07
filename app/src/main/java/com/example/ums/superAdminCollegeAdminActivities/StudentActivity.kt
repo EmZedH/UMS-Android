@@ -67,9 +67,9 @@ class StudentActivity: AppCompatActivity() {
 
             TabLayoutMediator(tabLayout, viewPager){tab, position->
                 when(position){
-                    0-> tab.text = "Professional Courses"
+                    0-> tab.text = "Mandatory Courses"
                     1-> tab.text = "Open Courses"
-                    2-> tab.text = "Transactions"
+                    2-> tab.text = "Payments"
                 }
                 viewPager.adapter
             }.attach()

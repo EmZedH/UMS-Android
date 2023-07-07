@@ -11,18 +11,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
-import com.example.ums.adapters.StudentListItemViewAdapter
+import com.example.ums.adapters.ListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.StudentAddBottomSheet
 import com.example.ums.bottomsheetdialogs.StudentUpdateBottomSheet
 import com.example.ums.dialogFragments.StudentDeleteDialog
-import com.example.ums.interfaces.ItemListener
+import com.example.ums.interfaces.ListIdItemListener
+import com.example.ums.model.AdapterItem
+import com.example.ums.model.Student
 import com.example.ums.model.databaseAccessObject.StudentDAO
 import com.example.ums.superAdminCollegeAdminActivities.StudentActivity
 
-class StudentFragment: ListFragment(), ItemListener {
+class StudentFragment: ListFragment(), ListIdItemListener {
 
     private lateinit var studentDAO: StudentDAO
-    private var studentListItemViewAdapter: StudentListItemViewAdapter? = null
+    private var listItemViewAdapter: ListItemViewAdapter? = null
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
 
@@ -35,9 +37,7 @@ class StudentFragment: ListFragment(), ItemListener {
         departmentID = arguments?.getInt("department_activity_department_id")
         collegeID = arguments?.getInt("department_activity_college_id")
         studentDAO = StudentDAO(DatabaseHelper(requireActivity()))
-        if(collegeID!=null){
-            studentListItemViewAdapter = StudentListItemViewAdapter(departmentID!!, collegeID!!, studentDAO, this )
-        }
+        listItemViewAdapter = ListItemViewAdapter(getAdapterItems(), this)
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +50,7 @@ class StudentFragment: ListFragment(), ItemListener {
         firstTextView = view.findViewById(R.id.no_items_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
         onRefresh()
-        recyclerView.adapter = studentListItemViewAdapter
+        recyclerView.adapter = listItemViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(this.context)
         return view
     }
@@ -59,38 +59,28 @@ class StudentFragment: ListFragment(), ItemListener {
         super.onViewCreated(view, savedInstanceState)
 
         setFragmentResultListener("StudentAddFragmentPosition"){_, result->
-            val position = result.getInt("id")
-            addAt(position)
+            val id = result.getInt("id")
+            val student = studentDAO.get(id)
+            student?.let {
+                listItemViewAdapter?.addItem(getAdapterItem(it))
+            }
+            onRefresh()
         }
 
         setFragmentResultListener("StudentDeleteDialog"){_, result->
             val id = result.getInt("id")
-            studentListItemViewAdapter?.deleteItem(id)
+            listItemViewAdapter?.deleteItem(listOf(id))
             onRefresh()
         }
         setFragmentResultListener("StudentUpdateFragmentPosition"){_, result->
             val id = result.getInt("id")
-            studentListItemViewAdapter?.updateItemInAdapter(id)
+            val student = studentDAO.get(id)
+            student?.let {
+                listItemViewAdapter?.updateItem(getAdapterItem(it))
+            }
         }
     }
-    override fun onUpdate(id: Int) {
-        val collegeAdminUpdateBottomSheet = StudentUpdateBottomSheet.newInstance(id)
-        collegeAdminUpdateBottomSheet?.show(requireActivity().supportFragmentManager, "StudentUpdateDialog")
-    }
 
-    override fun onDelete(id: Int) {
-        val deleteFragment = StudentDeleteDialog.getInstance(id)
-        deleteFragment.show(requireActivity().supportFragmentManager, "StudentDeleteDialog")
-    }
-
-    override fun onClick(bundle: Bundle?) {
-        val intent = Intent(requireContext(), StudentActivity::class.java)
-        if(bundle!=null){
-            editStudentId = bundle.getInt("student_activity_student_id")
-            intent.putExtras(bundle)
-            startActivity(intent)
-        }
-    }
 
     override fun onAdd() {
         val professorAddBottomSheet = StudentAddBottomSheet.newInstance(departmentID, collegeID)
@@ -98,16 +88,11 @@ class StudentFragment: ListFragment(), ItemListener {
     }
 
     override fun onSearch(query: String?) {
-        studentListItemViewAdapter?.filter(query)
-    }
-
-    private fun addAt(id: Int){
-        studentListItemViewAdapter?.addItem(id)
-        onRefresh()
+        listItemViewAdapter?.filter(query)
     }
 
     private fun onRefresh(){
-        if(studentDAO.getList(departmentID!!, collegeID!!).isNotEmpty()){
+        if(studentDAO.getList(departmentID, collegeID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }
@@ -120,9 +105,46 @@ class StudentFragment: ListFragment(), ItemListener {
 
     override fun onResume() {
         super.onResume()
-        if(editStudentId!=null){
-            studentListItemViewAdapter?.updateItemInAdapter(editStudentId!!)
-            editStudentId=null
+        val student = studentDAO.get(editStudentId)
+        student?.let {
+            listItemViewAdapter?.updateItem(getAdapterItem(student))
+            editStudentId= null
         }
+    }
+    private fun getAdapterItems(): MutableList<AdapterItem>{
+        val list = studentDAO.getList(departmentID, collegeID)
+        return list.map {
+            getAdapterItem(it)
+        }.toMutableList()
+    }
+
+    private fun getAdapterItem(student: Student): AdapterItem {
+        return AdapterItem(
+            listOf(student.user.id),
+            "ID : C/${student.collegeID}-D/${student.departmentID}-U/${student.user.id}",
+            student.user.name
+        )
+    }
+
+    override fun onDelete(id: List<Int>) {
+        val deleteFragment = StudentDeleteDialog.getInstance(id[0])
+        deleteFragment.show(requireActivity().supportFragmentManager, "StudentDeleteDialog")
+    }
+
+    override fun onUpdate(id: List<Int>) {
+        val collegeAdminUpdateBottomSheet = StudentUpdateBottomSheet.newInstance(id[0])
+        collegeAdminUpdateBottomSheet?.show(requireActivity().supportFragmentManager, "StudentUpdateDialog")
+    }
+
+    override fun onClick(id: List<Int>) {
+        val intent = Intent(requireContext(), StudentActivity::class.java)
+        editStudentId = id[0]
+        intent.putExtras(Bundle().apply {
+            putInt("student_activity_student_id", id[0])
+        })
+        startActivity(intent)
+    }
+
+    override fun onLongClick(id: List<Int>) {
     }
 }

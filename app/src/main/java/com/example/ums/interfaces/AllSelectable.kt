@@ -1,6 +1,6 @@
 package com.example.ums.interfaces
 
-interface SelectAllListener {
+interface AllSelectable {
 
     fun selectAll()
 }

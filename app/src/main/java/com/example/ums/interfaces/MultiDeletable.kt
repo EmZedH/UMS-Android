@@ -1,5 +1,5 @@
 package com.example.ums.interfaces
 
-interface MultiDeleteListener {
+interface MultiDeletable {
     fun deleteAll()
 }

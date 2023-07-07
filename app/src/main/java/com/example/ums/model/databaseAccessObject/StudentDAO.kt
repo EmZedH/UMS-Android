@@ -56,7 +56,9 @@ class StudentDAO(private val databaseHelper: DatabaseHelper) {
         cursor.close()
         return student
     }
-    fun getList(departmentID: Int, collegeID: Int) : List<Student>{
+    fun getList(departmentID: Int?, collegeID: Int?) : List<Student>{
+        departmentID ?: return emptyList()
+        collegeID ?: return emptyList()
         val students = mutableListOf<Student>()
         val cursor = databaseHelper.readableDatabase
             .rawQuery("SELECT * FROM $tableName INNER JOIN $userTable ON " +
