@@ -80,7 +80,9 @@ class DepartmentDAO(private val databaseHelper: DatabaseHelper) {
         databaseHelper.writableDatabase.insert(tableName,null, contentValues)
     }
 
-    fun delete(id : Int, collegeID: Int){
+    fun delete(id : Int?, collegeID: Int?){
+        id ?: return
+        collegeID ?: return
         val db = databaseHelper.writableDatabase
         db.beginTransaction()
         try {

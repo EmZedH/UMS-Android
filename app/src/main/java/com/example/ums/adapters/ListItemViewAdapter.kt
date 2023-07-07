@@ -11,8 +11,8 @@ import com.example.ums.model.AdapterItem
 
 class ListItemViewAdapter(list: MutableList<AdapterItem>, private val listener: ListIdItemListener): RecyclerView.Adapter<ListItemViewHolder>() {
 
-    private var list = list.sortedBy { it.id[0] }.toMutableList()
-    private var preFilteredList = list.sortedBy { it.id[0] }.toMutableList()
+    private var list = list.sortedBy { it.id[0] }.toList().toMutableList()
+    private var preFilteredList = list.sortedBy { it.id[0] }.toList().toMutableList()
     private var filterQuery: String? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItemViewHolder {
@@ -78,7 +78,7 @@ class ListItemViewAdapter(list: MutableList<AdapterItem>, private val listener: 
         return filteredList
     }
 
-    fun updateItemInAdapter(adapterItem: AdapterItem) {
+    fun updateItem(adapterItem: AdapterItem) {
         val query = filterQuery
         if(list.map { it.id }.contains(adapterItem.id)){
             val index = list.map { it.id }.indexOf(adapterItem.id)
@@ -128,9 +128,9 @@ class ListItemViewAdapter(list: MutableList<AdapterItem>, private val listener: 
         notifyItemRemoved(index)
     }
 
-    fun updateList(list: MutableList<AdapterItem>){
-        this.list = list
-        preFilteredList = list
+    fun updateAdapter(list: MutableList<AdapterItem>){
+        this.list = list.toList().toMutableList()
+        preFilteredList = list.toList().toMutableList()
         filterQuery = null
         notifyDataSetChanged()
     }

@@ -12,7 +12,7 @@ class CourseDeleteDialog: DialogFragment() {
     private var courseID: Int? = null
 
     companion object{
-        fun getInstance(courseID: Int): CourseDeleteDialog{
+        fun newInstance(courseID: Int): CourseDeleteDialog{
             val courseDeleteDialog = CourseDeleteDialog()
             courseDeleteDialog.arguments = Bundle().apply {
                 putInt("delete_dialog_course_id", courseID)

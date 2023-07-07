@@ -50,7 +50,9 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
         return null
     }
 
-    fun getList(departmentID : Int, collegeID: Int) : List<Course>{
+    fun getList(departmentID : Int?, collegeID: Int?) : List<Course>{
+        departmentID ?: return emptyList()
+        collegeID ?: return emptyList()
         val courses = mutableListOf<Course>()
         val cursor = databaseHelper.readableDatabase
             .query(

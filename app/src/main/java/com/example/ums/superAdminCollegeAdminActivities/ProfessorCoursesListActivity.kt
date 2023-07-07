@@ -136,7 +136,7 @@ class ProfessorCoursesListActivity: AppCompatActivity(), DeleteClickListener {
     }
 
     override fun onDelete(id: Int) {
-        val professorDeleteDialog = CourseDeleteDialog.getInstance(id)
+        val professorDeleteDialog = CourseDeleteDialog.newInstance(id)
         professorDeleteDialog.show(supportFragmentManager, "CourseDeleteDialog")
     }
 

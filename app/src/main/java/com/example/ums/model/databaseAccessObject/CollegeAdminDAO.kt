@@ -22,7 +22,8 @@ class CollegeAdminDAO(private val databaseHelper: DatabaseHelper) {
     private val userRoleColumn = "U_ROLE"
     private val userEmailColumn = "U_EMAIL_ID"
 
-    fun get(id : Int) : CollegeAdmin?{
+    fun get(id : Int?) : CollegeAdmin?{
+        id ?: return null
         var collegeAdmin : CollegeAdmin? = null
         val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName INNER JOIN $userTable ON ($userTable.$userPrimaryKey = $tableName.$primaryKey) WHERE $primaryKey = $id", null)
         if(cursor.moveToFirst()){
@@ -45,7 +46,8 @@ class CollegeAdminDAO(private val databaseHelper: DatabaseHelper) {
         cursor.close()
         return collegeAdmin
     }
-    fun getList(collegeID: Int) : List<CollegeAdmin>{
+    fun getList(collegeID: Int?) : List<CollegeAdmin>{
+        collegeID ?: return emptyList()
         val collegeAdmins = mutableListOf<CollegeAdmin>()
         val cursor = databaseHelper.readableDatabase.rawQuery("SELECT * FROM $tableName INNER JOIN $userTable ON ($userTable.$userPrimaryKey = $tableName.$primaryKey) WHERE $collegeKey = $collegeID", null)
         cursor.moveToFirst()

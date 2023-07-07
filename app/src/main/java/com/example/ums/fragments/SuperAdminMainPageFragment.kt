@@ -43,7 +43,6 @@ class SuperAdminMainPageFragment : LatestListFragment(), SelectionListener, List
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
-//        collegeListItemViewAdapter = CollegeListItemViewAdapter(collegeDAO, this)
         listItemViewAdapter = ListItemViewAdapter(getAdapterItemList(), this)
     }
 
@@ -123,7 +122,7 @@ class SuperAdminMainPageFragment : LatestListFragment(), SelectionListener, List
             val id = result.getInt("collegeID")
             val college = collegeDAO.get(id)
             college?.let {
-                listItemViewAdapter?.updateItemInAdapter(
+                listItemViewAdapter?.updateItem(
                     AdapterItem(
                         listOf(id),
                         "CID : C/${college.id}",
@@ -236,7 +235,7 @@ class SuperAdminMainPageFragment : LatestListFragment(), SelectionListener, List
     override fun onResume() {
         super.onResume()
         if(editCollegeId!=null){
-            listItemViewAdapter?.updateItemInAdapter(
+            listItemViewAdapter?.updateItem(
                 AdapterItem(
                     listOf(editCollegeId!!),
                     "CID : C/$editCollegeId",

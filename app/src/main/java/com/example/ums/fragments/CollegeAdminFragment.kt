@@ -11,18 +11,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
-import com.example.ums.adapters.CollegeAdminListItemViewAdapter
+import com.example.ums.adapters.ListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.CollegeAdminAddBottomSheet
 import com.example.ums.bottomsheetdialogs.CollegeAdminUpdateBottomSheet
 import com.example.ums.dialogFragments.CollegeAdminDeleteDialog
-import com.example.ums.interfaces.ItemListener
+import com.example.ums.interfaces.ListIdItemListener
+import com.example.ums.model.AdapterItem
+import com.example.ums.model.CollegeAdmin
 import com.example.ums.model.databaseAccessObject.CollegeAdminDAO
 import com.example.ums.superAdminCollegeAdminActivities.CollegeAdminDetailsActivity
 
-class CollegeAdminFragment: ListFragment(), ItemListener {
+class CollegeAdminFragment: ListFragment(), ListIdItemListener {
 
     private lateinit var collegeAdminDAO: CollegeAdminDAO
-    private var collegeAdminListItemViewAdapter: CollegeAdminListItemViewAdapter? = null
+
+    private var listItemViewAdapter: ListItemViewAdapter? = null
+
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
     private var collegeID: Int? = null
@@ -32,9 +36,7 @@ class CollegeAdminFragment: ListFragment(), ItemListener {
         super.onCreate(savedInstanceState)
         collegeID = arguments?.getInt("college_activity_college_id")
         collegeAdminDAO = CollegeAdminDAO(DatabaseHelper(requireActivity()))
-        if(collegeID!=null){
-            collegeAdminListItemViewAdapter = CollegeAdminListItemViewAdapter(collegeID!!, collegeAdminDAO, this )
-        }
+        listItemViewAdapter = ListItemViewAdapter(getAdapterItems(), this)
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,7 +49,7 @@ class CollegeAdminFragment: ListFragment(), ItemListener {
         firstTextView = view.findViewById(R.id.no_items_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
         onRefresh()
-        recyclerView.adapter = collegeAdminListItemViewAdapter
+        recyclerView.adapter = listItemViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(this.context)
         return view
     }
@@ -56,36 +58,26 @@ class CollegeAdminFragment: ListFragment(), ItemListener {
         super.onViewCreated(view, savedInstanceState)
 
         setFragmentResultListener("collegeAdminAddFragmentPosition"){_, result->
-            val position = result.getInt("id")
-            addAt(position)
+            val id = result.getInt("id")
+            val collegeAdmin = collegeAdminDAO.get(id)
+            collegeAdmin?.let {
+                listItemViewAdapter?.addItem(getAdapterItem(it))
+            }
+            onRefresh()
         }
 
         setFragmentResultListener("collegeAdminDeleteDialog"){_, result->
             val id = result.getInt("id")
-            collegeAdminListItemViewAdapter?.deleteItem(id)
+            collegeAdminDAO.delete(id)
+            listItemViewAdapter?.deleteItem(listOf(id))
             onRefresh()
         }
         setFragmentResultListener("collegeAdminUpdateFragmentPosition"){_, result->
             val id = result.getInt("id")
-            collegeAdminListItemViewAdapter?.updateItemInAdapter(id)
-        }
-    }
-    override fun onUpdate(id: Int) {
-        val collegeAdminUpdateBottomSheet = CollegeAdminUpdateBottomSheet.newInstance(id)
-        collegeAdminUpdateBottomSheet?.show(requireActivity().supportFragmentManager, "collegeAdminUpdateDialog")
-    }
-
-    override fun onDelete(id: Int) {
-        val deleteFragment = CollegeAdminDeleteDialog.getInstance(id)
-        deleteFragment.show(requireActivity().supportFragmentManager, "collegeAdminDeleteDialog")
-    }
-
-    override fun onClick(bundle: Bundle?) {
-        val intent = Intent(requireContext(), CollegeAdminDetailsActivity::class.java)
-        if(bundle!=null){
-            editedCollegeAdminId = bundle.getInt("college_admin_profile_college_admin_id")
-            intent.putExtras(bundle)
-            startActivity(intent)
+            val collegeAdmin = collegeAdminDAO.get(id)
+            collegeAdmin?.let {
+                listItemViewAdapter?.updateItem(getAdapterItem(it))
+            }
         }
     }
 
@@ -95,14 +87,8 @@ class CollegeAdminFragment: ListFragment(), ItemListener {
     }
 
     override fun onSearch(query: String?) {
-        collegeAdminListItemViewAdapter?.filter(query)
+        listItemViewAdapter?.filter(query)
     }
-
-    private fun addAt(id: Int){
-        collegeAdminListItemViewAdapter?.addItem(id)
-        onRefresh()
-    }
-
     private fun onRefresh(){
         if(collegeAdminDAO.getList(collegeID!!).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
@@ -117,9 +103,47 @@ class CollegeAdminFragment: ListFragment(), ItemListener {
 
     override fun onResume() {
         super.onResume()
-        if(editedCollegeAdminId!=null){
-            collegeAdminListItemViewAdapter?.updateItemInAdapter(editedCollegeAdminId!!)
-            editedCollegeAdminId=null
+        val collegeAdmin = collegeAdminDAO.get(editedCollegeAdminId)
+        collegeAdmin?.let {
+            listItemViewAdapter?.updateItem(
+                getAdapterItem(it)
+            )
         }
+    }
+    override fun onDelete(id: List<Int>) {
+        val deleteFragment = CollegeAdminDeleteDialog.getInstance(id[0])
+        deleteFragment.show(requireActivity().supportFragmentManager, "collegeAdminDeleteDialog")
+    }
+
+    override fun onUpdate(id: List<Int>) {
+        val collegeAdminUpdateBottomSheet = CollegeAdminUpdateBottomSheet.newInstance(id[0])
+        collegeAdminUpdateBottomSheet?.show(requireActivity().supportFragmentManager, "collegeAdminUpdateDialog")
+    }
+
+    override fun onClick(id: List<Int>) {
+        val intent = Intent(requireContext(), CollegeAdminDetailsActivity::class.java)
+        editedCollegeAdminId = id[0]
+        intent.putExtras(Bundle().apply {
+            putInt("college_admin_profile_college_admin_id", id[0])
+            putInt("college_admin_profile_college_id", collegeID ?: return)
+        })
+        startActivity(intent)
+    }
+
+    override fun onLongClick(id: List<Int>) {
+    }
+    private fun getAdapterItems(): MutableList<AdapterItem>{
+        val list = collegeAdminDAO.getList(collegeID)
+        return list.map {
+            getAdapterItem(it)
+        }.toMutableList()
+    }
+
+    private fun getAdapterItem(collegeAdmin: CollegeAdmin): AdapterItem{
+        return AdapterItem(
+            listOf(collegeAdmin.user.id),
+            "ID : C/${collegeAdmin.collegeID}-U/${collegeAdmin.user.id}",
+            collegeAdmin.user.name
+        )
     }
 }

@@ -81,6 +81,7 @@ class DepartmentFragment: ListFragment(), ListIdItemListener {
 
         setFragmentResultListener("departmentDeleteDialog"){_, result->
             val id = result.getInt("departmentID")
+            departmentDAO.delete(id, collegeID)
             collegeID?.let { listItemViewAdapter?.deleteItem(listOf(id, it)) }
             onRefresh()
         }
@@ -88,7 +89,7 @@ class DepartmentFragment: ListFragment(), ListIdItemListener {
             val id = result.getInt("departmentID")
             val department = departmentDAO.get(id, collegeID)
             department?.let {
-                listItemViewAdapter?.updateItemInAdapter(
+                listItemViewAdapter?.updateItem(
                     AdapterItem(
                         listOf(it.id, it.collegeID),
                         "ID : C/${it.collegeID}-D/${it.id}",
@@ -124,7 +125,7 @@ class DepartmentFragment: ListFragment(), ListIdItemListener {
         if(editCollegeId!=null && editDepartmentId!=null){
             val department = departmentDAO.get(editDepartmentId, editCollegeId)
             department?.let {
-                listItemViewAdapter?.updateItemInAdapter(
+                listItemViewAdapter?.updateItem(
                     AdapterItem(
                         listOf(it.id, it.collegeID),
                         "ID : C/${it.collegeID}-D/${it.id}",

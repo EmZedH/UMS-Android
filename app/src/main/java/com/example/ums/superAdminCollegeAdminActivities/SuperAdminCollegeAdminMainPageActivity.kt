@@ -163,8 +163,8 @@ class SuperAdminCollegeAdminMainPageActivity: AppCompatActivity(){
     }
 
     private fun superAdminProcesses() {
-        navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_welcome_text_view).append(" ${user.name}")
-        navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_user_id).append(" SA/${user.id}")
+//        navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_welcome_text_view).append(" ${user.name}")
+//        navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_user_id).append(" SA/${user.id}")
         userFragment = SuperAdminMainPageFragment()
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, userFragment ?: return, "LatestListFragment")
@@ -173,8 +173,8 @@ class SuperAdminCollegeAdminMainPageActivity: AppCompatActivity(){
     }
 
     private fun collegeAdminProcesses(collegeID: Int?){
-        navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_welcome_text_view).append(" ${user.name}")
-        navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_user_id).append(" CA/${user.id}")
+//        navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_welcome_text_view).append(" ${user.name}")
+//        navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_user_id).append(" CA/${user.id}")
 
         userFragment = CollegeAdminMainPageFragment()
         userFragment?.arguments = Bundle().apply {
@@ -238,8 +238,16 @@ class SuperAdminCollegeAdminMainPageActivity: AppCompatActivity(){
         super.onResume()
         user = UserDAO(DatabaseHelper(this)).get(user.id)!!
         val welcomeTextView = navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_welcome_text_view)
+        val userIDTextView = navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_user_id)
         welcomeTextView.setText(R.string.hi_string)
         welcomeTextView.append(" ${user.name}")
+        userIDTextView.setText(R.string.user_id_string)
+        if(user.role == UserRole.SUPER_ADMIN.role){
+            userIDTextView.append(" SA/${user.id}")
+        }
+        else if(user.role == UserRole.COLLEGE_ADMIN.role){
+            userIDTextView.append(" CA/${user.id}")
+        }
     }
 
 
