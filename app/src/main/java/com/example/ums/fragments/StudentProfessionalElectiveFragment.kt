@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
-import com.example.ums.superAdminCollegeAdminActivities.StudentTransactionSelectActivity
-import com.example.ums.superAdminCollegeAdminActivities.TestRecordsActivity
 import com.example.ums.adapters.StudentProfessionalCourseListItemViewAdapter
 import com.example.ums.dialogFragments.RecordDeleteDialog
 import com.example.ums.interfaces.DeleteClickListener
@@ -23,6 +21,8 @@ import com.example.ums.model.databaseAccessObject.CourseDAO
 import com.example.ums.model.databaseAccessObject.CourseProfessorDAO
 import com.example.ums.model.databaseAccessObject.RecordsDAO
 import com.example.ums.model.databaseAccessObject.StudentDAO
+import com.example.ums.superAdminCollegeAdminActivities.StudentTransactionSelectActivity
+import com.example.ums.superAdminCollegeAdminActivities.TestRecordsActivity
 
 class StudentProfessionalElectiveFragment: ListFragment(), DeleteClickListener {
 
@@ -41,9 +41,10 @@ class StudentProfessionalElectiveFragment: ListFragment(), DeleteClickListener {
         super.onCreate(savedInstanceState)
         studentID = arguments?.getInt("student_activity_student_id")
         activityString = arguments?.getString("activity_name")
-        val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
-        val recordsDAO = RecordsDAO(DatabaseHelper(requireActivity()))
-        val departmentID = StudentDAO(DatabaseHelper(requireActivity())).get(studentID)?.departmentID
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val courseDAO = CourseDAO(databaseHelper)
+        val recordsDAO = RecordsDAO(databaseHelper)
+        val departmentID = StudentDAO(databaseHelper).get(studentID)?.departmentID
         studentProfessionalCourseListItemViewAdapter = StudentProfessionalCourseListItemViewAdapter(studentID ?: return,departmentID ?: return, courseDAO, recordsDAO, this )
     }
     override fun onCreateView(
@@ -101,7 +102,8 @@ class StudentProfessionalElectiveFragment: ListFragment(), DeleteClickListener {
     }
 
     private fun onRefresh(){
-        val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val courseDAO = CourseDAO(databaseHelper)
         if(courseDAO.getProfessionalCourses(studentID ?: return).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
@@ -127,8 +129,9 @@ class StudentProfessionalElectiveFragment: ListFragment(), DeleteClickListener {
             val collegeID = data?.getIntExtra("college_id", -1)
             val professorID = data?.getIntExtra("professor_id", -1)
             val transactionID = data?.getIntExtra("transaction_id", -1)
-            val recordsDAO = RecordsDAO(DatabaseHelper(requireActivity()))
-            val courseProfessorDAO = CourseProfessorDAO(DatabaseHelper(requireActivity()))
+            val databaseHelper = DatabaseHelper.newInstance(requireContext())
+            val recordsDAO = RecordsDAO(databaseHelper)
+            val courseProfessorDAO = CourseProfessorDAO(databaseHelper)
             val courseProfessor = courseProfessorDAO.get(professorID, courseID, departmentID, collegeID)
 
             if(courseID!=null && courseID != -1 && departmentID != null &&

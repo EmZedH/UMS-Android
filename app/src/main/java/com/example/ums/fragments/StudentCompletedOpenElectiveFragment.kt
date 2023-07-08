@@ -11,12 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
-import com.example.ums.superAdminCollegeAdminActivities.StudentCompletedCourseRecordActivity
 import com.example.ums.adapters.StudentCompletedOpenCourseListItemViewAdapter
 import com.example.ums.dialogFragments.RecordDeleteDialog
 import com.example.ums.interfaces.DeleteClickListener
 import com.example.ums.model.databaseAccessObject.CourseDAO
 import com.example.ums.model.databaseAccessObject.RecordsDAO
+import com.example.ums.superAdminCollegeAdminActivities.StudentCompletedCourseRecordActivity
 
 class StudentCompletedOpenElectiveFragment: ListFragment(), DeleteClickListener {
 
@@ -33,8 +33,9 @@ class StudentCompletedOpenElectiveFragment: ListFragment(), DeleteClickListener 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         studentID = arguments?.getInt("student_activity_student_id")
-        val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
-        val recordsDAO = RecordsDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val courseDAO = CourseDAO(databaseHelper)
+        val recordsDAO = RecordsDAO(databaseHelper)
         studentCompletedOpenCourseListItemViewAdapter = StudentCompletedOpenCourseListItemViewAdapter(studentID ?: return, courseDAO, recordsDAO, this )
     }
     override fun onCreateView(
@@ -80,7 +81,8 @@ class StudentCompletedOpenElectiveFragment: ListFragment(), DeleteClickListener 
     }
 
     private fun onRefresh(){
-        val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val courseDAO = CourseDAO(databaseHelper)
         if(courseDAO.getCompletedOpenCourses(studentID ?: return).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE

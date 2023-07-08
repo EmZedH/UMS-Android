@@ -45,7 +45,8 @@ class CollegeAddBottomSheet : FullScreenBottomSheetDialog() {
         collegeAddressError = savedInstanceState?.getString("college_add_address_error")
         collegeTelephoneError = savedInstanceState?.getString("college_add_telephone_error")
 
-        collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        collegeDAO = CollegeDAO(databaseHelper)
 
     }
     override fun onCreateView(

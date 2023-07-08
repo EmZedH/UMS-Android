@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
-import com.example.ums.adapters.ListItemViewAdapter
+import com.example.ums.adapters.LongClickableListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.ProfessorAddBottomSheet
 import com.example.ums.bottomsheetdialogs.ProfessorUpdateBottomSheet
 import com.example.ums.dialogFragments.ProfessorDeleteDialog
@@ -24,7 +24,7 @@ import com.example.ums.superAdminCollegeAdminActivities.ProfessorCoursesListActi
 class ProfessorFragment: ListFragment(), ListIdItemListener {
 
     private lateinit var professorDAO: ProfessorDAO
-    private var listItemViewAdapter: ListItemViewAdapter? = null
+    private var longClickableListItemViewAdapter: LongClickableListItemViewAdapter? = null
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
 
@@ -36,9 +36,10 @@ class ProfessorFragment: ListFragment(), ListIdItemListener {
         super.onCreate(savedInstanceState)
         departmentID = arguments?.getInt("department_activity_department_id")
         collegeID = arguments?.getInt("department_activity_college_id")
-        professorDAO = ProfessorDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        professorDAO = ProfessorDAO(databaseHelper)
         if(collegeID!=null){
-            listItemViewAdapter = ListItemViewAdapter(getAdapterItems(), this)
+            longClickableListItemViewAdapter = LongClickableListItemViewAdapter(getAdapterItems(), this)
         }
     }
     override fun onCreateView(
@@ -52,7 +53,7 @@ class ProfessorFragment: ListFragment(), ListIdItemListener {
         firstTextView = view.findViewById(R.id.no_items_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
         onRefresh()
-        recyclerView.adapter = listItemViewAdapter
+        recyclerView.adapter = longClickableListItemViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(this.context)
         return view
     }
@@ -64,7 +65,7 @@ class ProfessorFragment: ListFragment(), ListIdItemListener {
             val id = result.getInt("id")
             val collegeAdmin = professorDAO.get(id)
             collegeAdmin?.let {
-                listItemViewAdapter?.addItem(getAdapterItem(it))
+                longClickableListItemViewAdapter?.addItem(getAdapterItem(it))
             }
             onRefresh()
         }
@@ -72,14 +73,14 @@ class ProfessorFragment: ListFragment(), ListIdItemListener {
         setFragmentResultListener("ProfessorDeleteDialog"){_, result->
             val id = result.getInt("id")
             professorDAO.delete(id)
-            listItemViewAdapter?.deleteItem(listOf(id))
+            longClickableListItemViewAdapter?.deleteItem(listOf(id))
             onRefresh()
         }
         setFragmentResultListener("ProfessorUpdateFragmentPosition"){_, result->
             val id = result.getInt("id")
             val professor = professorDAO.get(id)
             professor?.let {
-                listItemViewAdapter?.updateItem(getAdapterItem(it))
+                longClickableListItemViewAdapter?.updateItem(getAdapterItem(it))
             }
         }
     }
@@ -89,7 +90,7 @@ class ProfessorFragment: ListFragment(), ListIdItemListener {
     }
 
     override fun onSearch(query: String?) {
-        listItemViewAdapter?.filter(query)
+        longClickableListItemViewAdapter?.filter(query)
     }
 
     private fun onRefresh(){
@@ -109,13 +110,13 @@ class ProfessorFragment: ListFragment(), ListIdItemListener {
         if(editProfessorId!=null){
             val professor = professorDAO.get(editProfessorId)
             professor?.let {
-                listItemViewAdapter?.updateItem(getAdapterItem(it))
+                longClickableListItemViewAdapter?.updateItem(getAdapterItem(it))
             }
             editProfessorId=null
         }
         else{
             onRefresh()
-            listItemViewAdapter?.updateAdapter(getAdapterItems())
+            longClickableListItemViewAdapter?.updateAdapter(getAdapterItems())
         }
     }
     private fun getAdapterItems(): MutableList<AdapterItem>{

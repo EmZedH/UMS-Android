@@ -68,7 +68,8 @@ class TestUpdateBottomSheet: FullScreenBottomSheetDialog() {
         testMark =
             view.findViewById(R.id.test_marks_text_layout)
 
-        val testDAO = TestDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val testDAO = TestDAO(databaseHelper)
         if(testMarkTextView.isNotEmpty()){
             testMark.editText?.setText(testMarkTextView)
         }
@@ -130,7 +131,8 @@ class TestUpdateBottomSheet: FullScreenBottomSheetDialog() {
     }
 
     private fun setView(view : View){
-        val testDAO = TestDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val testDAO = TestDAO(databaseHelper)
         view.findViewById<TextView>(R.id.course_id_text_view)?.setText(R.string.id_string)
         view.findViewById<TextView>(R.id.course_id_text_view)
             ?.append(" T/${testDAO.getNewID(

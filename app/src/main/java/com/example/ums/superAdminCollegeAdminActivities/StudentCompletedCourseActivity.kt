@@ -35,7 +35,8 @@ class StudentCompletedCourseActivity: AppCompatActivity() {
             searchQuery = savedInstanceState.getString("college_page_activity_search_query")
             isSearchViewOpen = savedInstanceState.getBoolean("college_page_activity_is_search_query_open")
         }
-        val studentDAO = StudentDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val studentDAO = StudentDAO(databaseHelper)
         val bundle = intent.extras
         studentID = bundle?.getInt("student_id")
         val studentID = studentID

@@ -44,7 +44,8 @@ class StudentMainPageActivity: AppCompatActivity() {
             userID = savedInstanceState.getInt("student_main_page_activity_college_id")
         }
 
-        val studentDAO = StudentDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val studentDAO = StudentDAO(databaseHelper)
         val bundle = intent.extras
         userID = bundle?.getInt("userID")
         val userID = userID

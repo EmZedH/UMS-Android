@@ -34,7 +34,7 @@ class StudentCompletedCourseRecordActivity: AppCompatActivity() {
             val assignmentMarksTextView = findViewById<TextView>(R.id.assignment_marks)
 
             val toolBar = findViewById<MaterialToolbar>(R.id.top_app_bar)
-            val databaseHelper = DatabaseHelper(this)
+            val databaseHelper = DatabaseHelper.newInstance(this)
             val recordsDAO = RecordsDAO(databaseHelper)
             val courseDAO = CourseDAO(databaseHelper)
             val testDAO = TestDAO(databaseHelper)

@@ -54,7 +54,8 @@ class CourseProfessorsListActivity: AppCompatActivity(), DeleteClickListener {
         val departmentID = departmentID
         val courseID = courseID
         if(collegeID!=null && courseID!=null && departmentID!=null){
-            val courseProfessorDAO = CourseProfessorDAO(DatabaseHelper(this))
+            val databaseHelper = DatabaseHelper.newInstance(this)
+            val courseProfessorDAO = CourseProfessorDAO(databaseHelper)
             courseProfessorListItemViewAdapter = CoursesProfessorListItemViewAdapter(courseID, departmentID, collegeID, courseProfessorDAO, this)
             searchView = findViewById(R.id.search)
             firstTextView = findViewById(R.id.no_items_text_view)
@@ -162,7 +163,8 @@ class CourseProfessorsListActivity: AppCompatActivity(), DeleteClickListener {
     }
 
     private fun onRefresh(){
-        val courseProfessorDAO = CourseProfessorDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val courseProfessorDAO = CourseProfessorDAO(databaseHelper)
         if(courseProfessorDAO.getList(courseID!!, departmentID!!, collegeID!!).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
@@ -179,7 +181,8 @@ class CourseProfessorsListActivity: AppCompatActivity(), DeleteClickListener {
         courseProfessorListItemViewAdapter?.onRefresh()
 
         if(courseID!=null && departmentID!=null && collegeID!=null){
-            val courseDAO = CourseDAO(DatabaseHelper(this))
+            val databaseHelper = DatabaseHelper.newInstance(this)
+            val courseDAO = CourseDAO(databaseHelper)
             toolBar?.title = "${courseDAO.get(courseID, departmentID, collegeID)?.name} Professors"
         }
     }

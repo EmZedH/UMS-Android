@@ -52,7 +52,8 @@ class StudentProfessorsListActivity: AppCompatActivity(), ClickListener, Searcha
         }
 
         if(courseID!=null && departmentID !=null && collegeID!=null){
-            val courseProfessorDAO = CourseProfessorDAO(DatabaseHelper(this))
+            val databaseHelper = DatabaseHelper.newInstance(this)
+            val courseProfessorDAO = CourseProfessorDAO(databaseHelper)
             newProfessorsForCoursesListItemViewAdapter = StudentProfessorsListItemViewAdapter(courseID!!, departmentID!!, collegeID!!, courseProfessorDAO, this)
             val recyclerView: RecyclerView = findViewById(R.id.list_view)
 
@@ -134,7 +135,8 @@ class StudentProfessorsListActivity: AppCompatActivity(), ClickListener, Searcha
     }
 
     private fun onRefresh(){
-        val courseProfessorDAO = CourseProfessorDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val courseProfessorDAO = CourseProfessorDAO(databaseHelper)
 
         if(courseProfessorDAO.getList(courseID ?: return, departmentID ?: return, collegeID ?: return).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE

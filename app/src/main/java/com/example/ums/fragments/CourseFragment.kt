@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
-import com.example.ums.adapters.ListItemViewAdapter
+import com.example.ums.adapters.LongClickableListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.CourseAddBottomSheet
 import com.example.ums.bottomsheetdialogs.CourseUpdateBottomSheet
 import com.example.ums.dialogFragments.CourseDeleteDialog
@@ -24,7 +24,7 @@ import com.example.ums.superAdminCollegeAdminActivities.CourseProfessorsListActi
 class CourseFragment: ListFragment(), ListIdItemListener {
     private lateinit var courseDAO: CourseDAO
 
-    private var listItemViewAdapter: ListItemViewAdapter? = null
+    private var longClickableListItemViewAdapter: LongClickableListItemViewAdapter? = null
 
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
@@ -37,8 +37,9 @@ class CourseFragment: ListFragment(), ListIdItemListener {
         super.onCreate(savedInstanceState)
         departmentID = arguments?.getInt("department_activity_department_id")
         collegeID = arguments?.getInt("department_activity_college_id")
-        courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
-        listItemViewAdapter = ListItemViewAdapter(getAdapterItems(), this)
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        courseDAO = CourseDAO(databaseHelper)
+        longClickableListItemViewAdapter = LongClickableListItemViewAdapter(getAdapterItems(), this)
     }
 
     override fun onCreateView(
@@ -52,7 +53,7 @@ class CourseFragment: ListFragment(), ListIdItemListener {
         firstTextView = view.findViewById(R.id.no_items_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
         onRefresh()
-        recyclerView.adapter = listItemViewAdapter
+        recyclerView.adapter = longClickableListItemViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
         return view
     }
@@ -64,7 +65,7 @@ class CourseFragment: ListFragment(), ListIdItemListener {
             val id = result.getInt("id")
             val course = courseDAO.get(id, departmentID, collegeID)
             course?.let {
-                listItemViewAdapter?.addItem(getAdapterItem(course))
+                longClickableListItemViewAdapter?.addItem(getAdapterItem(course))
             }
             onRefresh()
         }
@@ -72,14 +73,14 @@ class CourseFragment: ListFragment(), ListIdItemListener {
         setFragmentResultListener("CourseDeleteDialog"){_, result->
             val id = result.getInt("courseID")
             courseDAO.delete(id, departmentID, collegeID)
-            listItemViewAdapter?.deleteItem(listOf(id))
+            longClickableListItemViewAdapter?.deleteItem(listOf(id))
             onRefresh()
         }
         setFragmentResultListener("CourseUpdateBottomSheet"){_, result->
             val id = result.getInt("courseID")
             val course = courseDAO.get(id, departmentID, collegeID)
             course?.let {
-                listItemViewAdapter?.updateItem(getAdapterItem(course))
+                longClickableListItemViewAdapter?.updateItem(getAdapterItem(course))
             }
         }
     }
@@ -89,7 +90,7 @@ class CourseFragment: ListFragment(), ListIdItemListener {
     }
 
     override fun onSearch(query: String?) {
-        listItemViewAdapter?.filter(query)
+        longClickableListItemViewAdapter?.filter(query)
     }
 
     private fun onRefresh(){
@@ -108,13 +109,13 @@ class CourseFragment: ListFragment(), ListIdItemListener {
         if(editCourseId!=null){
             val course = courseDAO.get(editCourseId, departmentID, collegeID)
             course?.let {
-                listItemViewAdapter?.updateItem(getAdapterItem(course))
+                longClickableListItemViewAdapter?.updateItem(getAdapterItem(course))
             }
             editCourseId=null
         }
         else{
             onRefresh()
-            listItemViewAdapter?.updateAdapter(getAdapterItems())
+            longClickableListItemViewAdapter?.updateAdapter(getAdapterItems())
         }
     }
 

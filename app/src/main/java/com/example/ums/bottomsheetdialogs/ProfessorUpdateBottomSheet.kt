@@ -58,7 +58,8 @@ class ProfessorUpdateBottomSheet: FullScreenBottomSheetDialog() {
         contactNumberError = savedInstanceState?.getString("professor_update_contact_number_error")
         userAddressError = savedInstanceState?.getString("professor_update_user_address_error")
 
-        professorDAO = ProfessorDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        professorDAO = ProfessorDAO(databaseHelper)
     }
     override fun onCreateView(
         inflater: LayoutInflater,

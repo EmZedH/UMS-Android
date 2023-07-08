@@ -48,7 +48,8 @@ class DepartmentUpdateBottomSheet: FullScreenBottomSheetDialog() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val departmentDAO = DepartmentDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val departmentDAO = DepartmentDAO(databaseHelper)
         val view = inflater.inflate(R.layout.fragment_update_department, container, false)
         val collegeID = collegeID
         val departmentID = departmentID

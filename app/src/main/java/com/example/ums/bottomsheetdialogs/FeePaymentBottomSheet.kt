@@ -36,6 +36,7 @@ class FeePaymentBottomSheet: FullScreenBottomSheetDialog() {
     private var studentID: Int? = null
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         studentID = arguments?.getInt("student_id")
@@ -49,7 +50,8 @@ class FeePaymentBottomSheet: FullScreenBottomSheetDialog() {
         val view = inflater.inflate(R.layout.fragment_fee_payment, container, false)
 
         val studentID = studentID ?: return view
-        val transactionDAO = TransactionDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val transactionDAO = TransactionDAO(databaseHelper)
         val addStudentButton = view.findViewById<MaterialButton>(R.id.add_button)
         val bottomSheetCloseButton = view.findViewById<ImageButton>(R.id.close_button)
 
@@ -70,36 +72,33 @@ class FeePaymentBottomSheet: FullScreenBottomSheetDialog() {
         amountTextView.text = getString(R.string.amount_string)
         amountTextView.append(" ₹20000")
 
-        val studentDAO = StudentDAO(DatabaseHelper(requireActivity()))
+        val studentDAO = StudentDAO(databaseHelper)
         val student = studentDAO.get(studentID)
         semesterTextView.text = getString(R.string.semester_string)
         semesterTextView.append(" ${student?.semester}")
 
         addStudentButton.setOnClickListener {
             val newID = transactionDAO.getNewID()
-            val studentDAO = StudentDAO(DatabaseHelper(requireActivity()))
             val semester = studentDAO.get(studentID)?.semester
-            if(studentID!=null){
-                transactionDAO.insert(
-                    Transactions(
-                        newID,
-                        studentID,
-                        semester ?: return@setOnClickListener,
-                        "${calendarYear}-${calendarDay}-${calendarMonth + 1}",
-                        20000
-                    )
+            transactionDAO.insert(
+                Transactions(
+                    newID,
+                    studentID,
+                    semester ?: return@setOnClickListener,
+                    "${calendarYear}-${calendarDay}-${calendarMonth + 1}",
+                    20000
                 )
-            }
+            )
 
             setTextView(view)
 
-            val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
+            val courseDAO = CourseDAO(databaseHelper)
 
-            val courseProfessorDAO = CourseProfessorDAO(DatabaseHelper(requireActivity()))
+            val courseProfessorDAO = CourseProfessorDAO(databaseHelper)
 
             val professionalCourses = courseDAO.getNewProfessionalCoursesWithProfessors(studentID)
             val transactions = transactionDAO.getCurrentSemesterTransactionList(studentID)
-            val recordsDAO = RecordsDAO(DatabaseHelper(requireActivity()))
+            val recordsDAO = RecordsDAO(databaseHelper)
 
             for (course in professionalCourses){
                 val courseProfessors = courseProfessorDAO.getList(course.id, course.departmentID, course.collegeID)
@@ -126,7 +125,8 @@ class FeePaymentBottomSheet: FullScreenBottomSheetDialog() {
         return view
     }
     private fun setTextView(view : View){
-        val transactionDAO = TransactionDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val transactionDAO = TransactionDAO(databaseHelper)
         view.findViewById<TextView>(R.id.id_text_view)?.setText(R.string.id_string)
         view.findViewById<TextView>(R.id.id_text_view)?.append(" T/${transactionDAO.getNewID()}")
     }

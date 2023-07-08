@@ -101,7 +101,8 @@ class ProfessorAddBottomSheet: FullScreenBottomSheetDialog() {
 
         isGenderErrorOn = savedInstanceState?.getBoolean("professor_add_is_gender_error_on") ?: false
 
-        professorDAO = ProfessorDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        professorDAO = ProfessorDAO(databaseHelper)
 
     }
     override fun onCreateView(

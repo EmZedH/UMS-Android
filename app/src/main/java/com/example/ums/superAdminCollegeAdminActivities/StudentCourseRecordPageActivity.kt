@@ -43,7 +43,7 @@ class StudentCourseRecordPageActivity: AppCompatActivity() {
             val attendanceIncreaseButton = findViewById<MaterialButton>(R.id.attendance_increase_button)
             val floatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
             val toolBar = findViewById<MaterialToolbar>(R.id.top_app_bar)
-            val databaseHelper = DatabaseHelper(this)
+            val databaseHelper = DatabaseHelper.newInstance(this)
             val recordsDAO = RecordsDAO(databaseHelper)
             val testDAO = TestDAO(databaseHelper)
 

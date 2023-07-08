@@ -29,7 +29,8 @@ class StudentProfileOpenElectiveFragment: SearchableFragment(), DeleteClickListe
         super.onCreate(savedInstanceState)
         studentID = arguments?.getInt("student_activity_student_id")
         activityString = arguments?.getString("activity_name")
-        val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val courseDAO = CourseDAO(databaseHelper)
         studentOpenCourseListItemViewAdapter = StudentProfileOpenCourseListItemViewAdapter(
             studentID ?: return,
             courseDAO,
@@ -70,7 +71,8 @@ class StudentProfileOpenElectiveFragment: SearchableFragment(), DeleteClickListe
     }
 
     private fun onRefresh(){
-        val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val courseDAO = CourseDAO(databaseHelper)
         if(courseDAO.getOpenCourses(studentID ?: return).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE

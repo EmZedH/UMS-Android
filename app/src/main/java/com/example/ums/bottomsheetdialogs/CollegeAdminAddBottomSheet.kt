@@ -97,7 +97,8 @@ class CollegeAdminAddBottomSheet: FullScreenBottomSheetDialog() {
 
         isGenderErrorOn = savedInstanceState?.getBoolean("college_admin_add_is_gender_error_on") ?: false
 
-        collegeAdminDAO = CollegeAdminDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        collegeAdminDAO = CollegeAdminDAO(databaseHelper)
 
     }
     override fun onCreateView(

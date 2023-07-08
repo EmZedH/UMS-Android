@@ -35,7 +35,8 @@ class StudentTransactionPage: AppCompatActivity(){
         setContentView(R.layout.students_transaction_page_layout)
         val arguments = intent.extras
         studentID = arguments?.getInt("userID")
-        val transactionDAO = TransactionDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val transactionDAO = TransactionDAO(databaseHelper)
 
         if(savedInstanceState!=null){
             isConfigurationChanged = savedInstanceState.getBoolean("student_main_page_is_configuration_changed")
@@ -68,7 +69,6 @@ class StudentTransactionPage: AppCompatActivity(){
             }
 
             payFeeButton.setOnClickListener {
-                val transactionDAO = TransactionDAO(DatabaseHelper(this))
                 if(transactionDAO.hasPaidForCurrentSemester(studentID)){
                    Toast.makeText(this, "Already paid for current semester", Toast.LENGTH_SHORT).show()
                 }
@@ -114,8 +114,8 @@ class StudentTransactionPage: AppCompatActivity(){
     }
 
 //    override fun onAdd() {
-//        val transactionDAO = TransactionDAO(DatabaseHelper(this))
-//        val studentDAO = StudentDAO(DatabaseHelper(this))
+//        val transactionDAO = TransactionDAO(databaseHelper)
+//        val studentDAO = StudentDAO(databaseHelper)
 //        val student = studentDAO.get(studentID) ?: return
 //        for (transaction in transactionDAO.getList(studentID ?: return)){
 //            if(transaction.semester == student.semester){
@@ -132,7 +132,8 @@ class StudentTransactionPage: AppCompatActivity(){
     }
 
     private fun onRefresh(){
-        val transactionDAO = TransactionDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val transactionDAO = TransactionDAO(databaseHelper)
         if(transactionDAO.getList(studentID ?: return).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE

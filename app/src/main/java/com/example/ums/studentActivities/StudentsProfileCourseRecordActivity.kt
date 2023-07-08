@@ -35,7 +35,7 @@ class StudentsProfileCourseRecordActivity: AppCompatActivity() {
             val professorNameTextView = findViewById<TextView>(R.id.professor_name)
 
             val toolBar = findViewById<MaterialToolbar>(R.id.top_app_bar)
-            val databaseHelper = DatabaseHelper(this)
+            val databaseHelper = DatabaseHelper.newInstance(this)
             val recordsDAO = RecordsDAO(databaseHelper)
             val testDAO = TestDAO(databaseHelper)
 

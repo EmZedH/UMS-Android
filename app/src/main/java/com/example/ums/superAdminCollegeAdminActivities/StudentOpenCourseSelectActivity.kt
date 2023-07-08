@@ -51,11 +51,12 @@ class StudentOpenCourseSelectActivity: AppCompatActivity(), ClickListener, Searc
             isSearchViewOpen = savedInstanceState.getBoolean("student_open_course_select_activity_is_search_query_open")
         }
 
-        courseDAO = CourseDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        courseDAO = CourseDAO(databaseHelper)
         val studentID = studentID
         if(studentID!=null){
-            val courseDAO = CourseDAO(DatabaseHelper(this))
-            val studentDAO = StudentDAO(DatabaseHelper(this))
+            val courseDAO = CourseDAO(databaseHelper)
+            val studentDAO = StudentDAO(databaseHelper)
             newCoursesForProfessorListItemViewAdapter = NewOpenCoursesForStudentListItemViewAdapter(studentID,courseDAO, studentDAO, this)
             val recyclerView: RecyclerView = findViewById(R.id.list_view)
 

@@ -11,7 +11,8 @@ class Utility {
         }
 
         fun isEmailAddressFree(email: String, context: Activity): Boolean{
-            val userDAO = UserDAO(DatabaseHelper(context))
+            val databaseHelper = DatabaseHelper.newInstance(context)
+            val userDAO = UserDAO(databaseHelper)
             val userList = userDAO.getList()
             for (user in userList){
                 if(user.emailID.trim()==email.trim()){

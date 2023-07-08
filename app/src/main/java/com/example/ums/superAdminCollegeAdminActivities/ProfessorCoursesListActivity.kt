@@ -46,12 +46,13 @@ class ProfessorCoursesListActivity: AppCompatActivity(), DeleteClickListener {
         val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
         val bundle = intent.extras
         professorID = bundle?.getInt("professor_profile_professor_id")
-        val professorDAO = ProfessorDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val professorDAO = ProfessorDAO(databaseHelper)
         val professor = professorDAO.get(professorID)
         collegeID = professor?.collegeID
         departmentID = professor?.departmentID
         if(professor!=null){
-            val courseProfessorDAO = CourseProfessorDAO(DatabaseHelper(this))
+            val courseProfessorDAO = CourseProfessorDAO(databaseHelper)
             professorsCoursesListItemViewAdapter = ProfessorsCoursesListItemViewAdapter(professor.user.id, courseProfessorDAO, professorDAO, this)
             val professorID = professor.user.id
             searchView = findViewById(R.id.search)
@@ -156,7 +157,8 @@ class ProfessorCoursesListActivity: AppCompatActivity(), DeleteClickListener {
     }
 
     private fun onRefresh(){
-        val courseProfessorDAO = CourseProfessorDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val courseProfessorDAO = CourseProfessorDAO(databaseHelper)
         if(courseProfessorDAO.getList(professorID!!).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
@@ -172,8 +174,9 @@ class ProfessorCoursesListActivity: AppCompatActivity(), DeleteClickListener {
         onRefresh()
         professorsCoursesListItemViewAdapter?.onRefresh()
 
+        val databaseHelper = DatabaseHelper.newInstance(this)
         if(professorID!=null){
-            val professorDAO = ProfessorDAO(DatabaseHelper(this))
+            val professorDAO = ProfessorDAO(databaseHelper)
             toolBar?.title = "${professorDAO.get(professorID)?.user?.name} Courses"
         }
     }

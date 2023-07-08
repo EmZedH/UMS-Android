@@ -97,14 +97,15 @@ class TestAddBottomSheet: FullScreenBottomSheetDialog() {
             }
 
             if (flag) {
-                val testDAO = TestDAO(DatabaseHelper(requireActivity()))
+                val databaseHelper = DatabaseHelper.newInstance(requireContext())
+                val testDAO = TestDAO(databaseHelper)
                 val newID = testDAO.getNewID(
                     studentID ?: return@setOnClickListener,
                     courseID ?: return@setOnClickListener,
                     departmentID ?: return@setOnClickListener
                 )
 
-                val studentDAO = StudentDAO(DatabaseHelper(requireActivity()))
+                val studentDAO = StudentDAO(databaseHelper)
                 val collegeID = studentDAO.get(studentID)?.collegeID ?: return@setOnClickListener
 
                 if(studentID!=null){
@@ -140,7 +141,8 @@ class TestAddBottomSheet: FullScreenBottomSheetDialog() {
     }
 
     private fun setView(view : View){
-        val testDAO = TestDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val testDAO = TestDAO(databaseHelper)
         view.findViewById<TextView>(R.id.course_id_text_view)?.setText(R.string.id_string)
         view.findViewById<TextView>(R.id.course_id_text_view)
             ?.append(" T/${testDAO.getNewID(

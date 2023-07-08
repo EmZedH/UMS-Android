@@ -37,7 +37,8 @@ class StudentTransactionSelectActivity: AppCompatActivity(), ClickListener {
         studentID = arguments?.getInt("student_transaction_select_activity_student_id")
         activityName = arguments?.getString("student_transaction_select_activity_activity_name")
 
-        val transactionDAO = TransactionDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val transactionDAO = TransactionDAO(databaseHelper)
         val professorID = studentID
         if(professorID!=null){
             newTransactionsForStudentsListItemViewAdapter = NewTransactionsForStudentsListItemViewAdapter(professorID, transactionDAO, this)
@@ -95,7 +96,8 @@ class StudentTransactionSelectActivity: AppCompatActivity(), ClickListener {
     }
 
     private fun onRefresh(){
-        val transactionDAO = TransactionDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val transactionDAO = TransactionDAO(databaseHelper)
         if(transactionDAO.getCurrentSemesterTransactionList(studentID ?: return).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE

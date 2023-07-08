@@ -10,8 +10,8 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.adapters.DepartmentTabPageAdapter
-import com.example.ums.fragments.ListFragment
 import com.example.ums.fragments.CourseFragment
+import com.example.ums.fragments.ListFragment
 import com.example.ums.fragments.ProfessorFragment
 import com.example.ums.fragments.StudentFragment
 import com.example.ums.model.databaseAccessObject.DepartmentDAO
@@ -41,7 +41,8 @@ class DepartmentActivity: AppCompatActivity() {
             departmentID = savedInstanceState.getInt("department_page_activity_college_id")
         }
         val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
-        val departmentDAO = DepartmentDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val departmentDAO = DepartmentDAO(databaseHelper)
         val bundle = intent.extras
         departmentID = bundle?.getInt("departmentID")
         collegeID = bundle?.getInt("collegeID")
@@ -175,7 +176,8 @@ class DepartmentActivity: AppCompatActivity() {
         super.onResume()
 
         if(departmentID!=null && collegeID!=null){
-            toolBar?.title = DepartmentDAO(DatabaseHelper(this)).get(departmentID!!, collegeID!!)?.name
+            val databaseHelper = DatabaseHelper.newInstance(this)
+            toolBar?.title = DepartmentDAO(databaseHelper).get(departmentID, collegeID)?.name
         }
     }
 }

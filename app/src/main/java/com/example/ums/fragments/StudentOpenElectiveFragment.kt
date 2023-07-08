@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
-import com.example.ums.superAdminCollegeAdminActivities.StudentTransactionSelectActivity
-import com.example.ums.superAdminCollegeAdminActivities.TestRecordsActivity
 import com.example.ums.adapters.StudentOpenCourseListItemViewAdapter
 import com.example.ums.dialogFragments.RecordDeleteDialog
 import com.example.ums.dialogFragments.StudentOpenCourseAddConfirmationDialog
@@ -23,6 +21,8 @@ import com.example.ums.model.Records
 import com.example.ums.model.databaseAccessObject.CourseDAO
 import com.example.ums.model.databaseAccessObject.CourseProfessorDAO
 import com.example.ums.model.databaseAccessObject.RecordsDAO
+import com.example.ums.superAdminCollegeAdminActivities.StudentTransactionSelectActivity
+import com.example.ums.superAdminCollegeAdminActivities.TestRecordsActivity
 
 class StudentOpenElectiveFragment: ListFragment(), OpenCourseItemListener {
 
@@ -41,8 +41,9 @@ class StudentOpenElectiveFragment: ListFragment(), OpenCourseItemListener {
         super.onCreate(savedInstanceState)
         studentID = arguments?.getInt("student_activity_student_id")
         activityString = arguments?.getString("activity_name")
-        val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
-        val recordsDAO = RecordsDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val courseDAO = CourseDAO(databaseHelper)
+        val recordsDAO = RecordsDAO(databaseHelper)
         studentOpenCourseListItemViewAdapter = StudentOpenCourseListItemViewAdapter(studentID ?: return, courseDAO, recordsDAO, this )
     }
     override fun onCreateView(
@@ -92,7 +93,8 @@ class StudentOpenElectiveFragment: ListFragment(), OpenCourseItemListener {
     }
 
     override fun onAdd() {
-        val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val courseDAO = CourseDAO(databaseHelper)
         if(courseDAO.getOpenCourses(studentID ?: return).size >= 2){
             val studentOpenCourseAddConfirmationDialog = StudentOpenCourseAddConfirmationDialog()
             studentOpenCourseAddConfirmationDialog.show(requireActivity().supportFragmentManager, "StudentOpenCourseAddConfirmationDialog")
@@ -116,7 +118,8 @@ class StudentOpenElectiveFragment: ListFragment(), OpenCourseItemListener {
     }
 
     private fun onRefresh(){
-        val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val courseDAO = CourseDAO(databaseHelper)
         val id = studentID
         if(id!=null && courseDAO.getOpenCourses(id).isNotEmpty()){
             firstTextView?.visibility = View.INVISIBLE
@@ -143,8 +146,9 @@ class StudentOpenElectiveFragment: ListFragment(), OpenCourseItemListener {
             val collegeID = data?.getIntExtra("college_id", -1)
             val professorID = data?.getIntExtra("professor_id", -1)
             val transactionID = data?.getIntExtra("transaction_id", -1)
-            val recordsDAO = RecordsDAO(DatabaseHelper(requireActivity()))
-            val courseProfessorDAO = CourseProfessorDAO(DatabaseHelper(requireActivity()))
+            val databaseHelper = DatabaseHelper.newInstance(requireContext())
+            val recordsDAO = RecordsDAO(databaseHelper)
+            val courseProfessorDAO = CourseProfessorDAO(databaseHelper)
             val courseProfessor = courseProfessorDAO.get(professorID, courseID, departmentID, collegeID)
 
             if(courseID!=null && courseID != -1 && departmentID != null &&

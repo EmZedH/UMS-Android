@@ -29,7 +29,8 @@ class TransactionFragment: ListFragment(), DeleteListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         studentID = arguments?.getInt("student_activity_student_id")
-        val transactionDAO = TransactionDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val transactionDAO = TransactionDAO(databaseHelper)
         if(studentID!=null){
             professorListItemViewAdapter = TransactionsListItemViewAdapter(studentID!!, transactionDAO, this )
         }
@@ -79,8 +80,9 @@ class TransactionFragment: ListFragment(), DeleteListener {
     }
 
     override fun onAdd() {
-        val transactionDAO = TransactionDAO(DatabaseHelper(requireActivity()))
-        val studentDAO = StudentDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val transactionDAO = TransactionDAO(databaseHelper)
+        val studentDAO = StudentDAO(databaseHelper)
         val student = studentDAO.get(studentID) ?: return
         for (transaction in transactionDAO.getList(studentID ?: return)){
             if(transaction.semester == student.semester){
@@ -102,7 +104,8 @@ class TransactionFragment: ListFragment(), DeleteListener {
     }
 
     private fun onRefresh(){
-        val transactionDAO = TransactionDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val transactionDAO = TransactionDAO(databaseHelper)
         if(transactionDAO.getList(studentID ?: return).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE

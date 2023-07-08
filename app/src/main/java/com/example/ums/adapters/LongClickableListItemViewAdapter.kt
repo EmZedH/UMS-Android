@@ -9,7 +9,7 @@ import com.example.ums.interfaces.ListIdItemListener
 import com.example.ums.listItemViewHolder.ListItemViewHolder
 import com.example.ums.model.AdapterItem
 
-class ListItemViewAdapter(list: MutableList<AdapterItem>, private val listener: ListIdItemListener): RecyclerView.Adapter<ListItemViewHolder>() {
+class LongClickableListItemViewAdapter(list: MutableList<AdapterItem>, private val listener: ListIdItemListener): RecyclerView.Adapter<ListItemViewHolder>() {
 
     private var list = list.sortedBy { it.id[0] }.toList().toMutableList()
     private var preFilteredList = list.sortedBy { it.id[0] }.toList().toMutableList()

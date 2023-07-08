@@ -55,7 +55,8 @@ class TestRecordsActivity: AppCompatActivity(), DeleteUpdateListener {
         val departmentID = departmentID
         val courseID = courseID
         if(studentID!=null && courseID!=null && departmentID!=null){
-            val testDAO = TestDAO(DatabaseHelper(this))
+            val databaseHelper = DatabaseHelper.newInstance(this)
+            val testDAO = TestDAO(databaseHelper)
             testListItemViewAdapter = TestListItemViewAdapter(studentID, courseID, departmentID, testDAO, this)
             searchView = findViewById(R.id.search)
             firstTextView = findViewById(R.id.no_items_text_view)
@@ -168,7 +169,8 @@ class TestRecordsActivity: AppCompatActivity(), DeleteUpdateListener {
     }
 
     private fun onRefresh(){
-        val testDAO = TestDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val testDAO = TestDAO(databaseHelper)
         if(testDAO.getList(studentID!!, courseID!!, departmentID!!).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
@@ -184,8 +186,9 @@ class TestRecordsActivity: AppCompatActivity(), DeleteUpdateListener {
     override fun onResume() {
         super.onResume()
         onRefresh()
-        val studentDAO = StudentDAO(DatabaseHelper(this))
-        val courseDAO = CourseDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val studentDAO = StudentDAO(databaseHelper)
+        val courseDAO = CourseDAO(databaseHelper)
         toolBar?.title = "${courseDAO
             .get(courseID ?: return, 
                 departmentID ?: return, 

@@ -31,7 +31,10 @@ class TestDAO(private val databaseHelper: DatabaseHelper) {
         return null
     }
 
-    fun getList(studentID: Int, courseID: Int, departmentID: Int): List<Test>{
+    fun getList(studentID: Int?, courseID: Int?, departmentID: Int?): List<Test>{
+        studentID ?: return emptyList()
+        courseID ?: return emptyList()
+        departmentID ?: return emptyList()
         val tests = mutableListOf<Test>()
         val cursor = databaseHelper.readableDatabase
             .rawQuery("SELECT * FROM TEST WHERE STUDENT_ID = ? AND COURSE_ID = ? AND DEPT_ID = ?",

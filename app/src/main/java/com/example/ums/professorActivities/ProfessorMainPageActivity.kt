@@ -20,7 +20,6 @@ import com.example.ums.dialogFragments.ExitDialog
 import com.example.ums.dialogFragments.LogOutDialog
 import com.example.ums.interfaces.ClickListener
 import com.example.ums.model.User
-import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.example.ums.model.databaseAccessObject.CourseProfessorDAO
 import com.example.ums.model.databaseAccessObject.ProfessorDAO
 import com.example.ums.model.databaseAccessObject.UserDAO
@@ -66,7 +65,8 @@ class ProfessorMainPageActivity: AppCompatActivity(), ClickListener {
         val recyclerView: RecyclerView = findViewById(R.id.list_view)
 
 
-        val userDAO = UserDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val userDAO = UserDAO(databaseHelper)
         val bundle = intent.extras
         val userID = bundle?.getInt("userID")
         this.userID = userID
@@ -75,8 +75,8 @@ class ProfessorMainPageActivity: AppCompatActivity(), ClickListener {
         user = userID?.let { userDAO.get(it) }
         setView(userID, userDAO, bundle)
 
-        val courseProfessorDAO = CourseProfessorDAO(DatabaseHelper(this))
-        val professorDAO = ProfessorDAO(DatabaseHelper(this))
+        val courseProfessorDAO = CourseProfessorDAO(databaseHelper)
+        val professorDAO = ProfessorDAO(databaseHelper)
         professorsCoursesListItemViewAdapter = ProfessorMainPageListItemViewAdapter(userID!! , courseProfessorDAO, professorDAO, this)
         recyclerView.adapter = professorsCoursesListItemViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -118,7 +118,6 @@ class ProfessorMainPageActivity: AppCompatActivity(), ClickListener {
         user = userDAO.get(userID) ?: return
         userRole = bundle?.getString("userRole")!!
 
-        CollegeDAO(DatabaseHelper(this))
         drawerLayout = findViewById(R.id.main_page_drawer_layout)
 
         toolBar.setNavigationOnClickListener {
@@ -190,14 +189,16 @@ class ProfessorMainPageActivity: AppCompatActivity(), ClickListener {
 
     override fun onResume() {
         super.onResume()
-        user = UserDAO(DatabaseHelper(this)).get(user?.id ?: return)
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        user = UserDAO(databaseHelper).get(user?.id ?: return)
         val welcomeTextView = navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_welcome_text_view)
         welcomeTextView.setText(R.string.hi_string)
         welcomeTextView.append(" ${user?.name}")
     }
 
     private fun onRefresh(){
-        val courseProfessorDAO = CourseProfessorDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val courseProfessorDAO = CourseProfessorDAO(databaseHelper)
         if(courseProfessorDAO.getList(this.userID!!).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE

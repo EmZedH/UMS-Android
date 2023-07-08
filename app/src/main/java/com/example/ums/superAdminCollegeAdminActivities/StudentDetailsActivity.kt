@@ -58,7 +58,7 @@ class StudentDetailsActivity: AppCompatActivity() {
 
             val floatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
             val toolBar = findViewById<MaterialToolbar>(R.id.top_app_bar)
-            val databaseHelper = DatabaseHelper(this)
+            val databaseHelper = DatabaseHelper.newInstance(this)
             val studentDAO = StudentDAO(databaseHelper)
             val departmentDAO = DepartmentDAO(databaseHelper)
             val collegeDAO = CollegeDAO(databaseHelper)
@@ -71,8 +71,8 @@ class StudentDetailsActivity: AppCompatActivity() {
                 finish()
             }
 
-            val recordsDAO = RecordsDAO(DatabaseHelper(this))
-            val testDAO = TestDAO(DatabaseHelper(this))
+            val recordsDAO = RecordsDAO(databaseHelper)
+            val testDAO = TestDAO(databaseHelper)
             val records = recordsDAO.getList(studentID)
             var numberOfRecords = 0
             var externalMark = 0
@@ -104,8 +104,8 @@ class StudentDetailsActivity: AppCompatActivity() {
             collegeNameTextView.text = college?.name
 
             supportFragmentManager.setFragmentResultListener("StudentAdvanceSemesterConfirmationDialog", this){_, _ ->
-                val advancableRecords = recordsDAO.getList(studentID)
-                for(record in advancableRecords){
+                val recordsList = recordsDAO.getList(studentID)
+                for(record in recordsList){
                     val mark = record.externalMarks + (record.attendance/20) + record.assignmentMarks + (testDAO.getAverageTestMark(record.studentID, record.courseProfessor.course.id, record.courseProfessor.course.departmentID) ?: 0)
                     if(mark >= 60){
                         student?.semester?.let {
@@ -147,8 +147,8 @@ class StudentDetailsActivity: AppCompatActivity() {
             }
 
             autoAddCoursesButton.setOnClickListener{
-                val courseDAO = CourseDAO(DatabaseHelper(this))
-                val transactionDAO = TransactionDAO(DatabaseHelper(this))
+                val courseDAO = CourseDAO(databaseHelper)
+                val transactionDAO = TransactionDAO(databaseHelper)
                 val professionalCourses = courseDAO.getNewProfessionalCoursesWithProfessors(studentID)
                 if(!transactionDAO.hasPaidForCurrentSemester(studentID)){
                 Toast.makeText(this, "Current semester fees not paid", Toast.LENGTH_SHORT).show()
@@ -163,9 +163,9 @@ class StudentDetailsActivity: AppCompatActivity() {
             }
 
             supportFragmentManager.setFragmentResultListener("AutoAddCourseDialog", this){ _, _ ->
-                val courseDAO = CourseDAO(DatabaseHelper(this))
-                val courseProfessorDAO = CourseProfessorDAO(DatabaseHelper(this))
-                val transactionDAO = TransactionDAO(DatabaseHelper(this))
+                val courseDAO = CourseDAO(databaseHelper)
+                val courseProfessorDAO = CourseProfessorDAO(databaseHelper)
+                val transactionDAO = TransactionDAO(databaseHelper)
 
                 val professionalCourses = courseDAO.getNewProfessionalCoursesWithProfessors(studentID)
                 val transactions = transactionDAO.getCurrentSemesterTransactionList(studentID)

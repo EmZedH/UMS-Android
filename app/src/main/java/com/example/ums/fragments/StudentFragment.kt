@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
-import com.example.ums.adapters.ListItemViewAdapter
+import com.example.ums.adapters.LongClickableListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.StudentAddBottomSheet
 import com.example.ums.bottomsheetdialogs.StudentUpdateBottomSheet
 import com.example.ums.dialogFragments.StudentDeleteDialog
@@ -24,7 +24,7 @@ import com.example.ums.superAdminCollegeAdminActivities.StudentActivity
 class StudentFragment: ListFragment(), ListIdItemListener {
 
     private lateinit var studentDAO: StudentDAO
-    private var listItemViewAdapter: ListItemViewAdapter? = null
+    private var longClickableListItemViewAdapter: LongClickableListItemViewAdapter? = null
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
 
@@ -36,8 +36,9 @@ class StudentFragment: ListFragment(), ListIdItemListener {
         super.onCreate(savedInstanceState)
         departmentID = arguments?.getInt("department_activity_department_id")
         collegeID = arguments?.getInt("department_activity_college_id")
-        studentDAO = StudentDAO(DatabaseHelper(requireActivity()))
-        listItemViewAdapter = ListItemViewAdapter(getAdapterItems(), this)
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        studentDAO = StudentDAO(databaseHelper)
+        longClickableListItemViewAdapter = LongClickableListItemViewAdapter(getAdapterItems(), this)
     }
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -50,7 +51,7 @@ class StudentFragment: ListFragment(), ListIdItemListener {
         firstTextView = view.findViewById(R.id.no_items_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
         onRefresh()
-        recyclerView.adapter = listItemViewAdapter
+        recyclerView.adapter = longClickableListItemViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(this.context)
         return view
     }
@@ -62,21 +63,21 @@ class StudentFragment: ListFragment(), ListIdItemListener {
             val id = result.getInt("id")
             val student = studentDAO.get(id)
             student?.let {
-                listItemViewAdapter?.addItem(getAdapterItem(it))
+                longClickableListItemViewAdapter?.addItem(getAdapterItem(it))
             }
             onRefresh()
         }
 
         setFragmentResultListener("StudentDeleteDialog"){_, result->
             val id = result.getInt("id")
-            listItemViewAdapter?.deleteItem(listOf(id))
+            longClickableListItemViewAdapter?.deleteItem(listOf(id))
             onRefresh()
         }
         setFragmentResultListener("StudentUpdateFragmentPosition"){_, result->
             val id = result.getInt("id")
             val student = studentDAO.get(id)
             student?.let {
-                listItemViewAdapter?.updateItem(getAdapterItem(it))
+                longClickableListItemViewAdapter?.updateItem(getAdapterItem(it))
             }
         }
     }
@@ -88,7 +89,7 @@ class StudentFragment: ListFragment(), ListIdItemListener {
     }
 
     override fun onSearch(query: String?) {
-        listItemViewAdapter?.filter(query)
+        longClickableListItemViewAdapter?.filter(query)
     }
 
     private fun onRefresh(){
@@ -107,7 +108,7 @@ class StudentFragment: ListFragment(), ListIdItemListener {
         super.onResume()
         val student = studentDAO.get(editStudentId)
         student?.let {
-            listItemViewAdapter?.updateItem(getAdapterItem(student))
+            longClickableListItemViewAdapter?.updateItem(getAdapterItem(student))
             editStudentId= null
         }
     }

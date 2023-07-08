@@ -31,7 +31,7 @@ class DepartmentDetailsActivity: AppCompatActivity() {
 
             val floatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
             val toolBar = findViewById<MaterialToolbar>(R.id.top_app_bar)
-            val databaseHelper = DatabaseHelper(this)
+            val databaseHelper = DatabaseHelper.newInstance(this)
             val departmentDAO = DepartmentDAO(databaseHelper)
             val collegeDAO = CollegeDAO(databaseHelper)
 

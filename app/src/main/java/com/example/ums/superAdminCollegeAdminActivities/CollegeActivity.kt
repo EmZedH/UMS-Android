@@ -39,7 +39,8 @@ class CollegeActivity: AppCompatActivity() {
             collegeID = savedInstanceState.getInt("college_page_activity_college_id")
         }
         val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
-        val collegeDAO = CollegeDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val collegeDAO = CollegeDAO(databaseHelper)
         val bundle = intent.extras
         collegeID = bundle?.getInt("collegeID")
         val collegeID = collegeID
@@ -168,7 +169,8 @@ class CollegeActivity: AppCompatActivity() {
         super.onResume()
 
         if(collegeID!=null){
-            toolBar?.title = CollegeDAO(DatabaseHelper(this)).get(collegeID!!)?.name
+            val databaseHelper = DatabaseHelper.newInstance(this)
+            toolBar?.title = CollegeDAO(databaseHelper).get(collegeID)?.name
         }
     }
 }

@@ -53,7 +53,8 @@ class OtherDepartmentSelectActivity: AppCompatActivity(), Addable, Searchable, C
         searchQuery = savedInstanceState?.getString("college_page_activity_search_query")
         isSearchViewOpen = savedInstanceState?.getBoolean("college_page_activity_is_search_query_open") ?: false
 
-        departmentDAO = DepartmentDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        departmentDAO = DepartmentDAO(databaseHelper)
         if(collegeID!=null && departmentID!=null){
             departmentListItemViewAdapter = OtherDepartmentListItemViewAdapter(departmentID!!, collegeID!!, departmentDAO, this )
 

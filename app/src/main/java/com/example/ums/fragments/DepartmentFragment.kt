@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
-import com.example.ums.adapters.ListItemViewAdapter
+import com.example.ums.adapters.LongClickableListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.DepartmentAddBottomSheet
 import com.example.ums.bottomsheetdialogs.DepartmentUpdateBottomSheet
 import com.example.ums.dialogFragments.DepartmentDeleteDialog
@@ -23,7 +23,7 @@ import com.example.ums.superAdminCollegeAdminActivities.DepartmentActivity
 class DepartmentFragment: ListFragment(), ListIdItemListener {
     private lateinit var departmentDAO: DepartmentDAO
 
-    private var listItemViewAdapter: ListItemViewAdapter? = null
+    private var longClickableListItemViewAdapter: LongClickableListItemViewAdapter? = null
     private lateinit var firstTextView: TextView
     private lateinit var secondTextView: TextView
     private var collegeID: Int? = null
@@ -34,10 +34,11 @@ class DepartmentFragment: ListFragment(), ListIdItemListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         collegeID = arguments?.getInt("college_activity_college_id")
-        departmentDAO = DepartmentDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        departmentDAO = DepartmentDAO(databaseHelper)
         if(collegeID!=null){
 
-            listItemViewAdapter = ListItemViewAdapter(getAdapterItemList(), this)
+            longClickableListItemViewAdapter = LongClickableListItemViewAdapter(getAdapterItemList(), this)
 
         }
     }
@@ -55,7 +56,7 @@ class DepartmentFragment: ListFragment(), ListIdItemListener {
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
         onRefresh()
 
-        recyclerView.adapter = listItemViewAdapter
+        recyclerView.adapter = longClickableListItemViewAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
         return view
     }
@@ -68,7 +69,7 @@ class DepartmentFragment: ListFragment(), ListIdItemListener {
 
             val department = departmentDAO.get(id, collegeID)
             department?.let {
-                listItemViewAdapter?.addItem(
+                longClickableListItemViewAdapter?.addItem(
                     AdapterItem(
                         listOf(it.id, it.collegeID),
                         "ID : C/${it.collegeID}-D/${it.id}",
@@ -82,14 +83,14 @@ class DepartmentFragment: ListFragment(), ListIdItemListener {
         setFragmentResultListener("departmentDeleteDialog"){_, result->
             val id = result.getInt("departmentID")
             departmentDAO.delete(id, collegeID)
-            collegeID?.let { listItemViewAdapter?.deleteItem(listOf(id, it)) }
+            collegeID?.let { longClickableListItemViewAdapter?.deleteItem(listOf(id, it)) }
             onRefresh()
         }
         setFragmentResultListener("DepartmentUpdateBottomSheet"){_, result->
             val id = result.getInt("departmentID")
             val department = departmentDAO.get(id, collegeID)
             department?.let {
-                listItemViewAdapter?.updateItem(
+                longClickableListItemViewAdapter?.updateItem(
                     AdapterItem(
                         listOf(it.id, it.collegeID),
                         "ID : C/${it.collegeID}-D/${it.id}",
@@ -106,7 +107,7 @@ class DepartmentFragment: ListFragment(), ListIdItemListener {
     }
 
     override fun onSearch(query: String?) {
-        listItemViewAdapter?.filter(query)
+        longClickableListItemViewAdapter?.filter(query)
     }
 
     private fun onRefresh(){
@@ -125,7 +126,7 @@ class DepartmentFragment: ListFragment(), ListIdItemListener {
         if(editCollegeId!=null && editDepartmentId!=null){
             val department = departmentDAO.get(editDepartmentId, editCollegeId)
             department?.let {
-                listItemViewAdapter?.updateItem(
+                longClickableListItemViewAdapter?.updateItem(
                     AdapterItem(
                         listOf(it.id, it.collegeID),
                         "ID : C/${it.collegeID}-D/${it.id}",

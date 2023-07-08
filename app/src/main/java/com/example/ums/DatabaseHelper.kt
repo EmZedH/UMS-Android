@@ -1,10 +1,20 @@
 package com.example.ums
 
-import android.app.Activity
+import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-open class DatabaseHelper(context: Activity) : SQLiteOpenHelper(context, "ums.db",null,1){
+class DatabaseHelper private constructor(context: Context) :
+    SQLiteOpenHelper(context, "ums.db", null, 1) {
+
+    companion object{
+        private var instance: DatabaseHelper? = null
+        fun newInstance(context: Context): DatabaseHelper{
+            return instance ?: synchronized(this){
+                instance ?: DatabaseHelper(context.applicationContext).also { instance = it }
+            }
+        }
+    }
 
     private val createTableCollege = "CREATE TABLE IF NOT EXISTS \"COLLEGE\" (\n" +
             "\t\"C_ID\"\tINTEGER PRIMARY KEY,\n" +

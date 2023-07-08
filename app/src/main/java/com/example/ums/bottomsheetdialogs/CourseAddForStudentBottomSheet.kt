@@ -79,7 +79,8 @@ class CourseAddForStudentBottomSheet: FullScreenBottomSheetDialog() {
 
         isSemesterErrorOn = savedInstanceState?.getBoolean("course_add_is_semester_error_on") ?: false
 
-        courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        courseDAO = CourseDAO(databaseHelper)
     }
 
     override fun onCreateView(

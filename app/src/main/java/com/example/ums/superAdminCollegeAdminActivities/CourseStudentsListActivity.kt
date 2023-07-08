@@ -50,8 +50,9 @@ class CourseStudentsListActivity: AppCompatActivity(), ClickListener {
         val courseID = courseID
         val professorID = professorID
         if(professorID!=null && courseID!=null){
-            val studentDAO = StudentDAO(DatabaseHelper(this))
-            val professorDAO = ProfessorDAO(DatabaseHelper(this))
+            val databaseHelper = DatabaseHelper.newInstance(this)
+            val studentDAO = StudentDAO(databaseHelper)
+            val professorDAO = ProfessorDAO(databaseHelper)
             courseStudentListItemViewAdapter = CourseStudentListItemViewAdapter(professorID, courseID, studentDAO, professorDAO, this)
             searchView = findViewById(R.id.search)
             firstTextView = findViewById(R.id.no_items_text_view)
@@ -139,7 +140,8 @@ class CourseStudentsListActivity: AppCompatActivity(), ClickListener {
     }
 
     private fun onRefresh(){
-        val studentDAO = StudentDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val studentDAO = StudentDAO(databaseHelper)
         if(studentDAO.getNewCurrentStudentsList(professorID ?: return, courseID ?: return).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
@@ -158,8 +160,9 @@ class CourseStudentsListActivity: AppCompatActivity(), ClickListener {
         courseStudentListItemViewAdapter?.onRefresh()
 
         if(professorID!=null && courseID!=null){
-            val professorDAO = ProfessorDAO(DatabaseHelper(this))
-            val courseDAO = CourseDAO(DatabaseHelper(this))
+            val databaseHelper = DatabaseHelper.newInstance(this)
+            val professorDAO = ProfessorDAO(databaseHelper)
+            val courseDAO = CourseDAO(databaseHelper)
             val professor = professorDAO.get(professorID)
             val course = courseDAO.get(courseID, professor?.departmentID, professor?.collegeID)
 

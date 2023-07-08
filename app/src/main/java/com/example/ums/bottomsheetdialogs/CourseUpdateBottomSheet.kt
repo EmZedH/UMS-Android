@@ -54,7 +54,8 @@ class CourseUpdateBottomSheet: FullScreenBottomSheetDialog() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val courseDAO = CourseDAO(databaseHelper)
         val view = inflater.inflate(R.layout.fragment_update_course, container, false)
         val courseID = courseID
         val collegeID = collegeID

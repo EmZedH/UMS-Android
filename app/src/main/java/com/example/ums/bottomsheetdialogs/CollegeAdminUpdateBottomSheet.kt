@@ -58,7 +58,8 @@ class CollegeAdminUpdateBottomSheet: FullScreenBottomSheetDialog() {
         contactNumberError = savedInstanceState?.getString("college_admin_update_contact_number_error")
         userAddressError = savedInstanceState?.getString("college_admin_update_user_address_error")
 
-        collegeAdminDAO = CollegeAdminDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        collegeAdminDAO = CollegeAdminDAO(databaseHelper)
     }
     override fun onCreateView(
         inflater: LayoutInflater,

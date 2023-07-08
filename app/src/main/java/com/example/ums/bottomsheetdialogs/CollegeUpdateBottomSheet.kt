@@ -56,7 +56,8 @@ class CollegeUpdateBottomSheet: FullScreenBottomSheetDialog() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val collegeDAO = CollegeDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val collegeDAO = CollegeDAO(databaseHelper)
         val view = inflater.inflate(R.layout.fragment_update_college, container, false)
         val college = collegeDAO.get(collegeID)
         if(college!=null){

@@ -69,7 +69,8 @@ class TransactionAddBottomSheet private constructor(): FullScreenBottomSheetDial
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_add_transaction, container, false)
-        val transactionDAO = TransactionDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val transactionDAO = TransactionDAO(databaseHelper)
         val addStudentButton = view.findViewById<MaterialButton>(R.id.add_button)
         val bottomSheetCloseButton = view.findViewById<ImageButton>(R.id.close_button)
 
@@ -128,7 +129,7 @@ class TransactionAddBottomSheet private constructor(): FullScreenBottomSheetDial
 
             if (flag) {
                 val newID = transactionDAO.getNewID()
-                val studentDAO = StudentDAO(DatabaseHelper(requireActivity()))
+                val studentDAO = StudentDAO(databaseHelper)
                 val semester = studentDAO.get(studentID)?.semester
                 if(studentID!=null){
                     transactionDAO.insert(
@@ -162,7 +163,8 @@ class TransactionAddBottomSheet private constructor(): FullScreenBottomSheetDial
     }
 
     private fun setCollegeIDTextView(view : View){
-        val transactionDAO = TransactionDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val transactionDAO = TransactionDAO(databaseHelper)
         view.findViewById<TextView>(R.id.id_text_view)?.setText(R.string.id_string)
         view.findViewById<TextView>(R.id.id_text_view)?.append(" T/${transactionDAO.getNewID()}")
     }

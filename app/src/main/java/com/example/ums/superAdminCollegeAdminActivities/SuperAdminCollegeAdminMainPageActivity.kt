@@ -22,7 +22,6 @@ import com.example.ums.fragments.LatestListFragment
 import com.example.ums.fragments.SuperAdminMainPageFragment
 import com.example.ums.model.User
 import com.example.ums.model.databaseAccessObject.CollegeAdminDAO
-import com.example.ums.model.databaseAccessObject.CollegeDAO
 import com.example.ums.model.databaseAccessObject.UserDAO
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -56,7 +55,8 @@ class SuperAdminCollegeAdminMainPageActivity: AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.super_college_admin_main_page)
 
-        val userDAO = UserDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val userDAO = UserDAO(databaseHelper)
         val bundle = intent.extras
         val userID = bundle?.getInt("userID")
 
@@ -81,7 +81,7 @@ class SuperAdminCollegeAdminMainPageActivity: AppCompatActivity(){
             superAdminProcesses()
         }
         else if(userRole == UserRole.COLLEGE_ADMIN.role){
-            val collegeAdminDAO = CollegeAdminDAO(DatabaseHelper(this))
+            val collegeAdminDAO = CollegeAdminDAO(databaseHelper)
             collegeAdminProcesses(collegeAdminDAO.get(userID ?: return)?.collegeID)
         }
     }
@@ -117,7 +117,6 @@ class SuperAdminCollegeAdminMainPageActivity: AppCompatActivity(){
             switchBackToolbar()
         }
 
-        CollegeDAO(DatabaseHelper(this))
         drawerLayout = findViewById(R.id.main_page_drawer_layout)
 
         toolBar.setNavigationOnClickListener {
@@ -236,7 +235,8 @@ class SuperAdminCollegeAdminMainPageActivity: AppCompatActivity(){
     }
     override fun onResume() {
         super.onResume()
-        user = UserDAO(DatabaseHelper(this)).get(user.id)!!
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        user = UserDAO(databaseHelper).get(user.id)!!
         val welcomeTextView = navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_welcome_text_view)
         val userIDTextView = navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_user_id)
         welcomeTextView.setText(R.string.hi_string)

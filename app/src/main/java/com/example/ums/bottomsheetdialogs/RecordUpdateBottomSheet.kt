@@ -83,7 +83,8 @@ class RecordUpdateBottomSheet: FullScreenBottomSheetDialog() {
         externalMarks =
             view.findViewById(R.id.external_mark_layout)
 
-        val recordsDAO = RecordsDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val recordsDAO = RecordsDAO(databaseHelper)
         val record = recordsDAO.get(studentID, courseID, departmentID)
         if(attendanceText.isNotEmpty()){
             attendance.editText?.setText(attendanceText)
@@ -192,8 +193,9 @@ class RecordUpdateBottomSheet: FullScreenBottomSheetDialog() {
     }
 
     private fun setView(view : View){
-        val studentDAO = StudentDAO(DatabaseHelper(requireActivity()))
-        val courseDAO = CourseDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        val studentDAO = StudentDAO(databaseHelper)
+        val courseDAO = CourseDAO(databaseHelper)
         val student = studentDAO.get(studentID)
         val course = courseDAO.get(courseID, departmentID, student?.collegeID)
         view.findViewById<TextView>(R.id.course_name_text_view)?.text = course?.name

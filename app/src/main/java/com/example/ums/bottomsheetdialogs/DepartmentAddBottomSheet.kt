@@ -44,7 +44,8 @@ class DepartmentAddBottomSheet: FullScreenBottomSheetDialog() {
         departmentNameText = savedInstanceState?.getString("department_add_name_text") ?: ""
 
         departmentNameError = savedInstanceState?.getString("department_add_name_error")
-        departmentDAO = DepartmentDAO(DatabaseHelper(requireActivity()))
+        val databaseHelper = DatabaseHelper.newInstance(requireContext())
+        departmentDAO = DepartmentDAO(databaseHelper)
     }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

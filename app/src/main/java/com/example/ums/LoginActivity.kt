@@ -18,7 +18,7 @@ class LoginActivity : AppCompatActivity() {
     private val userIDPasswordIncorrectString = "User email ID or Password incorrect"
     private val userIDPasswordProperString = "Enter fields properly"
 
-    private val userDAO = UserDAO(DatabaseHelper(this))
+    private lateinit var userDAO: UserDAO
 
     private var textViewUserNamePasswordIncorrect: TextView? = null
 
@@ -27,6 +27,9 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_layout_page)
+
+        val databaseHelper = DatabaseHelper.newInstance(this.applicationContext)
+        userDAO = UserDAO(databaseHelper)
 
         errorText = savedInstanceState?.getString("error_text")
         textViewUserNamePasswordIncorrect = findViewById(R.id.textViewUserIDPasswordNotCorrect)

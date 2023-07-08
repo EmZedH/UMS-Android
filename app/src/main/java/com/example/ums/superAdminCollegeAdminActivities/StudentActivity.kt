@@ -40,7 +40,8 @@ class StudentActivity: AppCompatActivity() {
             studentID = savedInstanceState.getInt("student_activity_college_id")
         }
         val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
-        val studentDAO = StudentDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val studentDAO = StudentDAO(databaseHelper)
         val bundle = intent.extras
         studentID = bundle?.getInt("student_activity_student_id")
 
@@ -169,6 +170,7 @@ class StudentActivity: AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        toolBar?.title = "${StudentDAO(DatabaseHelper(this)).get(studentID)?.user?.name} Records"
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        toolBar?.title = "${StudentDAO(databaseHelper).get(studentID)?.user?.name} Records"
     }
 }

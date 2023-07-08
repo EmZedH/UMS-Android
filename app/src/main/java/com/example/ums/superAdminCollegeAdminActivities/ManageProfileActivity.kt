@@ -33,7 +33,8 @@ class ManageProfileActivity : AppCompatActivity() {
         setContentView(R.layout.manage_profile_page)
 
         val appBarLayout = findViewById<MaterialToolbar>(R.id.material_toolbar)
-        val userDAO = UserDAO(DatabaseHelper(this))
+        val databaseHelper = DatabaseHelper.newInstance(this)
+        val userDAO = UserDAO(databaseHelper)
 
         val bundle = intent.extras
         val userID = bundle!!.getInt("userID")
