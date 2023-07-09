@@ -28,7 +28,8 @@ class TransactionDAO(private val databaseHelper: DatabaseHelper) {
         return null
     }
 
-    fun getList(studentID: Int): List<Transactions>{
+    fun getList(studentID: Int?): List<Transactions>{
+        studentID ?: return emptyList()
         val transactions = mutableListOf<Transactions>()
         val cursor = databaseHelper.readableDatabase
             .rawQuery("SELECT * FROM $tableName WHERE $studentKey = $studentID",

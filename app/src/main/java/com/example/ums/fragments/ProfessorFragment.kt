@@ -94,7 +94,7 @@ class ProfessorFragment: ListFragment(), ListIdItemListener {
     }
 
     private fun onRefresh(){
-        if(professorDAO.getList(departmentID!!, collegeID!!).isNotEmpty()){
+        if(professorDAO.getList(departmentID, collegeID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }
@@ -129,7 +129,7 @@ class ProfessorFragment: ListFragment(), ListIdItemListener {
     private fun getAdapterItem(professor: Professor): AdapterItem {
         return AdapterItem(
             listOf(professor.user.id),
-            "ID : C/${professor.collegeID}-D/${professor.departmentID}-U/${professor.user.id}",
+            getString(R.string.professor_id, professor.collegeID, professor.departmentID, professor.user.id),
             professor.user.name
         )
     }

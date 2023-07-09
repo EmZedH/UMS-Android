@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ums.CompletionStatus
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.adapters.StudentOpenCourseListItemViewAdapter
@@ -95,7 +96,7 @@ class StudentOpenElectiveFragment: ListFragment(), OpenCourseItemListener {
     override fun onAdd() {
         val databaseHelper = DatabaseHelper.newInstance(requireContext())
         val courseDAO = CourseDAO(databaseHelper)
-        if(courseDAO.getOpenCourses(studentID ?: return).size >= 2){
+        if(courseDAO.getOpenCourses(studentID).size >= 2){
             val studentOpenCourseAddConfirmationDialog = StudentOpenCourseAddConfirmationDialog()
             studentOpenCourseAddConfirmationDialog.show(requireActivity().supportFragmentManager, "StudentOpenCourseAddConfirmationDialog")
             return
@@ -120,8 +121,7 @@ class StudentOpenElectiveFragment: ListFragment(), OpenCourseItemListener {
     private fun onRefresh(){
         val databaseHelper = DatabaseHelper.newInstance(requireContext())
         val courseDAO = CourseDAO(databaseHelper)
-        val id = studentID
-        if(id!=null && courseDAO.getOpenCourses(id).isNotEmpty()){
+        if(courseDAO.getOpenCourses(studentID).isNotEmpty()){
             firstTextView?.visibility = View.INVISIBLE
             secondTextView?.visibility = View.INVISIBLE
         }
@@ -163,7 +163,7 @@ class StudentOpenElectiveFragment: ListFragment(), OpenCourseItemListener {
                             0,
                             0,
                             0,
-                            "NOT_COMPLETED",
+                            CompletionStatus.NOT_COMPLETED.status,
                             0
                         )
                     )

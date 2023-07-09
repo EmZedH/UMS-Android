@@ -65,9 +65,6 @@ class StudentProfileProfessionalElectiveFragment: SearchableFragment(), DeleteCl
         }
     }
 
-//    override fun onAdd() {
-//    }
-
     override fun onSearch(query: String?) {
         studentProfessionalCourseListItemViewAdapter?.filter(query)
     }
@@ -75,7 +72,7 @@ class StudentProfileProfessionalElectiveFragment: SearchableFragment(), DeleteCl
     private fun onRefresh(){
         val databaseHelper = DatabaseHelper.newInstance(requireContext())
         val courseDAO = CourseDAO(databaseHelper)
-        if(courseDAO.getProfessionalCourses(studentID ?: return).isNotEmpty()){
+        if(courseDAO.getProfessionalCourses(studentID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }

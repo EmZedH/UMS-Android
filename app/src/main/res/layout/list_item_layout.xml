@@ -26,7 +26,6 @@
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:text="@string/college_id"
         android:textSize="20sp"
         android:textColor="@color/light_onSurface"
         android:layout_marginStart="5dp"

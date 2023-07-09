@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.setFragmentResultListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ums.CompletionStatus
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.adapters.StudentProfessionalCourseListItemViewAdapter
@@ -104,7 +105,7 @@ class StudentProfessionalElectiveFragment: ListFragment(), DeleteClickListener {
     private fun onRefresh(){
         val databaseHelper = DatabaseHelper.newInstance(requireContext())
         val courseDAO = CourseDAO(databaseHelper)
-        if(courseDAO.getProfessionalCourses(studentID ?: return).isNotEmpty()){
+        if(courseDAO.getProfessionalCourses(studentID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }
@@ -146,7 +147,7 @@ class StudentProfessionalElectiveFragment: ListFragment(), DeleteClickListener {
                         0,
                         0,
                         0,
-                        "NOT_COMPLETED",
+                        CompletionStatus.NOT_COMPLETED.status,
                         0
                     )
                 )

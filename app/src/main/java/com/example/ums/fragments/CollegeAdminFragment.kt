@@ -91,7 +91,7 @@ class CollegeAdminFragment: ListFragment(), ListIdItemListener {
         longClickableListItemViewAdapter?.filter(query)
     }
     private fun onRefresh(){
-        if(collegeAdminDAO.getList(collegeID!!).isNotEmpty()){
+        if(collegeAdminDAO.getList(collegeID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }
@@ -143,7 +143,7 @@ class CollegeAdminFragment: ListFragment(), ListIdItemListener {
     private fun getAdapterItem(collegeAdmin: CollegeAdmin): AdapterItem{
         return AdapterItem(
             listOf(collegeAdmin.user.id),
-            "ID : C/${collegeAdmin.collegeID}-U/${collegeAdmin.user.id}",
+            getString(R.string.college_admin_id, collegeAdmin.collegeID, collegeAdmin.user.id),
             collegeAdmin.user.name
         )
     }

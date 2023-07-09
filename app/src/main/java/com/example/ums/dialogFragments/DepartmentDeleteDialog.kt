@@ -6,6 +6,7 @@ import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
+import com.example.ums.R
 
 class DepartmentDeleteDialog: DialogFragment() {
 
@@ -28,13 +29,13 @@ class DepartmentDeleteDialog: DialogFragment() {
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialogBuilder = AlertDialog.Builder(requireContext())
-        dialogBuilder.setTitle("Confirmation").setMessage("Are you sure you want to delete this Department?")
-        dialogBuilder.setPositiveButton("Delete") { dialog, _ ->
+        dialogBuilder.setTitle(getString(R.string.confirmation_string)).setMessage(getString(R.string.are_you_sure_you_want_to_delete_this_department_string))
+        dialogBuilder.setPositiveButton(getString(R.string.delete_string)) { dialog, _ ->
             setFragmentResult("departmentDeleteDialog", bundleOf("departmentID" to departmentID))
             dialog.dismiss()
         }
 
-        dialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
+        dialogBuilder.setNegativeButton(getString(R.string.cancel_string)) { dialog, _ ->
             dialog.dismiss()
         }
         return dialogBuilder.create()

@@ -85,7 +85,7 @@ class StudentCompletedProfessionalElectiveFragment: ListFragment(), DeleteClickL
     private fun onRefresh(){
         val databaseHelper = DatabaseHelper.newInstance(requireContext())
         val courseDAO = CourseDAO(databaseHelper)
-        if(courseDAO.getCompletedProfessionalCourses(studentID ?: return).isNotEmpty()){
+        if(courseDAO.getCompletedProfessionalCourses(studentID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }

@@ -73,7 +73,7 @@ class StudentProfileOpenElectiveFragment: SearchableFragment(), DeleteClickListe
     private fun onRefresh(){
         val databaseHelper = DatabaseHelper.newInstance(requireContext())
         val courseDAO = CourseDAO(databaseHelper)
-        if(courseDAO.getOpenCourses(studentID ?: return).isNotEmpty()){
+        if(courseDAO.getOpenCourses(studentID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }

@@ -112,7 +112,8 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
         return courses
     }
 
-    fun getProfessionalCourses(studentID: Int): List<Course>{
+    fun getProfessionalCourses(studentID: Int?): List<Course>{
+        studentID ?: return emptyList()
         val courses = mutableListOf<Course>()
         val cursor = databaseHelper.readableDatabase
             .rawQuery("SELECT COURSE.* FROM COURSE INNER JOIN RECORDS ON " +
@@ -144,7 +145,8 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
         return courses
     }
 
-    fun getCompletedProfessionalCourses(studentID: Int): List<Course>{
+    fun getCompletedProfessionalCourses(studentID: Int?): List<Course>{
+        studentID ?: return emptyList()
         val courses = mutableListOf<Course>()
         val cursor = databaseHelper.readableDatabase
             .rawQuery("SELECT COURSE.* FROM COURSE INNER JOIN RECORDS ON " +
@@ -176,7 +178,8 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
         return courses
     }
 
-    fun getOpenCourses(studentID: Int): List<Course>{
+    fun getOpenCourses(studentID: Int?): List<Course>{
+        studentID ?: return emptyList()
         val courses = mutableListOf<Course>()
         val cursor = databaseHelper.readableDatabase
             .rawQuery("SELECT COURSE.* FROM COURSE INNER JOIN RECORDS ON " +
@@ -207,7 +210,8 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
         return courses
     }
 
-    fun getCompletedOpenCourses(studentID: Int): List<Course>{
+    fun getCompletedOpenCourses(studentID: Int?): List<Course>{
+        studentID ?: return emptyList()
         val courses = mutableListOf<Course>()
         val cursor = databaseHelper.readableDatabase
             .rawQuery("SELECT COURSE.* FROM COURSE INNER JOIN RECORDS ON " +

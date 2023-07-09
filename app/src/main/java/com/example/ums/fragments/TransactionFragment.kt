@@ -106,7 +106,7 @@ class TransactionFragment: ListFragment(), DeleteListener {
     private fun onRefresh(){
         val databaseHelper = DatabaseHelper.newInstance(requireContext())
         val transactionDAO = TransactionDAO(databaseHelper)
-        if(transactionDAO.getList(studentID ?: return).isNotEmpty()){
+        if(transactionDAO.getList(studentID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }

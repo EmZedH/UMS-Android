@@ -72,7 +72,7 @@ class DepartmentFragment: ListFragment(), ListIdItemListener {
                 longClickableListItemViewAdapter?.addItem(
                     AdapterItem(
                         listOf(it.id, it.collegeID),
-                        "ID : C/${it.collegeID}-D/${it.id}",
+                        getString(R.string.department_id, it.collegeID, it.id),
                         it.name
                     )
                 )
@@ -93,7 +93,7 @@ class DepartmentFragment: ListFragment(), ListIdItemListener {
                 longClickableListItemViewAdapter?.updateItem(
                     AdapterItem(
                         listOf(it.id, it.collegeID),
-                        "ID : C/${it.collegeID}-D/${it.id}",
+                        getString(R.string.department_id, it.collegeID, it.id),
                         it.name
                     )
                 )
@@ -111,7 +111,7 @@ class DepartmentFragment: ListFragment(), ListIdItemListener {
     }
 
     private fun onRefresh(){
-        if(departmentDAO.getList(collegeID!!).isNotEmpty()){
+        if(departmentDAO.getList(collegeID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }
@@ -129,7 +129,7 @@ class DepartmentFragment: ListFragment(), ListIdItemListener {
                 longClickableListItemViewAdapter?.updateItem(
                     AdapterItem(
                         listOf(it.id, it.collegeID),
-                        "ID : C/${it.collegeID}-D/${it.id}",
+                        getString(R.string.department_id, it.collegeID, it.id),
                         it.name
                     )
                 )
@@ -166,7 +166,7 @@ class DepartmentFragment: ListFragment(), ListIdItemListener {
         return list.map {
             AdapterItem(
                 listOf(it.id, it.collegeID),
-                "ID : C/${it.collegeID}-D/${it.id}",
+                getString(R.string.department_id, it.collegeID, it.id),
                 it.name
             )
         }.toMutableList()

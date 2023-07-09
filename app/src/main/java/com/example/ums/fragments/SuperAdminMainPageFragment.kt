@@ -83,7 +83,7 @@ class SuperAdminMainPageFragment : LatestListFragment(), SelectionListener, List
         if(selectedItems.isNotEmpty() && isSelectionEnabled){
             val selectList: MutableList<AdapterItem> = mutableListOf()
             for (collegeItem in collegeDAO.getList()){
-                selectList.add(AdapterItem(listOf(collegeItem.id), "CID : C/${collegeItem.id}", collegeItem.name))
+                selectList.add(AdapterItem(listOf(collegeItem.id), getString(R.string.college_id, collegeItem.id), collegeItem.name))
             }
             selectableListItemViewAdapter = SelectableListItemViewAdapter(selectedItems, selectList, this , collegeDAO)
             recyclerView?.adapter = selectableListItemViewAdapter
@@ -106,7 +106,7 @@ class SuperAdminMainPageFragment : LatestListFragment(), SelectionListener, List
                 longClickableListItemViewAdapter?.addItem(
                     AdapterItem(
                         listOf(id),
-                        "CID : C/${college.id}",
+                        getString(R.string.college_id, it.id),
                         college.name
                     )
                 )
@@ -126,7 +126,7 @@ class SuperAdminMainPageFragment : LatestListFragment(), SelectionListener, List
                 longClickableListItemViewAdapter?.updateItem(
                     AdapterItem(
                         listOf(id),
-                        "CID : C/${college.id}",
+                        getString(R.string.college_id, it.id),
                         college.name
                     )
                 )
@@ -239,7 +239,7 @@ class SuperAdminMainPageFragment : LatestListFragment(), SelectionListener, List
             longClickableListItemViewAdapter?.updateItem(
                 AdapterItem(
                     listOf(editCollegeId!!),
-                    "CID : C/$editCollegeId",
+                    getString(R.string.college_id, editCollegeId),
                     "${collegeDAO.get(editCollegeId)?.name}"
                 )
             )
@@ -263,7 +263,7 @@ class SuperAdminMainPageFragment : LatestListFragment(), SelectionListener, List
         return list.map {
             AdapterItem(
                 listOf(it.id),
-                "CID : C/${it.id}",
+                getString(R.string.college_id, it.id),
                 it.name
             )
         }.toMutableList()

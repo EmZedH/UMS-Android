@@ -7,12 +7,13 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.example.ums.LoginActivity
+import com.example.ums.R
 
 class LogOutDialog: DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialogBuilder = AlertDialog.Builder(requireContext())
-        dialogBuilder.setTitle("Log Out").setMessage("Are you sure you want to Log Out?")
-        dialogBuilder.setPositiveButton("Confirm") { _, _ ->
+        dialogBuilder.setTitle(getString(R.string.log_out_string)).setMessage(getString(R.string.are_you_sure_you_want_to_log_out_string))
+        dialogBuilder.setPositiveButton(getString(R.string.confirm_string)) { _, _ ->
             val editor = activity?.getSharedPreferences("UMSPreferences", Context.MODE_PRIVATE)?.edit()
             editor?.putBoolean("isLoggedOut", true)
             editor?.apply()
@@ -22,7 +23,7 @@ class LogOutDialog: DialogFragment() {
             startActivity(intent)
         }
 
-        dialogBuilder.setNegativeButton("Cancel") { dialog, _ ->
+        dialogBuilder.setNegativeButton(getString(R.string.cancel_string)) { dialog, _ ->
             dialog.dismiss()
         }
         return dialogBuilder.create()

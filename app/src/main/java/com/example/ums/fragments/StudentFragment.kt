@@ -122,7 +122,7 @@ class StudentFragment: ListFragment(), ListIdItemListener {
     private fun getAdapterItem(student: Student): AdapterItem {
         return AdapterItem(
             listOf(student.user.id),
-            "ID : C/${student.collegeID}-D/${student.departmentID}-U/${student.user.id}",
+            getString(R.string.student_id, student.collegeID, student.departmentID, student.user.id),
             student.user.name
         )
     }
