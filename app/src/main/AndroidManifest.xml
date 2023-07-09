@@ -54,7 +54,7 @@
         <activity android:name=".professorActivities.ProfessorCourseDetailsActivity"/>
         <activity android:name=".studentActivities.StudentMainPageActivity"/>
         <activity android:name=".studentActivities.StudentTestActivity"/>
-        <activity android:name=".StudentsProfileCourseRecordActivity"/>
+        <activity android:name=".studentActivities.StudentsProfileCourseRecordActivity"/>
         <activity android:name=".studentActivities.StudentTransactionPage"/>
 
     </application>

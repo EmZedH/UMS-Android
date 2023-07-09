@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
-import com.example.ums.StudentsProfileCourseRecordActivity
 import com.example.ums.adapters.SelectableTestListItemViewAdapter
 import com.example.ums.bottomsheetdialogs.TestUpdateBottomSheet
 import com.example.ums.dialogFragments.TestDeleteDialog

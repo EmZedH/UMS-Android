@@ -15,7 +15,9 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import com.example.ums.CourseElective
 import com.example.ums.DatabaseHelper
+import com.example.ums.Degree
 import com.example.ums.R
 import com.example.ums.model.Course
 import com.example.ums.model.databaseAccessObject.CourseDAO
@@ -138,8 +140,8 @@ class CourseAddBottomSheet: FullScreenBottomSheetDialog() {
             if(degreeRadio.checkedRadioButtonId!=-1){
                 isDegreeErrorOn = false
                 when(view.findViewById<RadioButton>(degreeRadio.checkedRadioButtonId).text.toString()){
-                    "B. Tech" -> degree = "B. Tech"
-                    "M. Tech" -> degree = "M. Tech"
+                    Degree.B_TECH.degree -> degree = Degree.B_TECH.degree
+                    Degree.M_TECH.degree -> degree = Degree.M_TECH.degree
                 }
             }
             degreeTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_onSurface))
@@ -147,10 +149,7 @@ class CourseAddBottomSheet: FullScreenBottomSheetDialog() {
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
-                if(degree == "B. Tech")
-                    arrayOf("Semester 1","Semester 2","Semester 3","Semester 4","Semester 5","Semester 6","Semester 7","Semester 8")
-                else
-                    arrayOf("Semester 1","Semester 2","Semester 3","Semester 4")
+                getSemesterArray(degree)
             )
             semesterSpinner?.adapter = adapter
         }
@@ -160,8 +159,8 @@ class CourseAddBottomSheet: FullScreenBottomSheetDialog() {
             if(electiveRadio.checkedRadioButtonId!=-1){
                 isElectiveErrorOn = false
                 when(view.findViewById<RadioButton>(electiveRadio.checkedRadioButtonId).text.toString()){
-                    "Open" -> elective = "Open"
-                    "Professional" -> elective =  "Professional"
+                    CourseElective.OPEN.elective -> elective = CourseElective.OPEN.elective
+                    CourseElective.PROFESSIONAL.elective -> elective =  CourseElective.PROFESSIONAL.elective
                 }
             }
             electiveTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_onSurface))
@@ -176,7 +175,7 @@ class CourseAddBottomSheet: FullScreenBottomSheetDialog() {
 
             if (courseNameText.isEmpty()) {
                 flag = false
-                courseNameError = "Don't leave name field blank"
+                courseNameError = getString(R.string.don_t_leave_name_field_blank_string)
                 courseName.error = courseNameError
             }
             if(electiveOptionId==-1){
@@ -214,8 +213,7 @@ class CourseAddBottomSheet: FullScreenBottomSheetDialog() {
     }
 
     private fun setCollegeIDTextView(view : View){
-        view.findViewById<TextView>(R.id.course_id_text_view)?.setText(R.string.id_string)
-        view.findViewById<TextView>(R.id.course_id_text_view)?.append(" C/$collegeID-D/$departmentID-CO/${courseDAO.getNewID(departmentID!!, collegeID!!)}")
+        view.findViewById<TextView>(R.id.course_id_text_view)?.text = getString(R.string.course_id, collegeID, departmentID, courseDAO.getNewID(departmentID!!, collegeID!!))
     }
 
     private fun textListener(layout: TextInputLayout, errorOperation: (() -> Unit)): TextWatcher {
@@ -231,6 +229,21 @@ class CourseAddBottomSheet: FullScreenBottomSheetDialog() {
             override fun afterTextChanged(p0: Editable?) {
             }
         }
+    }
+
+    private fun getSemesterArray(degree: String?): Array<String>{
+        val semesterArray = mutableListOf<String>()
+        var maximumSemester = 0
+        if(degree == Degree.B_TECH.degree){
+            maximumSemester = 8
+        }
+        else if(degree == Degree.M_TECH.degree){
+            maximumSemester = 4
+        }
+        for (index in 1 until maximumSemester+1){
+            semesterArray.add(getString(R.string.semester, index))
+        }
+        return semesterArray.toTypedArray()
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
