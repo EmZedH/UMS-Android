@@ -1,6 +1,6 @@
 package com.example.ums.model
 
-data class Department (
+class Department (
     var id : Int,
     var name : String,
     var collegeID : Int

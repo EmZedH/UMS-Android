@@ -140,7 +140,7 @@ class StudentProfessionalCourseSelectActivity: AppCompatActivity(), ClickListene
     }
 
     private fun onRefresh(){
-        if(studentID != null && courseDAO.getNewProfessionalCourses(studentID!!).isNotEmpty()){
+        if(courseDAO.getNewProfessionalCourses(studentID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }

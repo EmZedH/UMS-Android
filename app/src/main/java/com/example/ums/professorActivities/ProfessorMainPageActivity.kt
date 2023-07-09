@@ -59,8 +59,8 @@ class ProfessorMainPageActivity: AppCompatActivity(), ClickListener {
         firstTextView = findViewById(R.id.no_item_text_view)
         secondTextView = findViewById(R.id.second_text_view)
 
-        firstTextView.text = "No Courses"
-        secondTextView.text = "Please wait. Admin yet to add courses"
+        firstTextView.text = getString(R.string.no_courses_string)
+        secondTextView.text = getString(R.string.please_wait_admin_yet_to_add_courses_string)
 
         val recyclerView: RecyclerView = findViewById(R.id.list_view)
 
@@ -184,7 +184,7 @@ class ProfessorMainPageActivity: AppCompatActivity(), ClickListener {
 
     private fun showExitConfirmationDialog() {
         val exitDialogFragment = ExitDialog()
-        exitDialogFragment.show(supportFragmentManager, "exitDialog")
+        exitDialogFragment.show(supportFragmentManager, "ExitDialog")
     }
 
     override fun onResume() {
@@ -199,7 +199,7 @@ class ProfessorMainPageActivity: AppCompatActivity(), ClickListener {
     private fun onRefresh(){
         val databaseHelper = DatabaseHelper.newInstance(this)
         val courseProfessorDAO = CourseProfessorDAO(databaseHelper)
-        if(courseProfessorDAO.getList(this.userID!!).isNotEmpty()){
+        if(courseProfessorDAO.getList(this.userID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }

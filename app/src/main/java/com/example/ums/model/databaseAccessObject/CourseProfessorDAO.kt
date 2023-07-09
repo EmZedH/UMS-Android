@@ -130,7 +130,8 @@ class CourseProfessorDAO(private val databaseHelper: DatabaseHelper) {
         return courseProfessors
     }
 
-    fun getList(professorID: Int) : List<CourseProfessor>{
+    fun getList(professorID: Int?) : List<CourseProfessor>{
+        professorID ?: return emptyList()
         val courseProfessors = mutableListOf<CourseProfessor>()
         val cursor = databaseHelper.readableDatabase
             .rawQuery("SELECT * FROM $tableName " +

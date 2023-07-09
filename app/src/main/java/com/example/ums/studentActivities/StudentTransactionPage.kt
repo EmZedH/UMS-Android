@@ -57,7 +57,7 @@ class StudentTransactionPage: AppCompatActivity(){
             onRefresh()
 
             val toolBar = findViewById<MaterialToolbar>(R.id.top_app_bar)
-            toolBar.title = "Transactions"
+            toolBar.title = getString(R.string.transactions_string)
             toolBar.setNavigationOnClickListener {
                 if(searchView!=null){
                     if(!searchView!!.isIconified){
@@ -70,7 +70,7 @@ class StudentTransactionPage: AppCompatActivity(){
 
             payFeeButton.setOnClickListener {
                 if(transactionDAO.hasPaidForCurrentSemester(studentID)){
-                   Toast.makeText(this, "Already paid for current semester", Toast.LENGTH_SHORT).show()
+                   Toast.makeText(this, getString(R.string.already_paid_for_current_semester_string), Toast.LENGTH_SHORT).show()
                 }
                 else{
                     val feePaymentBottomSheet = FeePaymentBottomSheet.newInstance(studentID)
@@ -113,19 +113,6 @@ class StudentTransactionPage: AppCompatActivity(){
         }
     }
 
-//    override fun onAdd() {
-//        val transactionDAO = TransactionDAO(databaseHelper)
-//        val studentDAO = StudentDAO(databaseHelper)
-//        val student = studentDAO.get(studentID) ?: return
-//        for (transaction in transactionDAO.getList(studentID ?: return)){
-//            if(transaction.semester == student.semester){
-//                val transactionAddConfirmationDialog = TransactionAddConfirmationDialog()
-//                transactionAddConfirmationDialog.show(supportFragmentManager, "TransactionAddConfirmationDialog")
-//                return
-//            }
-//        }
-//    }
-
     private fun addAt(id: Int){
         studentTransactionsListItemViewAdapter?.addItem(id)
         onRefresh()
@@ -140,6 +127,7 @@ class StudentTransactionPage: AppCompatActivity(){
         }
         else{
             firstTextView.text = getString(R.string.no_transactions_string)
+            secondTextView.text = getString(R.string.pay_fees_to_see_past_transactions_string)
             firstTextView.visibility = View.VISIBLE
             secondTextView.visibility = View.VISIBLE
         }

@@ -142,7 +142,7 @@ class CourseStudentsListActivity: AppCompatActivity(), ClickListener {
     private fun onRefresh(){
         val databaseHelper = DatabaseHelper.newInstance(this)
         val studentDAO = StudentDAO(databaseHelper)
-        if(studentDAO.getNewCurrentStudentsList(professorID ?: return, courseID ?: return).isNotEmpty()){
+        if(studentDAO.getNewCurrentStudentsList(professorID, courseID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }

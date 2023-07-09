@@ -91,15 +91,11 @@ class StudentDAO(private val databaseHelper: DatabaseHelper) {
         return students
     }
 
-    fun getNewCurrentStudentsList(professorID: Int, courseID: Int): List<Student>{
+    fun getNewCurrentStudentsList(professorID: Int?, courseID: Int?): List<Student>{
+        professorID ?: return emptyList()
+        courseID ?: return emptyList()
         val students = mutableListOf<Student>()
         val cursor = databaseHelper.readableDatabase
-//            .rawQuery("SELECT STUDENT.*, USER.*, COURSE.COURSE_SEM FROM STUDENT INNER JOIN USER ON " +
-//                    "(USER.U_ID = STUDENT.STUDENT_ID) INNER JOIN COURSE ON " +
-//                    "(COURSE.COURSE_ID = $courseID AND " +
-//                    "COURSE.COLLEGE_ID = STUDENT.COLLEGE_ID) WHERE STUDENT_ID NOT IN " +
-//                    "(SELECT STUDENT_ID FROM RECORDS WHERE PROF_ID = $professorID AND COURSE_ID = $courseID) AND " +
-//                    "STUDENT.S_SEM = COURSE.COURSE_SEM", null)
             .rawQuery("SELECT STUDENT.*, USER.*, RECORDS.* FROM STUDENT INNER JOIN USER ON (USER.U_ID = STUDENT.STUDENT_ID) INNER JOIN RECORDS ON (RECORDS.STUDENT_ID = STUDENT.STUDENT_ID AND RECORDS.COLLEGE_ID = STUDENT.COLLEGE_ID) WHERE RECORDS.COURSE_ID = $courseID AND RECORDS.PROF_ID = $professorID AND RECORDS.STATUS = \"NOT_COMPLETED\"", null)
         cursor.moveToFirst()
         while (!cursor.isAfterLast){
@@ -188,15 +184,6 @@ class StudentDAO(private val databaseHelper: DatabaseHelper) {
         val newID = cursor.getInt(0)
         cursor.close()
         return newID
-    }
-
-    fun getCourseCompletedStudentListFromClass(professorID: Int, courseID: Int): List<Student>{
-        val students = mutableListOf<Student>()
-        val cursor = databaseHelper.readableDatabase
-            .rawQuery("SELECT STUDENT.* FROM STUDENT INNER JOIN RECORDS ON (STUDENT.STUDENT_ID = RECORDS.STUDENT_ID) WHERE RECORDS.STATUS = \"COMPLETED\" AND RECORDS.PROF_ID = $professorID AND RECORDS.COURSE_ID = $courseID AND RECORDS.DEPT_ID = STUDENT.DEPT_ID AND RECORDS.COLLEGE_ID = STUDENT.COLLEGE_ID",
-                null)
-        cursor.close()
-        return students
     }
 
     fun update(student: Student?){

@@ -1,6 +1,6 @@
 package com.example.ums.model
 
-data class Records (
+class Records (
     var studentID : Int,
     var courseProfessor : CourseProfessor,
     var transactionID : Int,

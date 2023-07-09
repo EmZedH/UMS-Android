@@ -182,4 +182,9 @@
     <string name="select_professors_string">Select Professors</string>
     <string name="select_transaction_string">Select Transaction</string>
     <string name="colleges_string">Colleges</string>
+    <string name="please_wait_admin_yet_to_add_courses_string">Please wait. Admin yet to add courses</string>
+    <string name="transactions_string">Transactions</string>
+    <string name="already_paid_for_current_semester_string">Already paid for current semester</string>
+    <string name="pay_fees_to_see_past_transactions_string">Pay Fees to see past transactions</string>
+    <string name="tests_will_be_added_once_records_are_updated_string">Tests will be added once records are updated</string>
 </resources>

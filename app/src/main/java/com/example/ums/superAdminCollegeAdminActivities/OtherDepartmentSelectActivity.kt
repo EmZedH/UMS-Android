@@ -144,7 +144,7 @@ class OtherDepartmentSelectActivity: AppCompatActivity(), Addable, Searchable, C
     }
 
     private fun onRefresh(){
-        if(departmentDAO.getOtherDepartment(departmentID!!, collegeID!!).isNotEmpty()){
+        if(departmentDAO.getOtherDepartment(departmentID, collegeID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }

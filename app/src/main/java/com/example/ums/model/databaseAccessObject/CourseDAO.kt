@@ -84,7 +84,8 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
         return courses
     }
 
-    fun getNewCourses(professorID: Int): List<Course>{
+    fun getNewCourses(professorID: Int?): List<Course>{
+        professorID ?: return emptyList()
         val courses = mutableListOf<Course>()
         val cursor = databaseHelper.readableDatabase
             .rawQuery("SELECT * FROM $tableName WHERE ($courseKey, $departmentKey, $collegeKey) NOT IN " +
@@ -273,7 +274,8 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
         return courses
     }
 
-    fun getNewProfessionalCourses(studentID: Int): List<Course>{
+    fun getNewProfessionalCourses(studentID: Int?): List<Course>{
+        studentID ?: return emptyList()
         val courses = mutableListOf<Course>()
         val cursor = databaseHelper.readableDatabase
             .rawQuery("SELECT COURSE.* FROM COURSE WHERE (COURSE.COURSE_ID, COURSE.DEPT_ID, COURSE.COLLEGE_ID) NOT IN " +
@@ -305,7 +307,8 @@ class CourseDAO(private val databaseHelper: DatabaseHelper) {
         return courses
     }
 
-    fun getNewOpenCourses(studentID: Int): List<Course>{
+    fun getNewOpenCourses(studentID: Int?): List<Course>{
+        studentID ?: return emptyList()
         val courses = mutableListOf<Course>()
         val cursor = databaseHelper.readableDatabase
             .rawQuery("SELECT COURSE.* FROM COURSE WHERE (COURSE.COURSE_ID, COURSE.DEPT_ID, COURSE.COLLEGE_ID) NOT IN " +

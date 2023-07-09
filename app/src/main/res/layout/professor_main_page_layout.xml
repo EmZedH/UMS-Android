@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="30sp"
-
+            android:text="@string/no_courses_string"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="?attr/actionBarSize"
             app:layout_constraintEnd_toEndOf="parent"
@@ -53,8 +53,8 @@
             android:id="@+id/second_text_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/tap_add_button_to_get_started_string"
             android:textSize="18sp"
+            android:text="@string/please_wait_admin_yet_to_add_courses_string"
 
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

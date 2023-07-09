@@ -143,7 +143,7 @@ class ProfessorStudentsListActivity: AppCompatActivity(), ClickListener {
     private fun onRefresh(){
         val databaseHelper = DatabaseHelper.newInstance(this)
         val studentDAO = StudentDAO(databaseHelper)
-        if(studentDAO.getNewCurrentStudentsList(professorID ?: return, courseID ?: return).isNotEmpty()){
+        if(studentDAO.getNewCurrentStudentsList(professorID, courseID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }
@@ -167,7 +167,7 @@ class ProfessorStudentsListActivity: AppCompatActivity(), ClickListener {
             val professor = professorDAO.get(professorID)
             val course = courseDAO.get(courseID, professor?.departmentID, professor?.collegeID)
 
-            toolBar?.title = "${course?.name} Students"
+            toolBar?.title = getString(R.string.course_students_title, course?.name)
         }
     }
 }

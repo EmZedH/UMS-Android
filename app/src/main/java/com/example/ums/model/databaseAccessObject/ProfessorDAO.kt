@@ -112,7 +112,10 @@ class ProfessorDAO (private val databaseHelper: DatabaseHelper) {
         db.close()
     }
 
-    fun getNewProfessors(courseID: Int, departmentID: Int, collegeID: Int): List<Professor>{
+    fun getNewProfessors(courseID: Int?, departmentID: Int?, collegeID: Int?): List<Professor>{
+        courseID ?: return emptyList()
+        departmentID ?: return emptyList()
+        collegeID ?: return emptyList()
         val professors = mutableListOf<Professor>()
         val cursor = databaseHelper.readableDatabase
             .rawQuery("SELECT * FROM $tableName INNER JOIN $userTable ON " +

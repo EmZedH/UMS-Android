@@ -143,7 +143,7 @@ class StudentOpenCourseSelectActivity: AppCompatActivity(), ClickListener, Searc
     }
 
     private fun onRefresh(){
-        if(courseDAO.getNewOpenCourses(studentID ?: return).isNotEmpty()){
+        if(courseDAO.getNewOpenCourses(studentID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }

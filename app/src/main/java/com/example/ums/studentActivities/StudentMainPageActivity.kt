@@ -52,7 +52,7 @@ class StudentMainPageActivity: AppCompatActivity() {
         if(userID!=null){
             val student = studentDAO.get(userID)
             toolBar = findViewById(R.id.top_app_bar)
-            toolBar?.title = "Home"
+            toolBar?.title = getString(R.string.courses_string)
 
             val drawerLayout = findViewById<DrawerLayout>(R.id.main_page_drawer_layout)
             toolBar?.setNavigationOnClickListener {
@@ -94,8 +94,8 @@ class StudentMainPageActivity: AppCompatActivity() {
 
             TabLayoutMediator(tabLayout, viewPager){tab, position->
                 when(position){
-                    0->tab.text = "Professional Courses"
-                    1->tab.text = "Open Courses"
+                    0->tab.text = getString(R.string.mandatory_courses_string)
+                    1->tab.text = getString(R.string.open_courses_string)
                 }
                 viewPager.adapter
             }.attach()

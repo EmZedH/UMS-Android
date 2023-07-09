@@ -1,6 +1,6 @@
 package com.example.ums.model
 
-data class User  (
+class User  (
     var id : Int,
     var name : String,
     var contactNumber : String,

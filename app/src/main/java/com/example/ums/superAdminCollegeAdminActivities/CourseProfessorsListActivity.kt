@@ -165,7 +165,7 @@ class CourseProfessorsListActivity: AppCompatActivity(), DeleteClickListener {
     private fun onRefresh(){
         val databaseHelper = DatabaseHelper.newInstance(this)
         val courseProfessorDAO = CourseProfessorDAO(databaseHelper)
-        if(courseProfessorDAO.getList(courseID!!, departmentID!!, collegeID!!).isNotEmpty()){
+        if(courseProfessorDAO.getList(courseID, departmentID, collegeID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }

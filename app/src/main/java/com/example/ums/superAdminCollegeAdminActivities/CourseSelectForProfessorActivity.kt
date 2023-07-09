@@ -127,7 +127,7 @@ class CourseSelectForProfessorActivity: AppCompatActivity(), ClickListener, Sear
     }
 
     private fun onRefresh(){
-        if(courseDAO.getNewCourses(professorID ?: return).isNotEmpty()){
+        if(courseDAO.getNewCourses(professorID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }
