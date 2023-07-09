@@ -177,7 +177,7 @@ class ProfessorCoursesListActivity: AppCompatActivity(), DeleteClickListener {
         val databaseHelper = DatabaseHelper.newInstance(this)
         if(professorID!=null){
             val professorDAO = ProfessorDAO(databaseHelper)
-            toolBar?.title = "${professorDAO.get(professorID)?.user?.name} Courses"
+            toolBar?.title = getString(R.string.professor_courses, professorDAO.get(professorID)?.user?.name)
         }
     }
 }

@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ums.CourseElective
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.adapters.OtherDepartmentListItemViewAdapter
@@ -137,19 +138,8 @@ class OtherDepartmentSelectActivity: AppCompatActivity(), Addable, Searchable, C
         onRefresh()
     }
 
-//    override fun onUpdate(id: Int) {
-//        val updateBottomSheet = DepartmentUpdateBottomSheet.newInstance(id, collegeID)
-//
-//        updateBottomSheet?.show(supportFragmentManager, "updateDialog")
-//    }
-//
-//    override fun onDelete(id: Int) {
-//        val deleteFragment = DepartmentDeleteDialog.getInstance(id)
-//        deleteFragment.show(supportFragmentManager, "deleteDialog")
-//    }
-
     override fun onClick(bundle: Bundle?) {
-        val courseAddBottomSheet = CourseAddForStudentBottomSheet.newInstance(bundle, degree, semester, "Open")
+        val courseAddBottomSheet = CourseAddForStudentBottomSheet.newInstance(bundle, degree, semester, CourseElective.OPEN.elective)
         courseAddBottomSheet?.show(supportFragmentManager, "CourseAddDialog")
     }
 

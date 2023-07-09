@@ -71,9 +71,9 @@ class DepartmentActivity: AppCompatActivity() {
 
             TabLayoutMediator(tabLayout, viewPager){tab, position->
                 when(position){
-                    0-> tab.text = "Courses"
-                    1-> tab.text = "Professors"
-                    2-> tab.text = "Students"
+                    0-> tab.text = getString(R.string.courses_string)
+                    1-> tab.text = getString(R.string.professors_string)
+                    2-> tab.text = getString(R.string.students_string)
                 }
                 viewPager.adapter
             }.attach()

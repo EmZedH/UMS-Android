@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ums.CourseElective
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.adapters.NewOpenCoursesForStudentListItemViewAdapter
@@ -67,7 +68,7 @@ class StudentOpenCourseSelectActivity: AppCompatActivity(), ClickListener, Searc
             firstTextView.text = getString(R.string.no_courses_string)
             secondTextView.text = getString(R.string.tap_add_button_to_select_courses_string)
             toolBar = findViewById(R.id.top_app_bar)
-            toolBar?.title = "Select Courses"
+            toolBar?.title = getString(R.string.select_courses_string)
             toolBar?.setNavigationOnClickListener {
                 if(searchView!=null){
                     if(!searchView!!.isIconified){
@@ -96,7 +97,7 @@ class StudentOpenCourseSelectActivity: AppCompatActivity(), ClickListener, Searc
                     putInt("college_id", student.collegeID)
                     putInt("student_semester", student.semester)
                     putString("student_degree", student.degree)
-                    putString("student_elective", "Open")
+                    putString("student_elective", CourseElective.OPEN.elective)
                 }
                 intent.putExtras(bundle)
                 startActivity(intent)

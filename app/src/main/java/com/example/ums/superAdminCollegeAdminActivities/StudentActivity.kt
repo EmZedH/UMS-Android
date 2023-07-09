@@ -68,9 +68,9 @@ class StudentActivity: AppCompatActivity() {
 
             TabLayoutMediator(tabLayout, viewPager){tab, position->
                 when(position){
-                    0-> tab.text = "Mandatory Courses"
-                    1-> tab.text = "Open Courses"
-                    2-> tab.text = "Payments"
+                    0-> tab.text = getString(R.string.mandatory_courses_string)
+                    1-> tab.text = getString(R.string.open_courses_string)
+                    2-> tab.text = getString(R.string.payments_string)
                 }
                 viewPager.adapter
             }.attach()
@@ -171,6 +171,6 @@ class StudentActivity: AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         val databaseHelper = DatabaseHelper.newInstance(this)
-        toolBar?.title = "${StudentDAO(databaseHelper).get(studentID)?.user?.name} Records"
+        toolBar?.title = getString(R.string.student_records, StudentDAO(databaseHelper).get(studentID)?.user?.name)
     }
 }

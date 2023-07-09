@@ -93,15 +93,14 @@ class SuperAdminCollegeAdminMainPageActivity: AppCompatActivity(){
         setSupportActionBar(toolBar)
         user = userDAO.get(userID) ?: return
         userRole = user.role
-        toolBar.title = if(userRole == UserRole.SUPER_ADMIN.role) "Colleges" else "Departments"
+        toolBar.title = if(userRole == UserRole.SUPER_ADMIN.role) getString(R.string.colleges_string) else getString(R.string.departments_string)
         if(isSelectionToolbarOpen == true){
-            selectionToolbar.title = "Selected $selectionNumber"
+            selectionToolbar.title = getString(R.string.selected_number, selectionNumber)
             switchToSelectionToolbar()
         }
         supportFragmentManager.setFragmentResultListener("FragmentSelectionCount", this){_, result->
             selectionNumber = result.getInt("selected_count")
-
-            selectionToolbar.title = "Selected $selectionNumber"
+            selectionToolbar.title = getString(R.string.selected_number, selectionNumber)
         }
         supportFragmentManager.setFragmentResultListener("FragmentSwitchToolbar", this){_, result->
             val shouldSwitchToolbar = result.getBoolean("switch_toolbar")
@@ -153,7 +152,7 @@ class SuperAdminCollegeAdminMainPageActivity: AppCompatActivity(){
                 }
                 R.id.log_out_tab -> {
                     val logOutDialog = LogOutDialog()
-                    logOutDialog.show(supportFragmentManager, "Log Out Dialog")
+                    logOutDialog.show(supportFragmentManager, "LogOutDialog")
                 }
             }
             drawerLayout.closeDrawer(GravityCompat.START)
@@ -162,8 +161,6 @@ class SuperAdminCollegeAdminMainPageActivity: AppCompatActivity(){
     }
 
     private fun superAdminProcesses() {
-//        navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_welcome_text_view).append(" ${user.name}")
-//        navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_user_id).append(" SA/${user.id}")
         userFragment = SuperAdminMainPageFragment()
         supportFragmentManager.beginTransaction().apply {
             replace(R.id.fragment_container, userFragment ?: return, "LatestListFragment")
@@ -172,8 +169,6 @@ class SuperAdminCollegeAdminMainPageActivity: AppCompatActivity(){
     }
 
     private fun collegeAdminProcesses(collegeID: Int?){
-//        navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_welcome_text_view).append(" ${user.name}")
-//        navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_user_id).append(" CA/${user.id}")
 
         userFragment = CollegeAdminMainPageFragment()
         userFragment?.arguments = Bundle().apply {
@@ -231,7 +226,7 @@ class SuperAdminCollegeAdminMainPageActivity: AppCompatActivity(){
 
     private fun showExitConfirmationDialog() {
         val exitDialogFragment = ExitDialog()
-        exitDialogFragment.show(supportFragmentManager, "exitDialog")
+        exitDialogFragment.show(supportFragmentManager, "ExitDialog")
     }
     override fun onResume() {
         super.onResume()
@@ -239,14 +234,12 @@ class SuperAdminCollegeAdminMainPageActivity: AppCompatActivity(){
         user = UserDAO(databaseHelper).get(user.id)!!
         val welcomeTextView = navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_welcome_text_view)
         val userIDTextView = navigationView.getHeaderView(0).findViewById<TextView>(R.id.header_user_id)
-        welcomeTextView.setText(R.string.hi_string)
-        welcomeTextView.append(" ${user.name}")
-        userIDTextView.setText(R.string.user_id_string)
+        welcomeTextView.text = getString(R.string.hi_user, user.name)
         if(user.role == UserRole.SUPER_ADMIN.role){
-            userIDTextView.append(" SA/${user.id}")
+            userIDTextView.text = getString(R.string.super_admin_user_id, user.id)
         }
         else if(user.role == UserRole.COLLEGE_ADMIN.role){
-            userIDTextView.append(" CA/${user.id}")
+            userIDTextView.text = getString(R.string.college_admin_user_id, user.id)
         }
     }
 

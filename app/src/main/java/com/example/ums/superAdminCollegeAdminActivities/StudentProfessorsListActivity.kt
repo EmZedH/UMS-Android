@@ -63,7 +63,7 @@ class StudentProfessorsListActivity: AppCompatActivity(), ClickListener, Searcha
             val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
 
             toolBar = findViewById(R.id.top_app_bar)
-            toolBar?.title = "Select Professors"
+            toolBar?.title = getString(R.string.select_professors_string)
             toolBar?.setNavigationOnClickListener {
                 if(searchView!=null){
                     if(!searchView!!.isIconified){
@@ -138,7 +138,7 @@ class StudentProfessorsListActivity: AppCompatActivity(), ClickListener, Searcha
         val databaseHelper = DatabaseHelper.newInstance(this)
         val courseProfessorDAO = CourseProfessorDAO(databaseHelper)
 
-        if(courseProfessorDAO.getList(courseID ?: return, departmentID ?: return, collegeID ?: return).isNotEmpty()){
+        if(courseProfessorDAO.getList(courseID, departmentID, collegeID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }

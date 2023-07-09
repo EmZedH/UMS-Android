@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.ums.CourseElective
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.adapters.NewProfessionalCoursesForStudentListItemViewAdapter
@@ -66,7 +67,7 @@ class StudentProfessionalCourseSelectActivity: AppCompatActivity(), ClickListene
 
             val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
             toolBar = findViewById(R.id.top_app_bar)
-            toolBar?.title = "Select Courses"
+            toolBar?.title = getString(R.string.select_courses_string)
             toolBar?.setNavigationOnClickListener {
                 if(searchView!=null){
                     if(!searchView!!.isIconified){
@@ -96,7 +97,7 @@ class StudentProfessionalCourseSelectActivity: AppCompatActivity(), ClickListene
                             student?.departmentID,
                             student?.degree,
                             student?.semester,
-                            "Professional")
+                            CourseElective.PROFESSIONAL.elective)
                 courseAddBottomSheet?.show(supportFragmentManager, "CourseAddDialog")
             }
 

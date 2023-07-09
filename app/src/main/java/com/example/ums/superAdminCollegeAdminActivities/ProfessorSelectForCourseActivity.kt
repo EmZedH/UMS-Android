@@ -65,7 +65,7 @@ class ProfessorSelectForCourseActivity: AppCompatActivity(), ClickListener, Sear
             val addFloatingActionButton = findViewById<FloatingActionButton>(R.id.floating_action_button)
 
             toolBar = findViewById(R.id.top_app_bar)
-            toolBar?.title = "Add Professor to Course"
+            toolBar?.title = getString(R.string.add_professor_to_course_string)
             toolBar?.setNavigationOnClickListener {
                 if(searchView!=null){
                     if(!searchView!!.isIconified){

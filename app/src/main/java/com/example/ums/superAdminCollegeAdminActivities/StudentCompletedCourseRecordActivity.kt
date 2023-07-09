@@ -48,12 +48,11 @@ class StudentCompletedCourseRecordActivity: AppCompatActivity() {
 
             courseNameTextView.text = course?.name
 
-            attendanceTextView.text = "${(record?.attendance ?: 0)} (${(record?.attendance ?: 0)*2}%)"
-            assignmentMarksTextView.text = "${record?.assignmentMarks ?: 0} (Out of 10)"
+            attendanceTextView.text = getString(R.string.record_attendance, record?.attendance ?: 0, (record?.attendance ?: 0)*2)
+            assignmentMarksTextView.text = getString(R.string.record_assignment, record?.assignmentMarks ?: 0)
             courseNameTextView.text = course?.name
-            internalMarksTextView.text = "${((record?.attendance ?: 0)/20) + (record?.assignmentMarks ?: 0) +((testDAO.getAverageTestMark(
-                studentId, courseID, departmentId) ?: 0))} (Out of 40)"
-            externalMarksTextView.text = "${record?.externalMarks ?: 0} (Out of 60)"
+            internalMarksTextView.text = getString(R.string.record_internal_marks, ((record?.attendance ?: 0)/20) + (record?.assignmentMarks ?: 0) +((testDAO.getAverageTestMark(studentId, courseID, departmentId) ?: 0)))
+            externalMarksTextView.text = getString(R.string.record_external_marks, record?.externalMarks ?: 0)
         }
     }
 }

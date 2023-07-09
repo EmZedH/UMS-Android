@@ -54,8 +54,7 @@ class CourseDetailsActivity: AppCompatActivity() {
                 finish()
             }
 
-            courseIDTextView.text = getString(R.string.id_string)
-            courseIDTextView.append(" C/$collegeId-D/$departmentId-CO/$courseID")
+            courseIDTextView.text = getString(R.string.course_id, collegeId, departmentId, courseID)
 
             courseNameTextView.text = course?.name
             departmentIDTextView.text = departmentId.toString()

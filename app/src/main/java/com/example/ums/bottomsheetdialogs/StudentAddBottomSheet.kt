@@ -24,6 +24,7 @@ import com.example.ums.Utility
 import com.example.ums.model.Student
 import com.example.ums.model.User
 import com.example.ums.model.databaseAccessObject.StudentDAO
+import com.example.ums.model.databaseAccessObject.UserDAO
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.TextInputLayout
 import java.util.Calendar
@@ -278,12 +279,14 @@ class StudentAddBottomSheet: FullScreenBottomSheetDialog() {
                 userAddressError = "Don't leave address field blank"
                 userAddress.error = userAddressError
             }
+            val userDAO = UserDAO(DatabaseHelper.newInstance(requireContext()))
+            val isEmailFree = userDAO.isEmailFree(emailAddressText)
             if (emailAddressText.isEmpty()) {
                 flag = false
                 emailAddressError = "Don't leave email address field blank"
                 emailAddress.error = emailAddressError
             }
-            else if(!Utility.isEmailAddressFree(emailAddressText, requireActivity())){
+            else if(!isEmailFree){
                 flag = false
                 emailAddressError = "Email Address already exists"
                 emailAddress.error = emailAddressError

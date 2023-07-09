@@ -43,7 +43,7 @@ class StudentCompletedCourseActivity: AppCompatActivity() {
         if(studentID!=null){
             val student = studentDAO.get(studentID)
             toolBar = findViewById(R.id.top_app_bar)
-            toolBar?.title = "${ student?.user?.name } Records"
+            toolBar?.title = getString(R.string.student_records, student?.user?.name)
             toolBar?.setNavigationOnClickListener {
                 if(searchView!=null){
                     if(!searchView!!.isIconified){
@@ -62,8 +62,8 @@ class StudentCompletedCourseActivity: AppCompatActivity() {
 
             TabLayoutMediator(tabLayout, viewPager){tab, position->
                 when(position){
-                    0->tab.text = "Professional Courses"
-                    1->tab.text = "Open Courses"
+                    0->tab.text = getString(R.string.mandatory_courses_string)
+                    1->tab.text = getString(R.string.open_courses_string)
                 }
                 viewPager.adapter
             }.attach()

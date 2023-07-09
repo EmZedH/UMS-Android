@@ -166,7 +166,7 @@ class CourseStudentsListActivity: AppCompatActivity(), ClickListener {
             val professor = professorDAO.get(professorID)
             val course = courseDAO.get(courseID, professor?.departmentID, professor?.collegeID)
 
-            toolBar?.title = "${course?.name} Students"
+            toolBar?.title = getString(R.string.course_students_title, course?.name)
         }
     }
 }

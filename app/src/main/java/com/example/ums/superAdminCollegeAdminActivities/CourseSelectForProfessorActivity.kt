@@ -65,7 +65,7 @@ class CourseSelectForProfessorActivity: AppCompatActivity(), ClickListener, Sear
             firstTextView.text = getString(R.string.no_courses_string)
             secondTextView.text = getString(R.string.tap_add_button_to_select_courses_string)
             toolBar = findViewById(R.id.top_app_bar)
-            toolBar?.title = "Select Courses"
+            toolBar?.title = getString(R.string.select_courses_string)
             toolBar?.setNavigationOnClickListener {
                 if(searchView!=null){
                     if(!searchView!!.isIconified){

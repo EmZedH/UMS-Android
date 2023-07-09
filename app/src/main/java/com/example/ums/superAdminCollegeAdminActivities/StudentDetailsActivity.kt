@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ums.CompletionStatus
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.bottomsheetdialogs.StudentUpdateBottomSheet
@@ -109,7 +110,7 @@ class StudentDetailsActivity: AppCompatActivity() {
                     val mark = record.externalMarks + (record.attendance/20) + record.assignmentMarks + (testDAO.getAverageTestMark(record.studentID, record.courseProfessor.course.id, record.courseProfessor.course.departmentID) ?: 0)
                     if(mark >= 60){
                         student?.semester?.let {
-                            record.status = "COMPLETED"
+                            record.status = CompletionStatus.COMPLETED.status
                             record.semCompleted = it
                             student.semester = it + 1
                             recordsDAO.update(record)
@@ -182,7 +183,7 @@ class StudentDetailsActivity: AppCompatActivity() {
                                 0,
                                 0,
                                 0,
-                                "NOT_COMPLETED",
+                                CompletionStatus.NOT_COMPLETED.status,
                                 0
                             )
                         )

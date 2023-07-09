@@ -171,7 +171,7 @@ class TestRecordsActivity: AppCompatActivity(), DeleteUpdateListener {
     private fun onRefresh(){
         val databaseHelper = DatabaseHelper.newInstance(this)
         val testDAO = TestDAO(databaseHelper)
-        if(testDAO.getList(studentID!!, courseID!!, departmentID!!).isNotEmpty()){
+        if(testDAO.getList(studentID, courseID, departmentID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }
@@ -189,10 +189,7 @@ class TestRecordsActivity: AppCompatActivity(), DeleteUpdateListener {
         val databaseHelper = DatabaseHelper.newInstance(this)
         val studentDAO = StudentDAO(databaseHelper)
         val courseDAO = CourseDAO(databaseHelper)
-        toolBar?.title = "${courseDAO
-            .get(courseID ?: return, 
-                departmentID ?: return, 
-                studentDAO.get(studentID)?.collegeID ?: return)?.name} Tests"
         testListItemViewAdapter?.updateList()
+        toolBar?.title = getString(R.string.student_tests, courseDAO.get(courseID, departmentID, studentDAO.get(studentID)?.collegeID)?.name)
     }
 }

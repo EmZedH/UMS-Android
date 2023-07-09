@@ -61,6 +61,26 @@
     <string name="departments_string">Departments</string>
     <string name="college_admins_string">College Admins</string>
     <string name="id_string">ID :</string>
+
+    <string name="course_id">ID : C/%d-D/%d-CO/%d</string>
+    <string name="course_students_title">%s Students</string>
+    <string name="department_id">ID : C/%d-D/%d</string>
+    <string name="super_admin_user_id">UID : SA/%d</string>
+    <string name="college_admin_user_id">UID : CA/%d</string>
+    <string name="professor_user_id">UID : P/%d</string>
+    <string name="student_user_id">UID : S/%d</string>
+    <string name="professor_courses">%s Courses</string>
+    <string name="professor_id">UID : C/%d-D/%d-P/%d</string>
+    <string name="student_records">%s Records</string>
+    <string name="record_attendance">%d (%d%%)</string>
+    <string name="record_assignment">%d (Out of 10)</string>
+    <string name="record_internal_marks">%d (Out of 40)</string>
+    <string name="record_external_marks">%d (Out of 60)</string>
+    <string name="selected_number">Selected %d</string>
+    <string name="hi_user">Hi %s</string>
+    <string name="student_tests">%s Tests</string>
+    <string name="semester">Semester %d</string>
+
     <string name="department_name_string">Department Name</string>
     <string name="add_department_string">Add Department</string>
     <string name="add_user_string">Add User</string>
@@ -142,4 +162,24 @@
     <string name="selected_string">Selected</string>
     <string name="top_app_bar_selected_string">Top app bar selected</string>
     <string name="select_all_toolbar_string">Select All Toolbar</string>
+    <string name="user_email_id_or_password_incorrect_string">User email ID or Password incorrect</string>
+    <string name="enter_fields_properly_string">Enter fields properly</string>
+    <string name="select_courses_string">Select Courses</string>
+    <string name="courses_string">Courses</string>
+    <string name="professors_string">Professors</string>
+    <string name="students_string">Students</string>
+    <string name="don_t_leave_name_field_blank_string">Don\'t leave Name field blank</string>
+    <string name="don_t_leave_contact_field_blank_string">Don\'t leave Contact field blank</string>
+    <string name="enter_10_digit_contact_number_string">Enter 10 digit contact number</string>
+    <string name="don_t_leave_address_field_blank_string">Don\'t leave Address field blank</string>
+    <string name="add_professor_to_course_string">Add Professor to Course</string>
+    <string name="mandatory_courses_string">Mandatory Courses</string>
+    <string name="open_courses_string">Open Courses</string>
+    <string name="payments_string">Payments</string>
+    <string name="maximum_attendance_days_reached_string">Maximum attendance days reached</string>
+    <string name="ongoing_backlog_string">Ongoing (Backlog)</string>
+    <string name="ongoing_string">Ongoing</string>
+    <string name="select_professors_string">Select Professors</string>
+    <string name="select_transaction_string">Select Transaction</string>
+    <string name="colleges_string">Colleges</string>
 </resources>

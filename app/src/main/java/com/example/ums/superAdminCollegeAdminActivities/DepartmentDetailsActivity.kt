@@ -19,8 +19,9 @@ class DepartmentDetailsActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.department_profile_page)
-        collegeId = intent.extras?.getInt("department_details_college_id")
-        departmentId = intent.extras?.getInt("department_details_department_id")
+        val extras = intent.extras
+        collegeId = extras?.getInt("department_details_college_id")
+        departmentId = extras?.getInt("department_details_department_id")
         val departmentId = departmentId
         val collegeId = collegeId
         if(collegeId != null && departmentId!=null){
@@ -42,8 +43,7 @@ class DepartmentDetailsActivity: AppCompatActivity() {
                 finish()
             }
 
-            departmentIDTextView.text = getString(R.string.id_string)
-            departmentIDTextView.append(" C/$collegeId-D/$departmentId")
+            departmentIDTextView.text = getString(R.string.department_id, collegeId, departmentId)
 
             departmentNameTextView.text = department?.name
             collegeIDTextView.text = collegeId.toString()

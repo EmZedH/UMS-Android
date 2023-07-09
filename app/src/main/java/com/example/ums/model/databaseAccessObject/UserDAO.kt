@@ -111,21 +111,15 @@ class UserDAO(private val databaseHelper : DatabaseHelper) {
         db.close()
     }
 
-//    fun delete(userID: Int){
-//        val db = databaseHelper.writableDatabase
-//        db.beginTransaction()
-//        try{
-//            db.execSQL("DELETE FROM USER WHERE U_ID = $userID")
-//            db.execSQL("DELETE FROM COLLEGE_ADMIN WHERE CA_ID = $userID")
-//            db.execSQL("DELETE FROM PROFESSOR WHERE P_ID = $userID")
-//            db.setTransactionSuccessful()
-//        }
-//        catch (e: Exception){
-//            e.printStackTrace()
-//        }
-//        finally {
-//            db.endTransaction()
-//        }
-//        db.close()
-//    }
+    fun isEmailFree(emailID: String): Boolean{
+        val cursor = databaseHelper
+            .readableDatabase
+            .rawQuery("SELECT COUNT(U_EMAIL_ID) FROM USER WHERE U_EMAIL_ID = ?", arrayOf(emailID.trim()))
+        var isEmailFree = true
+        if(cursor!=null && cursor.moveToFirst()){
+           isEmailFree = cursor.getInt(0) == 0
+        }
+        cursor.close()
+        return isEmailFree
+    }
 }

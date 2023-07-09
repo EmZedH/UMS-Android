@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.ums.CompletionStatus
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.bottomsheetdialogs.RecordUpdateBottomSheet
@@ -57,17 +58,17 @@ class StudentCourseRecordPageActivity: AppCompatActivity() {
 
             courseNameTextView.text = course?.name
 
-            attendanceTextView.text = "${(record?.attendance ?: 0)} (${(record?.attendance ?: 0)*2}%)"
-            assignmentMarksTextView.text = "${record?.assignmentMarks ?: 0} (Out of 10)"
+            attendanceTextView.text = getString(R.string.record_attendance, record?.attendance ?: 0, (record?.attendance ?: 0)*2)
+            assignmentMarksTextView.text = getString(R.string.record_assignment, record?.assignmentMarks ?: 0)
             courseNameTextView.text = course?.name
-            internalMarksTextView.text = "${((record?.attendance ?: 0)/20) + (record?.assignmentMarks ?: 0) +((testDAO.getAverageTestMark(
-                studentId, courseId, departmentId) ?: 0))} (Out of 40)"
-            externalMarksTextView.text = "${record?.externalMarks ?: 0} (Out of 60)"
+            internalMarksTextView.text = getString(R.string.record_internal_marks, ((record?.attendance ?: 0)/20) + (record?.assignmentMarks ?: 0) +((testDAO.getAverageTestMark(studentId, courseId, departmentId) ?: 0)))
+            externalMarksTextView.text = getString(R.string.record_external_marks, record?.externalMarks ?: 0)
             professorIDTextView.text = record?.courseProfessor?.professor?.user?.id.toString()
             professorNameTextView.text = record?.courseProfessor?.professor?.user?.name
 
             if(course?.semester != null && student?.semester != null){
-                courseStatusTextView.text = if(record?.status == "NOT_COMPLETED" && (student.semester > course.semester)) "Ongoing (Backlog)" else "Ongoing"
+                courseStatusTextView.text = if(record?.status == CompletionStatus.NOT_COMPLETED.status && (student.semester > course.semester)) getString(
+                                    R.string.ongoing_backlog_string) else getString(R.string.ongoing_string)
             }
 
             attendanceIncreaseButton.setOnClickListener {
@@ -75,11 +76,10 @@ class StudentCourseRecordPageActivity: AppCompatActivity() {
                     if(it<50){
                         record?.attendance = it + 1
                         recordsDAO.update(record)
-                        attendanceTextView.text = "${(record?.attendance ?: 0)} (${(record?.attendance ?: 0)*2}%)"
-                        internalMarksTextView.text = "${((record?.attendance ?: 0)/20) + (record?.assignmentMarks ?: 0) +((testDAO.getAverageTestMark(
-                            this.studentId, courseId, departmentId) ?: 0))} (Out of 40)"
+                        attendanceTextView.text = getString(R.string.record_attendance, record?.attendance ?: 0, (record?.attendance ?: 0)*2)
+                        internalMarksTextView.text = getString(R.string.record_internal_marks, ((record?.attendance ?: 0)/20) + (record?.assignmentMarks ?: 0) +((testDAO.getAverageTestMark(studentId, courseId, departmentId) ?: 0)))
                     }else{
-                        Toast.makeText(this, "Maximum attendance days reached", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, getString(R.string.maximum_attendance_days_reached_string), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -91,11 +91,10 @@ class StudentCourseRecordPageActivity: AppCompatActivity() {
 
             supportFragmentManager.setFragmentResultListener("RecordUpdateBottomSheerFragment", this){_, _->
                 record = recordsDAO.get(studentId, courseId, departmentId)
-                attendanceTextView.text = "${(record?.attendance ?: 0)} (${(record?.attendance ?: 0)*2}%)"
-                assignmentMarksTextView.text = "${record?.assignmentMarks ?: 0} (Out of 10)"
-                internalMarksTextView.text = "${((record?.attendance ?: 0)/20) + (record?.assignmentMarks ?: 0) +((testDAO.getAverageTestMark(
-                    this.studentId, courseId, departmentId) ?: 0))} (Out of 40)"
-                externalMarksTextView.text = "${record?.externalMarks ?: 0} (Out of 60)"
+                attendanceTextView.text = getString(R.string.record_attendance, record?.attendance ?: 0, (record?.attendance ?: 0)*2)
+                assignmentMarksTextView.text = getString(R.string.record_assignment, record?.assignmentMarks ?: 0)
+                internalMarksTextView.text = getString(R.string.record_internal_marks, ((record?.attendance ?: 0)/20) + (record?.assignmentMarks ?: 0) +((testDAO.getAverageTestMark(studentId, courseId, departmentId) ?: 0)))
+                externalMarksTextView.text = getString(R.string.record_external_marks, record?.externalMarks ?: 0)
             }
         }
     }

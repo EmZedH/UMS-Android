@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
+import com.example.ums.UserRole
 import com.example.ums.Utility
 import com.example.ums.bottomsheetdialogs.ChangePasswordBottomSheet
 import com.example.ums.model.databaseAccessObject.UserDAO
@@ -38,7 +39,9 @@ class ManageProfileActivity : AppCompatActivity() {
 
         val bundle = intent.extras
         val userID = bundle!!.getInt("userID")
-        val user = userDAO.get(userID)!!
+        val user = userDAO.get(userID)
+
+        user ?: return
 
         val userIDTextView = findViewById<TextView>(R.id.course_id_text_view)
         val userEmailIDTextView = findViewById<TextView>(R.id.user_email)
@@ -49,8 +52,14 @@ class ManageProfileActivity : AppCompatActivity() {
 
         confirmButton = findViewById(R.id.confirm_button)
 
-        userIDTextView.setText(R.string.user_id_string)
-        userIDTextView.append(" SA/$userID")
+        userIDTextView.text =
+        when(user.role){
+            UserRole.SUPER_ADMIN.role -> getString(R.string.super_admin_user_id, userID)
+            UserRole.COLLEGE_ADMIN.role -> getString(R.string.college_admin_user_id, userID)
+            UserRole.PROFESSOR.role -> getString(R.string.professor_user_id, userID)
+            UserRole.STUDENT.role -> getString(R.string.student_user_id, userID)
+            else -> getString(R.string.user_id_string)
+        }
         userEmailIDTextView.text = user.emailID
 
         userNameTextLayout.editText?.setText(userNameText ?: user.name)
@@ -79,20 +88,20 @@ class ManageProfileActivity : AppCompatActivity() {
         confirmButton.setOnClickListener {
             var flag = true
             if(userNameTextLayout.editText!!.text.isEmpty()){
-                userNameTextLayout.error = "Don't leave Name field blank"
+                userNameTextLayout.error = getString(R.string.don_t_leave_name_field_blank_string)
                 flag = false
             }
             if(userContactTextLayout.editText!!.text.isEmpty()){
                 flag = false
-                userContactTextLayout.error = "Don't leave Contact field blank"
+                userContactTextLayout.error = getString(R.string.don_t_leave_contact_field_blank_string)
             }
             else if(!Utility.isValidContactNumber(userContactTextLayout.editText!!.text.toString())){
                 flag = false
-                userContactTextLayout.error = "Enter 10 digit contact number"
+                userContactTextLayout.error = getString(R.string.enter_10_digit_contact_number_string)
             }
             if(userAddressTextLayout.editText!!.text.isEmpty()){
                 flag = false
-                userAddressTextLayout.error = "Don't leave Address field blank"
+                userAddressTextLayout.error = getString(R.string.don_t_leave_address_field_blank_string)
             }
             if(flag){
 

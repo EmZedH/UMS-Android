@@ -52,8 +52,7 @@ class ProfessorDetailsActivity: AppCompatActivity() {
                 finish()
             }
 
-            professorIDTextView.text = getString(R.string.id_string)
-            professorIDTextView.append(" C/${professor?.collegeID}-D/${professor?.departmentID}-U/${professor?.user?.id}")
+            professorIDTextView.text = getString(R.string.professor_id, professor?.collegeID, professor?.departmentID, professor?.user?.id)
 
             userEmailIdTextView.text = professor?.user?.emailID
             contactNumberTextView.text = professor?.user?.contactNumber

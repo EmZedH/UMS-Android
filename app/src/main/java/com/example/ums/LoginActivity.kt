@@ -15,12 +15,8 @@ import com.example.ums.superAdminCollegeAdminActivities.SuperAdminCollegeAdminMa
 
 class LoginActivity : AppCompatActivity() {
 
-    private val userIDPasswordIncorrectString = "User email ID or Password incorrect"
-    private val userIDPasswordProperString = "Enter fields properly"
-
     private lateinit var userDAO: UserDAO
 
-    private var textViewUserNamePasswordIncorrect: TextView? = null
 
     private var errorText: String? = null
 
@@ -28,11 +24,12 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.login_layout_page)
 
+
         val databaseHelper = DatabaseHelper.newInstance(this.applicationContext)
         userDAO = UserDAO(databaseHelper)
 
         errorText = savedInstanceState?.getString("error_text")
-        textViewUserNamePasswordIncorrect = findViewById(R.id.textViewUserIDPasswordNotCorrect)
+        val textViewUserNamePasswordIncorrect = findViewById<TextView>(R.id.textViewUserIDPasswordNotCorrect)
         textViewUserNamePasswordIncorrect?.text = errorText
 
 
@@ -60,13 +57,11 @@ class LoginActivity : AppCompatActivity() {
 
                 if(user == null){
 
-                    errorText =
                         if(userEmailID == "" || password == "")
-                            userIDPasswordProperString
+                            textViewUserNamePasswordIncorrect.text = getString(R.string.enter_fields_properly_string)
                         else
-                            userIDPasswordIncorrectString
+                            textViewUserNamePasswordIncorrect.text = getString(R.string.user_email_id_or_password_incorrect_string)
 
-                    textViewUserNamePasswordIncorrect?.text = errorText
 
                 }
                 else{

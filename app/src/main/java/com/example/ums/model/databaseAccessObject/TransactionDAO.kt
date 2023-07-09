@@ -52,7 +52,8 @@ class TransactionDAO(private val databaseHelper: DatabaseHelper) {
         return transactions
     }
 
-    fun getCurrentSemesterTransactionList(studentID: Int) : List<Transactions>{
+    fun getCurrentSemesterTransactionList(studentID: Int?) : List<Transactions>{
+        studentID ?: return emptyList()
         val transactions = mutableListOf<Transactions>()
         val cursor = databaseHelper.readableDatabase
             .rawQuery("SELECT TRANSACTIONS.* FROM TRANSACTIONS INNER JOIN " +

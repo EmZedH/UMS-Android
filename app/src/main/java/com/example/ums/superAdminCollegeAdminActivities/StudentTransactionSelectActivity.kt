@@ -51,7 +51,7 @@ class StudentTransactionSelectActivity: AppCompatActivity(), ClickListener {
             firstTextView.text = getString(R.string.no_transactions_string)
             secondTextView.text = getString(R.string.tap_add_button_to_continue_string)
             toolBar = findViewById(R.id.top_app_bar)
-            toolBar?.title = "Select Transaction"
+            toolBar?.title = getString(R.string.select_transaction_string)
             toolBar?.setNavigationOnClickListener {
                 finish()
             }
@@ -98,7 +98,7 @@ class StudentTransactionSelectActivity: AppCompatActivity(), ClickListener {
     private fun onRefresh(){
         val databaseHelper = DatabaseHelper.newInstance(this)
         val transactionDAO = TransactionDAO(databaseHelper)
-        if(transactionDAO.getCurrentSemesterTransactionList(studentID ?: return).isNotEmpty()){
+        if(transactionDAO.getCurrentSemesterTransactionList(studentID).isNotEmpty()){
             firstTextView.visibility = View.INVISIBLE
             secondTextView.visibility = View.INVISIBLE
         }

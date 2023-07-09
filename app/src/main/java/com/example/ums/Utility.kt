@@ -1,7 +1,6 @@
 package com.example.ums
 
-import android.app.Activity
-import com.example.ums.model.databaseAccessObject.UserDAO
+import android.util.Log
 
 class Utility {
     companion object{
@@ -10,20 +9,21 @@ class Utility {
             return number.length == 10
         }
 
-        fun isEmailAddressFree(email: String, context: Activity): Boolean{
-            val databaseHelper = DatabaseHelper.newInstance(context)
-            val userDAO = UserDAO(databaseHelper)
-            val userList = userDAO.getList()
-            for (user in userList){
-                if(user.emailID.trim()==email.trim()){
-                    return false
-                }
-            }
-            return true
-        }
+//        fun isEmailAddressFree(email: String, context: Activity): Boolean{
+//            val databaseHelper = DatabaseHelper.newInstance(context)
+//            val userDAO = UserDAO(databaseHelper)
+//            val userList = userDAO.getList()
+//            for (user in userList){
+//                if(user.emailID.trim()==email.trim()){
+//                    return false
+//                }
+//            }
+//            return true
+//        }
 
         fun isEmailDotCom(string: String): Boolean {
-            val pattern = Regex("[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.com")
+            Log.i("UtilityClass", "inside isEmailDotCom")
+            val pattern = Regex("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}")
             return pattern.matches(string.trim())
         }
 
