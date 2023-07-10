@@ -108,22 +108,22 @@ class TransactionAddBottomSheet private constructor(): FullScreenBottomSheetDial
 
             if (transactionAmountText.isEmpty()) {
                 flag = false
-                transactionAmountError = "Don't leave contact number field blank"
+                transactionAmountError = getString(R.string.don_t_leave_transaction_amount_field_blank_string)
                 transactionAmount.error = transactionAmountError
             }
             else if(transactionAmountText.toInt() < 100){
                 flag = false
-                transactionAmountError = "Please enter amount above 100"
+                transactionAmountError = getString(R.string.please_enter_amount_above_100_string)
                 transactionAmount.error = transactionAmountError
             }
             if (transactionDateText.isEmpty()) {
                 flag = false
-                transactionDateError = "Don't leave date of birth field blank"
+                transactionDateError = getString(R.string.don_t_leave_date_of_transaction_field_blank_string)
                 transactionDate.error = transactionDateError
             }
             else if(!Utility.isCorrectDateFormat(transactionDateText)){
                 flag = false
-                transactionDateError = "Please enter proper date format (yyyy-dd-mm)"
+                transactionDateError = getString(R.string.please_enter_proper_date_format_yyyy_dd_mm_string)
                 transactionDate.error = transactionDateError
             }
 
@@ -165,8 +165,7 @@ class TransactionAddBottomSheet private constructor(): FullScreenBottomSheetDial
     private fun setCollegeIDTextView(view : View){
         val databaseHelper = DatabaseHelper.newInstance(requireContext())
         val transactionDAO = TransactionDAO(databaseHelper)
-        view.findViewById<TextView>(R.id.id_text_view)?.setText(R.string.id_string)
-        view.findViewById<TextView>(R.id.id_text_view)?.append(" T/${transactionDAO.getNewID()}")
+        view.findViewById<TextView>(R.id.id_text_view)?.text = getString(R.string.transaction_id, transactionDAO.getNewID())
     }
 
     private fun showDatePicker() {

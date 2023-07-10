@@ -103,23 +103,23 @@ class CollegeAddBottomSheet : FullScreenBottomSheetDialog() {
 
             if (collegeNameText.isEmpty()) {
                 flag = false
-                collegeName.error = "Don't leave name field blank"
-                collegeNameError = "Don't leave name field blank"
+                collegeName.error = getString(R.string.don_t_leave_name_field_blank_string)
+                collegeNameError = getString(R.string.don_t_leave_name_field_blank_string)
             }
             if (collegeAddressText.isEmpty()) {
                 flag = false
-                collegeAddress.error = "Don't leave address field blank"
-                collegeAddressError = "Don't leave address field blank"
+                collegeAddress.error = getString(R.string.don_t_leave_address_field_blank_string)
+                collegeAddressError = getString(R.string.don_t_leave_address_field_blank_string)
             }
             if (collegeTelephoneText.isEmpty()) {
                 flag = false
-                collegeTelephone.error = "Don't leave telephone field blank"
-                collegeTelephoneError = "Don't leave telephone field blank"
+                collegeTelephone.error = getString(R.string.don_t_leave_telephone_field_blank_string)
+                collegeTelephoneError = getString(R.string.don_t_leave_telephone_field_blank_string)
             }
             else if(!Utility.isValidContactNumber(collegeTelephoneText)){
                 flag = false
-                collegeTelephone.error = "Enter 10 digit contact number"
-                collegeTelephoneError = "Enter 10 digit contact number"
+                collegeTelephone.error = getString(R.string.enter_10_digit_contact_number_string)
+                collegeTelephoneError = getString(R.string.enter_10_digit_contact_number_string)
             }
             if (flag) {
 
@@ -154,10 +154,7 @@ class CollegeAddBottomSheet : FullScreenBottomSheetDialog() {
     }
 
     private fun setCollegeIDTextView(view : View){
-
-        view.findViewById<TextView>(R.id.course_id_text_view)!!.setText(R.string.college_id)
-        view.findViewById<TextView>(R.id.course_id_text_view)!!.append(collegeDAO.getNewID().toString())
-
+        view.findViewById<TextView>(R.id.course_id_text_view)?.text = getString(R.string.college_id, collegeDAO.getNewID())
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

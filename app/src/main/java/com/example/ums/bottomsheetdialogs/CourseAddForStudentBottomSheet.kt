@@ -131,7 +131,7 @@ class CourseAddForStudentBottomSheet: FullScreenBottomSheetDialog() {
 
             if (courseNameText.isEmpty()) {
                 flag = false
-                courseNameError = "Don't leave name field blank"
+                courseNameError = getString(R.string.don_t_leave_name_field_blank_string)
                 courseName.error = courseNameError
             }
             if (flag) {

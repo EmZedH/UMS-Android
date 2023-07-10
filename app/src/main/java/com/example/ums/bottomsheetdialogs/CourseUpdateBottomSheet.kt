@@ -68,8 +68,7 @@ class CourseUpdateBottomSheet: FullScreenBottomSheetDialog() {
             updateButton = view.findViewById(R.id.update_college_button)
 
             courseNameText = savedInstanceState?.getString("course_update_name_text") ?: course.name
-            courseNameTextView.text = getString(R.string.id_string)
-            courseNameTextView.append(" C/$collegeID-D/$departmentID-CO/$courseID")
+            courseNameTextView.text = getString(R.string.course_id, collegeID, departmentID, courseID)
 
             updateButton.isEnabled = false
 
@@ -95,7 +94,7 @@ class CourseUpdateBottomSheet: FullScreenBottomSheetDialog() {
 
                 if (courseNameText.isEmpty()) {
                     flag = false
-                    courseNameTextLayout.error = "Don't leave name field blank"
+                    courseNameTextLayout.error = getString(R.string.don_t_leave_name_field_blank_string)
                 }
                 if (flag) {
                     val newCourse = Course(
@@ -109,7 +108,7 @@ class CourseUpdateBottomSheet: FullScreenBottomSheetDialog() {
                     )
                     courseDAO.update(newCourse)
                     setFragmentResult("CourseUpdateBottomSheet", bundleOf("courseID" to courseID))
-                    Toast.makeText(requireContext(), "Details Updated!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.details_updated_string), Toast.LENGTH_SHORT).show()
                     dismiss()
                 }
             }

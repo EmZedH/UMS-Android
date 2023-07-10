@@ -82,7 +82,7 @@ class DepartmentAddBottomSheet: FullScreenBottomSheetDialog() {
 
             if (departmentNameText.isEmpty()) {
                 flag = false
-                departmentNameError = "Don't leave name field blank"
+                departmentNameError = getString(R.string.don_t_leave_name_field_blank_string)
                 departmentName.error = departmentNameError
             }
             if (flag) {
@@ -108,11 +108,6 @@ class DepartmentAddBottomSheet: FullScreenBottomSheetDialog() {
         return view
     }
 
-//    override fun dismiss() {
-//        super.dismiss()
-//        clearErrors()
-//    }
-
     override fun onStop() {
         super.onStop()
         clearErrors()
@@ -123,8 +118,9 @@ class DepartmentAddBottomSheet: FullScreenBottomSheetDialog() {
     }
 
     private fun setCollegeIDTextView(view : View){
-        view.findViewById<TextView>(R.id.course_id_text_view)!!.setText(R.string.id_string)
-        view.findViewById<TextView>(R.id.course_id_text_view)!!.append(" C/$collegeID-D/${departmentDAO.getNewID(collegeID!!)}")
+        val collegeID = collegeID ?: return
+        view.findViewById<TextView>(R.id.course_id_text_view)?.text = getString(R.string.department_id,
+            collegeID, departmentDAO.getNewID(collegeID))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

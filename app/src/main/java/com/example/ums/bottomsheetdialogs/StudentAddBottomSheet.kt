@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import com.example.ums.DatabaseHelper
+import com.example.ums.Degree
 import com.example.ums.Gender
 import com.example.ums.R
 import com.example.ums.UserRole
@@ -188,8 +189,8 @@ class StudentAddBottomSheet: FullScreenBottomSheetDialog() {
             if(degreeRadio.checkedRadioButtonId!=-1){
                 isDegreeErrorOn = false
                 when(view.findViewById<RadioButton>(degreeRadio.checkedRadioButtonId).text.toString()){
-                    "B. Tech" -> degree = "B. Tech"
-                    "M. Tech" -> degree = "M. Tech"
+                    Degree.B_TECH.degree -> degree = Degree.B_TECH.degree
+                    Degree.M_TECH.degree -> degree = Degree.M_TECH.degree
                 }
             }
             degreeTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_onSurface))
@@ -197,10 +198,7 @@ class StudentAddBottomSheet: FullScreenBottomSheetDialog() {
             val adapter = ArrayAdapter(
                 requireContext(),
                 android.R.layout.simple_spinner_item,
-                if(degree == "B. Tech")
-                    arrayOf("Semester 1","Semester 2","Semester 3","Semester 4","Semester 5","Semester 6","Semester 7","Semester 8")
-                else
-                    arrayOf("Semester 1","Semester 2","Semester 3","Semester 4")
+                getSemesterArray(degree)
             )
             semesterSpinner?.adapter = adapter
         }
@@ -232,9 +230,9 @@ class StudentAddBottomSheet: FullScreenBottomSheetDialog() {
             if(genderRadio.checkedRadioButtonId!=-1){
                 isGenderErrorOn = false
                 when(view.findViewById<RadioButton>(genderRadio.checkedRadioButtonId).text.toString()){
-                    "Male" -> gender = Gender.MALE.type
-                    "Female" -> gender = Gender.FEMALE.type
-                    "Other" -> gender = Gender.OTHER.type
+                    Gender.MALE.type -> gender = Gender.MALE.type
+                    Gender.FEMALE.type -> gender = Gender.FEMALE.type
+                    Gender.OTHER.type -> gender = Gender.OTHER.type
                 }
             }
             genderTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_onSurface))
@@ -256,49 +254,49 @@ class StudentAddBottomSheet: FullScreenBottomSheetDialog() {
 
             if (userNameText.isEmpty()) {
                 flag = false
-                userNameError = "Don't leave name field blank"
+                userNameError = getString(R.string.don_t_leave_name_field_blank_string)
                 userName.error = userNameError
             }
             if (contactNumberText.isEmpty()) {
                 flag = false
-                contactNumberError = "Don't leave contact number field blank"
+                contactNumberError = getString(R.string.don_t_leave_contact_field_blank_string)
                 contactNumber.error = contactNumberError
             }
             else if(!Utility.isValidContactNumber(contactNumber.editText?.text.toString())){
                 flag = false
-                contactNumberError = "Enter 10 digit contact number"
+                contactNumberError = getString(R.string.enter_10_digit_contact_number_string)
                 contactNumber.error = contactNumberError
             }
             if (dateOfBirthText.isEmpty()) {
                 flag = false
-                dateOfBirthError = "Don't leave date of birth field blank"
+                dateOfBirthError = getString(R.string.don_t_leave_date_of_birth_field_blank_string)
                 dateOfBirth.error = dateOfBirthError
             }
             if (userAddressText.isEmpty()) {
                 flag = false
-                userAddressError = "Don't leave address field blank"
+                userAddressError = getString(R.string.don_t_leave_address_field_blank_string)
                 userAddress.error = userAddressError
             }
             val userDAO = UserDAO(DatabaseHelper.newInstance(requireContext()))
             val isEmailFree = userDAO.isEmailFree(emailAddressText)
             if (emailAddressText.isEmpty()) {
                 flag = false
-                emailAddressError = "Don't leave email address field blank"
+                emailAddressError = getString(R.string.don_t_leave_email_address_field_blank_string)
                 emailAddress.error = emailAddressError
             }
             else if(!isEmailFree){
                 flag = false
-                emailAddressError = "Email Address already exists"
+                emailAddressError = getString(R.string.email_address_already_exists_string)
                 emailAddress.error = emailAddressError
             }
             else if(!Utility.isEmailDotCom(emailAddressText)){
                 flag = false
-                emailAddressError = "Please type proper email address"
+                emailAddressError = getString(R.string.please_type_proper_email_address_string)
                 emailAddress.error = emailAddressError
             }
             if(userPasswordText.isEmpty()){
                 flag = false
-                userPasswordError = "Don't leave password field blank"
+                userPasswordError = getString(R.string.don_t_leave_password_field_blank_string)
                 userPassword.error = userAddressError
             }
             if(genderOptionId==-1){
@@ -364,8 +362,7 @@ class StudentAddBottomSheet: FullScreenBottomSheetDialog() {
     }
 
     private fun setCollegeIDTextView(view : View){
-        view.findViewById<TextView>(R.id.course_id_text_view)?.setText(R.string.user_id_string)
-        view.findViewById<TextView>(R.id.course_id_text_view)?.append(" C/$collegeID-D/$departmentID-U/${studentDAO.getNewID()}")
+        view.findViewById<TextView>(R.id.course_id_text_view)?.text = getString(R.string.student_id, collegeID, departmentID, studentDAO.getNewID())
     }
 
     private fun showDatePicker() {
@@ -461,5 +458,19 @@ class StudentAddBottomSheet: FullScreenBottomSheetDialog() {
         textInputLayout?.setStartIconOnClickListener {
             showDatePicker()
         }
+    }
+    private fun getSemesterArray(degree: String?): Array<String>{
+        val semesterArray = mutableListOf<String>()
+        var maximumSemester = 0
+        if(degree == Degree.B_TECH.degree){
+            maximumSemester = 8
+        }
+        else if(degree == Degree.M_TECH.degree){
+            maximumSemester = 4
+        }
+        for (index in 1 until maximumSemester+1){
+            semesterArray.add(getString(R.string.semester, index))
+        }
+        return semesterArray.toTypedArray()
     }
 }

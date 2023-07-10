@@ -103,29 +103,29 @@ class ChangePasswordBottomSheet: FullScreenBottomSheetDialog() {
                 val confirmPasswordText = confirmPassword.editText?.text.toString()
 
                 if(currentPasswordText.isEmpty()){
-                    currentPassword.error = "Please enter the current password"
-                    currentPasswordError = "Please enter the current password"
+                    currentPassword.error = getString(R.string.please_enter_the_current_password_string)
+                    currentPasswordError = getString(R.string.please_enter_the_current_password_string)
                 }
                 if(newPasswordText.isEmpty()){
-                    newPassword.error = "Please enter the new password"
-                    newPasswordError = "Please enter the new password"
+                    newPassword.error = getString(R.string.please_enter_the_new_password_string)
+                    newPasswordError = getString(R.string.please_enter_the_new_password_string)
                 }
                 if(confirmPasswordText.isEmpty()){
-                    confirmPassword.error = "Please re-enter new password"
-                    confirmPasswordError = "Please re-enter new password"
+                    confirmPassword.error = getString(R.string.please_re_enter_new_password_string)
+                    confirmPasswordError = getString(R.string.please_re_enter_new_password_string)
                 }
                 if(currentPasswordText.isNotEmpty() and
                     newPasswordText.isNotEmpty() and
                     confirmPasswordText.isNotEmpty()){
                     if(currentPasswordText != user!!.password){
-                        currentPassword.error = "Current password is wrong"
+                        currentPassword.error = getString(R.string.current_password_is_wrong_string)
                     }
                     else{
                         if(newPasswordText != confirmPasswordText){
-                            confirmPassword.error = "Re-entered password does not match"
+                            confirmPassword.error = getString(R.string.re_entered_password_does_not_match_string)
                         }
                         else if(newPasswordText == currentPasswordText){
-                            confirmPassword.error = "Please don't enter your current password"
+                            confirmPassword.error = getString(R.string.please_don_t_enter_your_current_password_string)
                         }
                         else{
                             user.password = newPasswordText
@@ -134,7 +134,7 @@ class ChangePasswordBottomSheet: FullScreenBottomSheetDialog() {
                             val editor = sharedPreferences?.edit()
                             editor?.putString("password",user.password)
                             editor?.apply()
-                            Toast.makeText(requireContext(), "Password Updated!",Toast.LENGTH_SHORT).show()
+                            Toast.makeText(requireContext(), getString(R.string.password_updated_string),Toast.LENGTH_SHORT).show()
                             dismiss()
                         }
                     }

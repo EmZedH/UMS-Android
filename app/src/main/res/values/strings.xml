@@ -82,6 +82,8 @@
     <string name="hi_user">Hi %s</string>
     <string name="student_tests">%s Tests</string>
     <string name="semester">Semester %d</string>
+    <string name="amount">Amount %d</string>
+    <string name="transaction_id">ID: T/%d</string>
 
     <string name="department_name_string">Department Name</string>
     <string name="add_department_string">Add Department</string>
@@ -159,7 +161,6 @@
     <string name="auto_add_courses_string">Auto Add Courses</string>
     <string name="please_wait_admin_yet_to_add_students_string">Please wait. Admin yet to add Students</string>
     <string name="pay_fees_string">Pay Fees</string>
-    <string name="amount_string">Amount:</string>
     <string name="pay_fees_to_register_courses_string">Pay Fees to register courses</string>
     <string name="selected_string">Selected</string>
     <string name="top_app_bar_selected_string">Top app bar selected</string>
@@ -209,4 +210,33 @@
     <string name="are_you_sure_you_want_to_delete_this_test_record_string">Are you sure you want to delete this test record?</string>
     <string name="student_already_paid_for_current_semester_are_you_sure_you_want_to_add_another_transaction_string">Student already paid for current semester. Are you sure you want to add another transaction</string>
     <string name="are_you_sure_you_want_to_delete_this_transaction_string">Are you sure you want to delete this transaction?</string>
+    <string name="please_enter_the_current_password_string">Please enter the current password</string>
+    <string name="please_enter_the_new_password_string">Please enter the new password</string>
+    <string name="please_re_enter_new_password_string">Please re-enter new password</string>
+    <string name="current_password_is_wrong_string">Current password is wrong</string>
+    <string name="re_entered_password_does_not_match_string">Re-entered password does not match</string>
+    <string name="please_don_t_enter_your_current_password_string">Please don\'t enter your current password</string>
+    <string name="password_updated_string">Password Updated!</string>
+    <string name="don_t_leave_telephone_field_blank_string">Don\'t leave telephone field blank</string>
+    <string name="don_t_leave_date_of_birth_field_blank_string">Don\'t leave date of birth field blank</string>
+    <string name="don_t_leave_email_address_field_blank_string">Don\'t leave email address field blank</string>
+    <string name="email_address_already_exists_string">Email Address already exists</string>
+    <string name="please_type_proper_email_address_string">Please type proper email address</string>
+    <string name="don_t_leave_password_field_blank_string">Don\'t leave password field blank</string>
+    <string name="details_updated_string">Details Updated!</string>
+    <string name="amount_20000_string">Amount: ₹20000</string>
+    <string name="fee_payment_and_course_registration_successful_string">Fee payment and course registration successful</string>
+    <string name="don_t_leave_attendance_field_blank_string">Don\'t leave attendance field blank</string>
+    <string name="enter_attendance_below_50_string">Enter attendance below 50</string>
+    <string name="don_t_leave_assignment_field_blank_string">Don\'t leave assignment field blank</string>
+    <string name="enter_attendance_equal_to_or_below_10_string">Enter attendance equal to or below 10</string>
+    <string name="don_t_leave_external_marks_field_blank_string">Don\'t leave external marks field blank</string>
+    <string name="enter_external_marks_below_60_string">Enter external marks below 60</string>
+    <string name="record_updated_string">Record Updated</string>
+    <string name="don_t_leave_test_mark_field_blank_string">Don\'t leave test mark field blank</string>
+    <string name="enter_mark_equal_to_or_below_25_string">Enter mark equal to or below 25</string>
+    <string name="don_t_leave_transaction_amount_field_blank_string">Don\'t leave transaction amount field blank</string>
+    <string name="please_enter_amount_above_100_string">Please enter amount above 100</string>
+    <string name="don_t_leave_date_of_transaction_field_blank_string">Don\'t leave date of transaction field blank</string>
+    <string name="please_enter_proper_date_format_yyyy_dd_mm_string">Please enter proper date format (yyyy-dd-mm)</string>
 </resources>

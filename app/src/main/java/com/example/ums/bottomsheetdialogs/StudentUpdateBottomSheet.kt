@@ -123,22 +123,22 @@ class StudentUpdateBottomSheet: FullScreenBottomSheetDialog() {
 
             if (userNameText.isEmpty()) {
                 flag = false
-                userNameError = "Don't leave name field blank"
+                userNameError = getString(R.string.don_t_leave_name_field_blank_string)
                 userName.error = userNameError
             }
             if (contactNumberText.isEmpty()) {
                 flag = false
-                contactNumberError = "Don't leave contact number field blank"
+                contactNumberError = getString(R.string.don_t_leave_contact_field_blank_string)
                 contactNumber.error = contactNumberError
             }
             else if(!Utility.isValidContactNumber(contactNumber.editText?.text.toString())){
                 flag = false
-                contactNumberError = "Enter 10 digit contact number"
+                contactNumberError = getString(R.string.enter_10_digit_contact_number_string)
                 contactNumber.error = contactNumberError
             }
             if (userAddressText.isEmpty()) {
                 flag = false
-                userAddressError = "Don't leave address field blank"
+                userAddressError = getString(R.string.enter_10_digit_contact_number_string)
                 userAddress.error = userAddressError
             }
 
@@ -174,8 +174,7 @@ class StudentUpdateBottomSheet: FullScreenBottomSheetDialog() {
     }
 
     private fun setCollegeIDTextView(view : View){
-        view.findViewById<TextView>(R.id.course_id_text_view)?.setText(R.string.user_id_string)
-        view.findViewById<TextView>(R.id.course_id_text_view)?.append(" C/${student.collegeID}-D/${student.departmentID}-U/${student.user.id}")
+        view.findViewById<TextView>(R.id.course_id_text_view)?.text = getString(R.string.student_id, student.collegeID, student.departmentID, student.user.id)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

@@ -176,9 +176,9 @@ class CollegeAdminAddBottomSheet: FullScreenBottomSheetDialog() {
             if(genderRadio.checkedRadioButtonId!=-1){
                 isGenderErrorOn = false
                 when(view.findViewById<RadioButton>(genderRadio.checkedRadioButtonId).text.toString()){
-                    "Male" -> gender = Gender.MALE.type
-                    "Female" -> gender = Gender.FEMALE.type
-                    "Other" -> gender = Gender.OTHER.type
+                    Gender.MALE.type -> gender = Gender.MALE.type
+                    Gender.FEMALE.type -> gender = Gender.FEMALE.type
+                    Gender.OTHER.type -> gender = Gender.OTHER.type
                 }
             }
             genderTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.light_onSurface))
@@ -197,49 +197,49 @@ class CollegeAdminAddBottomSheet: FullScreenBottomSheetDialog() {
             genderOptionId = genderRadio.checkedRadioButtonId
             if (userNameText.isEmpty()) {
                 flag = false
-                userNameError = "Don't leave name field blank"
+                userNameError = getString(R.string.don_t_leave_name_field_blank_string)
                 userName.error = userNameError
             }
             if (contactNumberText.isEmpty()) {
                 flag = false
-                contactNumberError = "Don't leave contact number field blank"
+                contactNumberError = getString(R.string.don_t_leave_contact_field_blank_string)
                 contactNumber.error = contactNumberError
             }
             else if(!Utility.isValidContactNumber(contactNumber.editText?.text.toString())){
                 flag = false
-                contactNumberError = "Enter 10 digit contact number"
+                contactNumberError = getString(R.string.enter_10_digit_contact_number_string)
                 contactNumber.error = contactNumberError
             }
             if (dateOfBirthText.isEmpty()) {
                 flag = false
-                dateOfBirthError = "Don't leave date of birth field blank"
+                dateOfBirthError = getString(R.string.don_t_leave_date_of_birth_field_blank_string)
                 dateOfBirth.error = dateOfBirthError
             }
             if (userAddressText.isEmpty()) {
                 flag = false
-                userAddressError = "Don't leave address field blank"
+                userAddressError = getString(R.string.don_t_leave_address_field_blank_string)
                 userAddress.error = userAddressError
             }
             val userDAO = UserDAO(DatabaseHelper.newInstance(requireContext()))
             val isEmailFree = userDAO.isEmailFree(emailAddressText)
             if (emailAddressText.isEmpty()) {
                 flag = false
-                emailAddressError = "Don't leave email address field blank"
+                emailAddressError = getString(R.string.don_t_leave_email_address_field_blank_string)
                 emailAddress.error = emailAddressError
             }
             else if(!isEmailFree){
                 flag = false
-                emailAddressError = "Email Address already exists"
+                emailAddressError = getString(R.string.email_address_already_exists_string)
                 emailAddress.error = emailAddressError
             }
             else if(!Utility.isEmailDotCom(emailAddressText)){
                 flag = false
-                emailAddressError = "Please type proper email address"
+                emailAddressError = getString(R.string.please_type_proper_email_address_string)
                 emailAddress.error = emailAddressError
             }
             if(userPasswordText.isEmpty()){
                 flag = false
-                userPasswordError = "Don't leave password field blank"
+                userPasswordError = getString(R.string.don_t_leave_password_field_blank_string)
                 userPassword.error = userAddressError
             }
             if(genderOptionId==-1){
@@ -296,8 +296,7 @@ class CollegeAdminAddBottomSheet: FullScreenBottomSheetDialog() {
     }
 
     private fun setCollegeIDTextView(view : View){
-        view.findViewById<TextView>(R.id.course_id_text_view)?.setText(R.string.user_id_string)
-        view.findViewById<TextView>(R.id.course_id_text_view)?.append(" C/$collegeID-U/${collegeAdminDAO.getNewID()}")
+        view.findViewById<TextView>(R.id.course_id_text_view)?.text = getString(R.string.college_admin_id, collegeID, collegeAdminDAO.getNewID())
     }
 
     private fun showDatePicker() {

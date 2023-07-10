@@ -61,17 +61,16 @@ class DepartmentUpdateBottomSheet: FullScreenBottomSheetDialog() {
             updateButton = view.findViewById(R.id.update_college_button)
 
             departmentNameText = savedInstanceState?.getString("department_update_name_text") ?: department.name
-            collegeIDTextView.text = getString(R.string.id_string)
-            collegeIDTextView.append(" C/$collegeID-D/$departmentID")
+            collegeIDTextView.text = getString(R.string.department_id, collegeID, departmentID)
 
             updateButton.isEnabled = false
 
-            departmentNameTextLayout.editText!!.setText(departmentNameText)
+            departmentNameTextLayout.editText?.setText(departmentNameText)
 
-            if(departmentNameTextLayout.editText!!.text.toString() != department.name){
+            if(departmentNameTextLayout.editText?.text.toString() != department.name){
                 updateButton.isEnabled = true
             }
-            departmentNameTextLayout.editText!!.addTextChangedListener(textListener(department.name, departmentNameTextLayout))
+            departmentNameTextLayout.editText?.addTextChangedListener(textListener(department.name, departmentNameTextLayout))
 
             closeButton.setOnClickListener {
                 dismiss()
@@ -93,7 +92,7 @@ class DepartmentUpdateBottomSheet: FullScreenBottomSheetDialog() {
                     )
                     departmentDAO.update(newDepartment)
                     setFragmentResult("DepartmentUpdateBottomSheet", bundleOf("departmentID" to departmentID))
-                    Toast.makeText(requireContext(), "Details Updated!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.details_updated_string), Toast.LENGTH_SHORT).show()
                     dismiss()
                 }
             }

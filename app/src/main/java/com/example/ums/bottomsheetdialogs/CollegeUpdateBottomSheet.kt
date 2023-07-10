@@ -110,19 +110,19 @@ class CollegeUpdateBottomSheet: FullScreenBottomSheetDialog() {
 
                 if (collegeNameText.isEmpty()) {
                     flag = false
-                    collegeNameTextLayout.error = "Don't leave name field blank"
+                    collegeNameTextLayout.error = getString(R.string.don_t_leave_name_field_blank_string)
                 }
                 if (collegeAddressText.isEmpty()) {
                     flag = false
-                    collegeAddressTextLayout.error = "Don't leave address field blank"
+                    collegeAddressTextLayout.error = getString(R.string.don_t_leave_address_field_blank_string)
                 }
                 if (collegeTelephoneText.isEmpty()) {
                     flag = false
-                    collegeTelephoneTextLayout.error = "Don't leave telephone field blank"
+                    collegeTelephoneTextLayout.error = getString(R.string.don_t_leave_telephone_field_blank_string)
                 }
                 else if(!Utility.isValidContactNumber(collegeTelephoneText)){
                     flag = false
-                    collegeTelephoneTextLayout.error = "Enter 10 digit contact number"
+                    collegeTelephoneTextLayout.error = getString(R.string.enter_10_digit_contact_number_string)
                 }
                 if (flag) {
                     val newCollege = College(
@@ -133,7 +133,7 @@ class CollegeUpdateBottomSheet: FullScreenBottomSheetDialog() {
                     )
                     collegeDAO.update(newCollege)
                     setFragmentResult("CollegeUpdateBottomSheet", bundleOf("collegeID" to collegeID))
-                    Toast.makeText(requireContext(), "Details Updated!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), getString(R.string.details_updated_string), Toast.LENGTH_SHORT).show()
                     dismiss()
                 }
             }

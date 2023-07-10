@@ -135,32 +135,32 @@ class RecordUpdateBottomSheet: FullScreenBottomSheetDialog() {
 
             if (attendanceText.isEmpty()) {
                 flag = false
-                attendanceError = "Don't leave attendance field blank"
+                attendanceError = getString(R.string.don_t_leave_attendance_field_blank_string)
                 attendance.error = attendanceError
             }
             else if(attendanceText.toInt() !in 0..50){
                 flag = false
-                attendanceError = "Enter attendance below 50"
+                attendanceError = getString(R.string.enter_attendance_below_50_string)
                 attendance.error = attendanceError
             }
             if (assignmentText.isEmpty()) {
                 flag = false
-                assignmentError = "Don't leave assignment field blank"
+                assignmentError = getString(R.string.don_t_leave_assignment_field_blank_string)
                 assignment.error = assignmentError
             }
             else if(assignmentText.toInt() !in 0..10){
                 flag = false
-                assignmentError = "Enter attendance equal to or below 10"
+                assignmentError = getString(R.string.enter_attendance_equal_to_or_below_10_string)
                 assignment.error = assignmentError
             }
             if (externalMarksText.isEmpty()) {
                 flag = false
-                externalMarksError = "Don't leave external marks field blank"
+                externalMarksError = getString(R.string.don_t_leave_external_marks_field_blank_string)
                 externalMarks.error = externalMarksError
             }
             else if(externalMarksText.toInt() !in 0..60){
                 flag = false
-                externalMarksError = "Enter external marks below 60"
+                externalMarksError = getString(R.string.enter_external_marks_below_60_string)
                 externalMarks.error = externalMarksError
             }
 
@@ -172,7 +172,7 @@ class RecordUpdateBottomSheet: FullScreenBottomSheetDialog() {
                 recordsDAO.update(updatedRecord)
 
                 setView(view)
-                Toast.makeText(requireContext(), "Record Updated", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.record_updated_string), Toast.LENGTH_SHORT).show()
                 setFragmentResult("RecordUpdateBottomSheerFragment", bundleOf())
                 dismiss()
             }

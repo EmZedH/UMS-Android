@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
+import com.example.ums.CompletionStatus
 import com.example.ums.DatabaseHelper
 import com.example.ums.R
 import com.example.ums.model.Records
@@ -69,8 +70,7 @@ class FeePaymentBottomSheet: FullScreenBottomSheetDialog() {
         val calendarMonth = calendar.get(Calendar.MONTH)
         val calendarDay = calendar.get(Calendar.DAY_OF_MONTH)
 
-        amountTextView.text = getString(R.string.amount_string)
-        amountTextView.append(" ₹20000")
+        amountTextView.text = getString(R.string.amount_20000_string)
 
         val studentDAO = StudentDAO(databaseHelper)
         val student = studentDAO.get(studentID)
@@ -112,14 +112,14 @@ class FeePaymentBottomSheet: FullScreenBottomSheetDialog() {
                             0,
                             0,
                             0,
-                            "NOT_COMPLETED",
+                            CompletionStatus.NOT_COMPLETED.status,
                             0
                         )
                     )
                 }
             }
             setFragmentResult("FeePaymentBottomSheetResult", bundleOf("id" to newID))
-            Toast.makeText(requireContext(), "Fee payment and course registration successful", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.fee_payment_and_course_registration_successful_string), Toast.LENGTH_SHORT).show()
             dismiss()
         }
         return view
@@ -127,7 +127,6 @@ class FeePaymentBottomSheet: FullScreenBottomSheetDialog() {
     private fun setTextView(view : View){
         val databaseHelper = DatabaseHelper.newInstance(requireContext())
         val transactionDAO = TransactionDAO(databaseHelper)
-        view.findViewById<TextView>(R.id.id_text_view)?.setText(R.string.id_string)
-        view.findViewById<TextView>(R.id.id_text_view)?.append(" T/${transactionDAO.getNewID()}")
+        view.findViewById<TextView>(R.id.id_text_view)?.text = getString(R.string.transaction_id, transactionDAO.getNewID())
     }
 }

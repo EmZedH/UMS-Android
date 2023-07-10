@@ -87,12 +87,12 @@ class TestAddBottomSheet: FullScreenBottomSheetDialog() {
 
             if (testMarkTextView.isEmpty()) {
                 flag = false
-                testMarkError = "Don't leave test mark field blank"
+                testMarkError = getString(R.string.don_t_leave_test_mark_field_blank_string)
                 testMark.error = testMarkError
             }
             else if(testMarkTextView.toInt() !in 0..25){
                 flag = false
-                testMarkError = "Enter mark equal to or below 25"
+                testMarkError = getString(R.string.enter_mark_equal_to_or_below_25_string)
                 testMark.error = testMarkError
             }
 
