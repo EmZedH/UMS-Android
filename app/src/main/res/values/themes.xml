@@ -11,21 +11,21 @@
         <item name="colorOnSecondary">@color/light_onSecondary</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <item name = "colorOnSurface">@color/light_onSurface</item>
+        <item name="colorOnSurface">@color/light_onSurface</item>
 
         <item name="bottomSheetDialogTheme">@style/CustomBottomSheetDialog</item>
     </style>
 
-    
+
     <style name="FloatingActionButtonStyle" parent="Widget.Design.FloatingActionButton">
         <item name="shapeAppearanceOverlay">@style/FabShapeStyle1</item>
     </style>
 
     <style name="FabShapeStyle1" parent="ShapeAppearanceOverlay.Material3.FloatingActionButton">
-        <item name = "cornerSize">16dp</item>
+        <item name="cornerSize">16dp</item>
     </style>
 
-<!--    Hello Mans-->
+    <!--    Hello Mans-->
     <style name="CustomBottomSheetDialog" parent="@style/ThemeOverlay.MaterialComponents.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/CustomBottomSheet</item>
     </style>

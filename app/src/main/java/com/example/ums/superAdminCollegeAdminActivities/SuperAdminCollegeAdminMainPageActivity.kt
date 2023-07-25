@@ -46,14 +46,14 @@ class SuperAdminCollegeAdminMainPageActivity: AppCompatActivity(){
     private var selectionNumber: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.super_college_admin_main_page)
 
         searchQuery = savedInstanceState?.getString("main_page_activity_search_query")
         isSearchViewOpen = savedInstanceState?.getBoolean("main_page_activity_is_search_query_open")
         isSelectionToolbarOpen = savedInstanceState?.getBoolean("main_page_activity_is_selection_toolbar_open")
         selectionNumber = savedInstanceState?.getInt("main_page_activity_selection_number") ?: 0
 
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.super_college_admin_main_page)
 
         val databaseHelper = DatabaseHelper.newInstance(this)
         val userDAO = UserDAO(databaseHelper)
