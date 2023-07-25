@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
 
     <application
@@ -16,11 +14,6 @@
         android:theme="@style/Theme.UMS"
         tools:targetApi="31">
         <activity
-            android:name=".NewSuperAdminActivity"
-            android:exported="false"
-            android:label="@string/title_activity_new_super_admin"
-            android:theme="@style/Theme.UMS" />
-        <activity
             android:name=".superAdminCollegeAdminActivities.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.UMS">
@@ -30,43 +23,40 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".LoginActivity"
-            android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".superAdminCollegeAdminActivities.SuperAdminCollegeAdminMainPageActivity" />
-        <activity
-            android:name=".superAdminCollegeAdminActivities.ManageProfileActivity"
-            android:windowSoftInputMode="adjustResize" />
-        <activity android:name=".superAdminCollegeAdminActivities.CollegeActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.CollegeAdminDetailsActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.CollegeDetailsActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.DepartmentActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.DepartmentDetailsActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.CourseProfessorsListActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.ProfessorSelectForCourseActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.CourseDetailsActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.ProfessorCoursesListActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.CourseSelectForProfessorActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.ProfessorDetailsActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.StudentActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.StudentTransactionSelectActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.StudentProfessionalCourseSelectActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.StudentOpenCourseSelectActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.OtherDepartmentSelectActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.StudentProfessorsListActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.TestRecordsActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.StudentCourseRecordPageActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.StudentDetailsActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.StudentCompletedCourseActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.StudentCompletedCourseRecordActivity" />
-        <activity android:name=".superAdminCollegeAdminActivities.CourseStudentsListActivity" />
-        <activity android:name=".professorActivities.ProfessorMainPageActivity" />
-        <activity android:name=".professorActivities.ProfessorStudentsListActivity" />
-        <activity android:name=".professorActivities.ProfessorCourseDetailsActivity" />
-        <activity android:name=".studentActivities.StudentMainPageActivity" />
-        <activity android:name=".studentActivities.StudentTestActivity" />
-        <activity android:name=".studentActivities.StudentsProfileCourseRecordActivity" />
-        <activity android:name=".studentActivities.StudentTransactionPage" />
+        <activity android:name=".LoginActivity" android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".superAdminCollegeAdminActivities.SuperAdminCollegeAdminMainPageActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.ManageProfileActivity" android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".superAdminCollegeAdminActivities.CollegeActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.CollegeAdminDetailsActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.CollegeDetailsActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.DepartmentActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.DepartmentDetailsActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.CourseProfessorsListActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.ProfessorSelectForCourseActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.CourseDetailsActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.ProfessorCoursesListActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.CourseSelectForProfessorActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.ProfessorDetailsActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.StudentActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.StudentTransactionSelectActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.StudentProfessionalCourseSelectActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.StudentOpenCourseSelectActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.OtherDepartmentSelectActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.StudentProfessorsListActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.TestRecordsActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.StudentCourseRecordPageActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.StudentDetailsActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.StudentCompletedCourseActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.StudentCompletedCourseRecordActivity"/>
+        <activity android:name=".superAdminCollegeAdminActivities.CourseStudentsListActivity"/>
+        <activity android:name=".professorActivities.ProfessorMainPageActivity"/>
+        <activity android:name=".professorActivities.ProfessorStudentsListActivity"/>
+        <activity android:name=".professorActivities.ProfessorCourseDetailsActivity"/>
+        <activity android:name=".studentActivities.StudentMainPageActivity"/>
+        <activity android:name=".studentActivities.StudentTestActivity"/>
+        <activity android:name=".studentActivities.StudentsProfileCourseRecordActivity"/>
+        <activity android:name=".studentActivities.StudentTransactionPage"/>
+
     </application>
 
 </manifest>

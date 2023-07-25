@@ -31,8 +31,8 @@ class SuperAdminMainPageFragment : LatestListFragment(), SelectionListener, List
 
     private var selectableListItemViewAdapter: SelectableListItemViewAdapter? = null
     private lateinit var collegeDAO: CollegeDAO
-    private var firstTextView: TextView? = null
-    private var secondTextView: TextView? = null
+    private lateinit var firstTextView: TextView
+    private lateinit var secondTextView: TextView
 
     private var recyclerView: RecyclerView? = null
     private var editCollegeId: Int? = null
@@ -65,20 +65,20 @@ class SuperAdminMainPageFragment : LatestListFragment(), SelectionListener, List
         }
 
         val view = inflater.inflate(R.layout.fragment_list_page, container, false)
-        recyclerView = view?.findViewById(R.id.list_view)
+        recyclerView = view.findViewById(R.id.list_view)
 
         firstTextView = view.findViewById(R.id.no_items_text_view)
         secondTextView = view.findViewById(R.id.add_to_get_started_text_view)
 
         if(collegeDAO.getList().isNotEmpty()){
 
-            firstTextView?.visibility = View.INVISIBLE
-            secondTextView?.visibility = View.INVISIBLE
+            firstTextView.visibility = View.INVISIBLE
+            secondTextView.visibility = View.INVISIBLE
         }
         else{
-            firstTextView?.setText(R.string.no_colleges_string)
-            firstTextView?.visibility = View.VISIBLE
-            secondTextView?.visibility = View.VISIBLE
+            firstTextView.setText(R.string.no_colleges_string)
+            firstTextView.visibility = View.VISIBLE
+            secondTextView.visibility = View.VISIBLE
         }
         if(selectedItems.isNotEmpty() && isSelectionEnabled){
             val selectList: MutableList<AdapterItem> = mutableListOf()
@@ -223,13 +223,13 @@ class SuperAdminMainPageFragment : LatestListFragment(), SelectionListener, List
 
     private fun onRefresh(){
         if(collegeDAO.getList().isNotEmpty()){
-            firstTextView?.visibility = View.INVISIBLE
-            secondTextView?.visibility = View.INVISIBLE
+            firstTextView.visibility = View.INVISIBLE
+            secondTextView.visibility = View.INVISIBLE
         }
         else{
-            firstTextView?.setText(R.string.no_colleges_string)
-            firstTextView?.visibility = View.VISIBLE
-            secondTextView?.visibility = View.VISIBLE
+            firstTextView.setText(R.string.no_colleges_string)
+            firstTextView.visibility = View.VISIBLE
+            secondTextView.visibility = View.VISIBLE
         }
     }
 

@@ -44,8 +44,9 @@ class UserDAO(private val databaseHelper : DatabaseHelper) {
         return user
     }
 
-    fun get(userID : Int?) : User?{
-        userID ?: return null
+    fun get(userID : Int) : User?{
+
+
         var user : User? = null
         val db = databaseHelper.readableDatabase
         val cursor = db.rawQuery("SELECT * FROM $tableName WHERE $primaryKey = $userID", null)

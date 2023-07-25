@@ -239,5 +239,4 @@
     <string name="please_enter_amount_above_100_string">Please enter amount above 100</string>
     <string name="don_t_leave_date_of_transaction_field_blank_string">Don\'t leave date of transaction field blank</string>
     <string name="please_enter_proper_date_format_yyyy_dd_mm_string">Please enter proper date format (yyyy-dd-mm)</string>
-    <string name="title_activity_new_super_admin">NewSuperAdminActivity</string>
 </resources>
